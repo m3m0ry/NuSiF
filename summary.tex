@@ -129,18 +129,18 @@ Engeneering: Flow around a car, flow pipeline. Often the iteration of a flow wit
 
 \paragraph{Properties of Fluids}
 \begin{itemize}
-	\item Viscoisty
+	\item Viscosity
 	\begin{itemize}
 		\item Frictional forces that act on the fluid
 		\item[$\rightarrow$] Without external forces the fluid will come to a rest. The higher the viscosity, the faster it comes to a rest.
 		\item Highly viscous (honey) $\rightarrow$ frictional forces are strong
-		\item In gases viscious forces small $\rightarrow$ sometimes neglected
+		\item In gases viscous forces small $\rightarrow$ sometimes neglected
 		\item[$\rightarrow$] "inviscid flow" in gas dynamics $\rightarrow$ Euler equation
 	\end{itemize}
 	\item Inertia
 	\begin{itemize}
 		\item[$\rightarrow$] Reynolds number : $\frac{\text{inertia}}{\text{viscosicty}}$
-		\item[$\rightarrow$] high $\rightarrow$ turbolence; low $\rightarrow$ laminar
+		\item[$\rightarrow$] high $\rightarrow$ turbulence; low $\rightarrow$ laminar
 	\end{itemize}
 	\item Compressibility
 	\begin{itemize}
@@ -186,7 +186,7 @@ Our goal: Simulate unsteady, incompressible, laminar flow, Navier-Stokes equatio
 	\item Fluid is characteristic by:
 	\begin{itemize}
 		\item Velocity: $\vec{u} : \Omega \times [0, t_{end}] \rightarrow \mathds{R}^2$
-		\item Presure: $p : \Omega \times [0, t_{end}] \rightarrow \mathds{R}$
+		\item Pressure: $p : \Omega \times [0, t_{end}] \rightarrow \mathds{R}$
 		\item Density: $ \varrho : \Omega \times [0, t_{end}] \rightarrow \mathds{R}$
 		\item[$\rightarrow$] Incompressible: $\varrho(\vec{x},t) = \varrho_\infty = \text{const}$
 	\end{itemize}
@@ -211,24 +211,24 @@ Governing equations, a system of partial differential equations (Navier-Stokes e
 \begin{itemize}
 	\item grad $p := (\frac{\delta p}{\delta x},\frac{\delta p}{\delta y})^T$
 	\item div $\vec{u} := \frac{\delta u}{\delta x} + \frac{\delta v}{\delta y}$
-	\item $\vec{u} \text{ grad} := ( \begin{pmatrix}
+	\item $\vec{u} \text{ grad} := \left( \begin{pmatrix}
 		u \\
 		v
 	\end{pmatrix}
 	\cdot \begin{pmatrix}
 		\frac{\delta}{\delta x} \\
 		\frac{\delta}{\delta y}
-	\end{pmatrix})
+	\end{pmatrix}\right)
 	= (u \cdot \frac{\delta}{\delta x} + v \frac{\delta}{\delta y})$
-	\item $(\vec{u} \text{ grad} ) \vec{u} = (u \cdot \frac{\delta}{\delta x} + v \frac{\delta}{\delta y}\begin{pmatrix}
+	\item $(\vec{u} \text{ grad} ) \vec{u} = \left( u \cdot \frac{\delta}{\delta x} + v \frac{\delta}{\delta y}\begin{pmatrix}
 		u \\
 		v
-	\end{pmatrix} = \begin{pmatrix}
+	\end{pmatrix}\right) = \begin{pmatrix}
 		u \frac{\delta u}{\delta x} & v \frac{\delta u}{\delta y}\\
 		u \frac{\delta v}{\delta x} & v \frac{\delta v}{\delta y}
 	\end{pmatrix}$
 	\item $Re \in \mathds{R} \Rightarrow$ Reynolds number
-	\item $\vec{g} \in mathds{R} \Rightarrow$ Body forces (i.e. gravity)
+	\item $\vec{g} \in \mathds{R} \Rightarrow$ Body forces (i.e. gravity)
 	\item $\vec{x} = \begin{pmatrix}
 	x\\
 	y
@@ -243,14 +243,14 @@ Governing equations, a system of partial differential equations (Navier-Stokes e
 
 \begin{figure}
 	\centering
-	\[ \frac{\delta u}{\delta t} + \frac{\delta p}{\delta x} = \frac{1}{Re} ( \frac{\delta^2 u}{\delta x^2} + \frac{\delta^2 u}{\delta y^2}) - \frac{\delta (u^2)}{\delta x} - \frac{\delta (uv)}{\delta y} + g_x\]
+	\[ \frac{\delta u}{\delta t} + \frac{\delta p}{\delta x} = \frac{1}{Re} \left( \frac{\delta^2 u}{\delta x^2} + \frac{\delta^2 u}{\delta y^2}\right) - \frac{\delta (u^2)}{\delta x} - \frac{\delta (uv)}{\delta y} + g_x\]
     \renewcommand{\thefigure}{2.2a}
 	\caption{Momentum Equation u}
 	\label{fig:momentuma}
 \end{figure}
 \begin{figure}
 	\centering
-	\[ \frac{\delta v}{\delta t} + \frac{\delta p}{\delta y} = \frac{1}{Re} ( \frac{\delta^2 v}{\delta x^2} + \frac{\delta^2 v}{\delta y^2}) - \frac{\delta (uv)}{\delta x} - \frac{\delta (v^2)}{\delta y} + g_x\]
+	\[ \frac{\delta v}{\delta t} + \frac{\delta p}{\delta y} = \frac{1}{Re} \left( \frac{\delta^2 v}{\delta x^2} + \frac{\delta^2 v}{\delta y^2}\right) - \frac{\delta (uv)}{\delta x} - \frac{\delta (v^2)}{\delta y} + g_y\]
     \renewcommand{\thefigure}{2.2b}
 	\caption{Momentum Equation v}
 	\label{fig:momentuma}
