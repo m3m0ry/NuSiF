@@ -1,0 +1,260 @@
+\documentclass[a4paper,11pt]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{dsfont}
+
+\title{Summary: Numerical Simulation of Fluids}
+
+\author{Jan H\"onig \\ \texttt{hrominium@gmail.com}}
+
+
+\date{\today}
+
+
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+\tikzset{
+>=stealth',
+  punktchain/.style={
+    rectangle, 
+    rounded corners, 
+     fill=black!10,
+    draw=black, very thick,
+    text width=10em, 
+    minimum height=3em, 
+    text centered, 
+    on chain},
+  line/.style={draw, thick, <-},
+  element/.style={
+    tape,
+    top color=white,
+    bottom color=blue!50!black!60!,
+    minimum width=8em,
+    draw=blue!40!black!90, very thick,
+    text width=10em, 
+    minimum height=3.5em, 
+    text centered, 
+    on chain},
+  every join/.style={->, thick,shorten >=1pt},
+  decoration={brace},
+  tuborg/.style={decorate},
+  tubnode/.style={midway, right=2pt},
+}
+\begin{document}
+
+\maketitle
+
+%\tableofcontents
+%\newpage
+
+\section{Introduction}
+How to uncover laws of nature?
+\begin{itemize}
+	\item practical $\rightarrow$ observation of experiments
+	\item theoretical $\rightarrow$ relations ship between mathematical quantities
+	\item[!] often experiments impossible (nuclear reactor, oil sill, too long, too short, where to measure) and mathematical equations too complex (only simplified models)
+	\item[$\rightarrow$] numerical simulation: combines both aproaches, see Figure~\ref{fig:simproc}
+\end{itemize}
+
+\subsection{Simulation Procedure}
+
+\begin{figure}
+\begin{tikzpicture}
+  [node distance=.8cm,
+  start chain=going below,]
+    \node[punktchain, join] (phys) {Physical Reality};
+    \node[punktchain, join] (math)      {Mathematical Model};
+    \node[punktchain, join] (discr)      {Discretization};
+    \node[punktchain, join] (time-dept) {Time dependencies};
+    \node[punktchain, join] (nonlin) {Nonlinearity};
+  	\node[punktchain, join] (lin) {Linear system solvers};
+    \node[punktchain, join] (error) {Error discrete solution};
+    \node[punktchain, join] (eval) {Evaluation};
+    \node[punktchain, join] (goal) {Goal: Gain insight};
+
+    \node [punktchain, right=of phys] (obs) {Observation of Experiments};
+	\node [punktchain, right=of math] (improvec) {Improvement of conitunous mathematical models};
+    \node [punktchain, right=of discr] (improved) {Improvement of discretization};
+    \node [punktchain, left=of time-dept, rotate=90] (parallel) {Parallelisation};
+	
+	\coordinate[right=of lin] (lin-right);
+	\coordinate[right,above=of lin] (lin-top);
+    
+    \coordinate[right=of nonlin] (nonlin-right);
+
+	\draw[->] (lin.east) |- (lin-top) -| (lin.north);
+	\draw[->] (lin.east) -| (nonlin-right) -- (nonlin.east);
+	\draw[->] (lin.east) -| (nonlin-right) |- (time-dept.east);
+
+    \draw[->] (eval.east) -| (improved.south);
+     
+    \draw[->] (parallel.east) |- (discr.west);
+    \draw[->] (parallel.south) |- (nonlin.west);
+    \draw[->] (parallel.south) |- (time-dept.west);
+    \draw[->] (parallel.south) |- (lin.west);
+    \draw[->] (parallel.west) |- (error.west);
+
+	\coordinate[right=of improvec] (improvec-coord);
+	\draw[->] (eval.east) -| (improvec-coord) -- (improvec);
+
+   	\draw[<->] (obs) -- (improvec);
+    \draw[<->] (obs) -- (phys);   		   
+ 		   
+  	\draw[->] (improvec) -- (math);   
+   	\draw[->] (improved) -- (discr);
+	
+
+  \end{tikzpicture}
+  
+  \renewcommand{\thefigure}{1.1}
+  \caption{Typical procedure in numerical simulation}
+  \label{fig:simproc}
+  \end{figure}
+
+  
+\subsection{Fluids and Flows}
+
+Fluids $\left\{
+\begin{tabular}{c}
+    gas \\
+    liquids
+\end{tabular}
+\right\}$ are substances that cannot resist shear forces. \\
+Examples: Water, Coffee, Air, Stream, Waterfall\\
+Engeneering: Flow around a car, flow pipeline. Often the iteration of a flow with a solid body, fluid sturcture interaction, multi-phase flows (gas $\leftrightarrow$ liquid).
+
+\paragraph{Properties of Fluids}
+\begin{itemize}
+	\item Viscoisty
+	\begin{itemize}
+		\item Frictional forces that act on the fluid
+		\item[$\rightarrow$] Without external forces the fluid will come to a rest. The higher the viscosity, the faster it comes to a rest.
+		\item Highly viscous (honey) $\rightarrow$ frictional forces are strong
+		\item In gases viscious forces small $\rightarrow$ sometimes neglected
+		\item[$\rightarrow$] "inviscid flow" in gas dynamics $\rightarrow$ Euler equation
+	\end{itemize}
+	\item Inertia
+	\begin{itemize}
+		\item[$\rightarrow$] Reynolds number : $\frac{\text{inertia}}{\text{viscosicty}}$
+		\item[$\rightarrow$] high $\rightarrow$ turbolence; low $\rightarrow$ laminar
+	\end{itemize}
+	\item Compressibility
+	\begin{itemize}
+		\item Gases at high velocities are compressible
+		\item Liquids are nearly incompressible
+		\item[$\rightarrow$] Important if temperature changes
+	\end{itemize}
+\end{itemize}
+
+Boundary layer theory
+\begin{itemize}
+	\item[$\rightarrow$] close to boundary, velocity is slow $\rightarrow$ viscous forces $\sim$ inertia forces
+	\item[$\rightarrow$] away from boundaries, velocity high $\rightarrow$ viscous forces $<$ inertia forces
+\end{itemize}
+%TODO pictures (2)
+
+\subsection{Numerical Fluid Simulation}
+Our goal: Simulate unsteady, incompressible, laminar flow, Navier-Stokes equations\\
+\paragraph{History}
+\begin{itemize}
+	\item[$\rightarrow$] Dictated by compute power
+	\item precursors: Crank-Nickelson '47
+	\item real start: Harlow-Fromm '65
+	\item in this course: "marker-and-cell" (MAC) method, Harlow-Welch '65
+	\begin{itemize}
+		\item simple
+		\item flexible
+		\item efficient
+	\end{itemize}
+	\item Alternatives: Finite elements, Finite Volumes, SIMPLE, QUICK
+\end{itemize}
+
+\section{Mathematical description of flows}
+\begin{itemize}
+	\item laminar
+	\item viscious
+	\item incompressible
+\end{itemize}
+\subsection{Mathematical Model}
+\begin{itemize}
+	\item Spatial domain: $\Omega \subset  \mathds{R}^2$ or $\Omega \subset  \mathds{R}^3$
+	\item Time $t \in [0, t_{end}]$
+	\item Fluid is characteristic by:
+	\begin{itemize}
+		\item Velocity: $\vec{u} : \Omega \times [0, t_{end}] \rightarrow \mathds{R}^2$
+		\item Presure: $p : \Omega \times [0, t_{end}] \rightarrow \mathds{R}$
+		\item Density: $ \varrho : \Omega \times [0, t_{end}] \rightarrow \mathds{R}$
+		\item[$\rightarrow$] Incompressible: $\varrho(\vec{x},t) = \varrho_\infty = \text{const}$
+	\end{itemize}
+\end{itemize}
+Governing equations, a system of partial differential equations (Navier-Stokes eq.) are:
+
+\begin{figure}[h]
+	\centering
+	\[\frac{\delta \vec{u}}{\delta t} + ( \vec{u} \cdot \text{grad}) \vec{u} + \text{grad} p = \frac{1}{Re} \Delta \vec{u} + \vec{g}\]
+	\renewcommand{\thefigure}{2.1.a}
+    \caption{Momentum Equation}
+	\label{fig:momentum}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\[\text{div} \vec{u} = 0\]
+	\renewcommand{\thefigure}{2.1.b}
+    \caption{Continuity Equation}
+	\label{fig:momentum}
+\end{figure}
+
+\begin{itemize}
+	\item grad $p := (\frac{\delta p}{\delta x},\frac{\delta p}{\delta y})^T$
+	\item div $\vec{u} := \frac{\delta u}{\delta x} + \frac{\delta v}{\delta y}$
+	\item $\vec{u} \text{ grad} := ( \begin{pmatrix}
+		u \\
+		v
+	\end{pmatrix}
+	\cdot \begin{pmatrix}
+		\frac{\delta}{\delta x} \\
+		\frac{\delta}{\delta y}
+	\end{pmatrix})
+	= (u \cdot \frac{\delta}{\delta x} + v \frac{\delta}{\delta y})$
+	\item $(\vec{u} \text{ grad} ) \vec{u} = (u \cdot \frac{\delta}{\delta x} + v \frac{\delta}{\delta y}\begin{pmatrix}
+		u \\
+		v
+	\end{pmatrix} = \begin{pmatrix}
+		u \frac{\delta u}{\delta x} & v \frac{\delta u}{\delta y}\\
+		u \frac{\delta v}{\delta x} & v \frac{\delta v}{\delta y}
+	\end{pmatrix}$
+	\item $Re \in \mathds{R} \Rightarrow$ Reynolds number
+	\item $\vec{g} \in mathds{R} \Rightarrow$ Body forces (i.e. gravity)
+	\item $\vec{x} = \begin{pmatrix}
+	x\\
+	y
+	\end{pmatrix}; \vec{u} = \begin{pmatrix}
+	u\\
+	v
+	\end{pmatrix}; \vec{p} = \begin{pmatrix}
+	p_x \\
+	p_y
+	\end{pmatrix}$
+\end{itemize}
+
+\begin{figure}
+	\centering
+	\[ \frac{\delta u}{\delta t} + \frac{\delta p}{\delta x} = \frac{1}{Re} ( \frac{\delta^2 u}{\delta x^2} + \frac{\delta^2 u}{\delta y^2}) - \frac{\delta (u^2)}{\delta x} - \frac{\delta (uv)}{\delta y} + g_x\]
+    \renewcommand{\thefigure}{2.2a}
+	\caption{Momentum Equation u}
+	\label{fig:momentuma}
+\end{figure}
+\begin{figure}
+	\centering
+	\[ \frac{\delta v}{\delta t} + \frac{\delta p}{\delta y} = \frac{1}{Re} ( \frac{\delta^2 v}{\delta x^2} + \frac{\delta^2 v}{\delta y^2}) - \frac{\delta (uv)}{\delta x} - \frac{\delta (v^2)}{\delta y} + g_x\]
+    \renewcommand{\thefigure}{2.2b}
+	\caption{Momentum Equation v}
+	\label{fig:momentuma}
+\end{figure}
+
+
+\end{document}
