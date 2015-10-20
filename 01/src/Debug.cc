@@ -72,7 +72,7 @@ namespace internal
 		for(int i = 0; i < (parts *20) /whole -1 ; ++i){
 			std::cerr << "=";
 		}
-		std::cerr << ">" << RED;
+		std::cerr << ">" << BROWN;
 		for(int i = 0; i < 20 - (parts*20)/whole; ++i){
 			std::cerr << "%";
 		}

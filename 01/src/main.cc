@@ -7,12 +7,19 @@
 int main( int argc, char** argv )
 {
 	auto filereader = new FileReader();
-	filereader->readFile("something");
+	filereader->readFile("arraytest.txt");
+
+
+	filereader->printParameters();
 
 	internal::progress("test", 0, 10);
 	internal::progress("", 50, 100);
 	internal::progress("test2", 200,200);
-	internal::progress("tersterror", -1, 0);
+
+
+
+
+	delete filereader;
 
    return 0;
 }

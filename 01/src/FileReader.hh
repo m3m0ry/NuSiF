@@ -4,6 +4,8 @@
 #include <string>
 #include <map>
 #include <iostream>
+#include <fstream>
+#include <cctype>
 
 #include "Types.hh"
 #include "Debug.hh"
