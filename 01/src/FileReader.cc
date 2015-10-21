@@ -8,10 +8,10 @@ void FileReader::registerIntParameter(const std::string &key, int init)
 	intParameters[key] = init;
 }
 
-void FileReader::registerRealParameter(const std::string &key, real init)
+void FileReader::registerRealParameter(const std::string &key, Real init)
 {
-	CHECK_MSG( realParameters.end() == realParameters.find(key), "Parameter already registered!");
-	realParameters[key] = init;
+	CHECK_MSG( RealParameters.end() == RealParameters.find(key), "Parameter already registered!");
+	RealParameters[key] = init;
 }
 
 void FileReader::registerStringParameter(const std::string &key, const std::string &init)
@@ -26,10 +26,10 @@ void FileReader::setParameter(const std::string &key, const std::string &in)
 	stringParameters.at(key) = in;
 }
 
-void FileReader::setParameter(const std::string &key, real in)
+void FileReader::setParameter(const std::string &key, Real in)
 {
-	CHECK_MSG( realParameters.end() != realParameters.find(key), "Parameter not found!");
-	realParameters.at(key) = in;
+	CHECK_MSG( RealParameters.end() != RealParameters.find(key), "Parameter not found!");
+	RealParameters.at(key) = in;
 }
 
 void FileReader::setParameter(const std::string &key, int in)
@@ -94,7 +94,7 @@ bool FileReader::readFile(const std::string &name)
 				//INT
 				if( value.find_first_not_of("0123456789") == std::string::npos)
 					registerIntParameter(key, stoi(value));
-				//REAL
+				//Real
 				else if( value.find_first_not_of(".0123456789") == std::string::npos)
 					registerRealParameter(key, stod(value));
 				//STRING
@@ -120,8 +120,8 @@ void FileReader::printParameters() const
 	std::cout << "INT Parameters:" << std::endl;
 	for (auto it=intParameters.begin(); it!=intParameters.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
-	std::cout << "REAL Parameters:" << std::endl;
-	for (auto it=realParameters.begin(); it!=realParameters.end(); ++it)
+	std::cout << "Real Parameters:" << std::endl;
+	for (auto it=RealParameters.begin(); it!=RealParameters.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
 	std::cout << "STRING Parameters:" << std::endl;
 	for (auto it=stringParameters.begin(); it!=stringParameters.end(); ++it)

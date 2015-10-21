@@ -39,7 +39,7 @@ public:
 	void registerIntParameter( const std::string & key, int init = 0 );
 
 	//register a new parameter with name key and initial double value
-	void registerRealParameter( const std::string & key, real init = 0 );
+	void registerRealParameter( const std::string & key, Real init = 0 );
 
 	//register a new parameter with name key and initial string value
 	void registerStringParameter( const std::string & key, const std::string & init = "" );
@@ -48,7 +48,7 @@ public:
 	void setParameter( const std::string & key, const std::string & in );
 
 	//set a value for the key string with value in
-	void setParameter( const std::string & key, real in );
+	void setParameter( const std::string & key, Real in );
 
 	//set a value for the key string with value in
 	void setParameter( const std::string & key, int in );
@@ -57,7 +57,7 @@ public:
 	int getIntParameter( const std::string & key ) const;
 
 	// get the double value of key 
-	real getRealParameter( const std::string & key ) const;
+	Real getRealParameter( const std::string & key ) const;
 
 	// get the string value of key 
 	std::string getStringParameter( const std::string & key ) const;
@@ -70,7 +70,7 @@ public:
 
 private:
 	std::map<std::string, int> intParameters;
-	std::map<std::string, real> realParameters;
+	std::map<std::string, Real> RealParameters;
 	std::map<std::string, std::string> stringParameters;
 
 };
@@ -83,10 +83,10 @@ inline int FileReader::getIntParameter(const std::string &key) const
 	return intParameters.at(key);
 }
 
-inline real FileReader::getRealParameter(const std::string &key) const
+inline Real FileReader::getRealParameter(const std::string &key) const
 {
-	CHECK_MSG( realParameters.end() != realParameters.find(key), "Parameter not found!");
-	return realParameters.at(key);
+	CHECK_MSG( RealParameters.end() != RealParameters.find(key), "Parameter not found!");
+	return RealParameters.at(key);
 }
 
 inline std::string FileReader::getStringParameter(const std::string &key) const

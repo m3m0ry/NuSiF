@@ -28,6 +28,9 @@ int main( int argc, char** argv )
 	bla = new Array(20);
 	bla->fill(42);
 	bla->print();
+	Real test = (*bla)(19); //should fail
+	ASSERT_MSG(true, "test");
+	std::cout << test << std::endl;
 	delete bla;
 
 	delete filereader;

@@ -18,51 +18,54 @@ class Array
 {
 public:
    // Constructors for 1D,2D and 3D
-   Array( int xSize );
-   Array( int xSize, int ySize );
-   Array( int xSize, int ySize, int zSize );
+   Array( MySize xSize );
+   Array( MySize xSize, MySize ySize );
+   Array( MySize xSize, MySize ySize, MySize zSize );
    Array(const Array& other);
    ~Array();
 
-   Array& operator= (const Array& other);
-   Array operator+ (const Array& other);
-   Array operator+ (const int value);
-   Array operator- (const Array& s);
-   Array operator- (const int value);
+   //Array operator- (const Array& s);
+   //Array operator- (const int value);
 
    // Access Operators for 1D, 2D and 3D
-   inline real & operator () ( int i );
-   inline real & operator () ( int i ,int j );
-   inline real & operator () ( int i, int j, int k );
+   inline Real & operator () ( MySize i );
+   inline Real & operator () ( MySize i ,MySize j );
+   inline Real & operator () ( MySize i, MySize j, MySize k );
 
    // for const Arrays the following access operators are required
-    inline const real & operator () ( int i ) const;
-    inline const real & operator () ( int i ,int j ) const;
-    inline const real & operator () ( int i, int j, int k ) const;
+    inline const Real & operator () ( MySize i) const;
+    inline const Real & operator () ( MySize i, MySize j) const;
+    inline const Real & operator () ( MySize i, MySize j, MySize k ) const;
 
 
+	//Operators
+	Array& operator= (const Array& other);
+	Array& operator+= (const Array& other);
+	Array operator+ (const Array& other) const;
+	Array operator+ (const Real value) const;
 
    // initialize the whole array with a constant value
-   void fill( real value );
+   void fill( Real value );
 
 
    // return total size of the array
-   int getSize() const;
+   MySize getSize() const;
 
    // return xSize for dimension==0, ySize for dimension==1 and zSize for dimension==2
    // other dimension values are not allowed
-   int getSize(int dimension ) const;
+   MySize getSize(char dimension ) const;
 
 
    // Print the whole array ( for debugging purposes )
    void print();
 
 private:
-	int size_ = 0;
-	int xSize_ = 0;
-	int ySize_ = 0;
-	int zSize_ = 0;
-	real * array_;
+	MySize size_;
+	MySize xSize_;
+	MySize ySize_;
+	MySize zSize_;
+	Real * array_;
+	char dimension_;
 };
 
 
@@ -74,61 +77,42 @@ private:
 
 
 // Operator() 1D
-inline real& Array::operator ()(int i)
+inline Real& Array::operator ()(MySize i)
 {
-	//TODO checks
+   ASSERT_MSG(i < xSize_, "Access value too large");
    return array_[i];
 }
 
 // Operator() 2D
-inline real& Array::operator ()(int i,int j)
+inline Real& Array::operator ()(MySize j,MySize i)
 {
-	//TODO checks
+   ASSERT_MSG(i < xSize_ && j < ySize_, "Access value too large");
    return array_[i + j*xSize_];
 }
 
 // Operator() 3D
-inline real& Array::operator ()(int i, int j, int k)
+inline Real& Array::operator ()(MySize k, MySize j, MySize i)
 {
-   //TODO checks
-   return array_[i + j * xSize_ + k * xSize_ * ySize_];
-}
-
-inline const real & Array::operator () ( int i ) const
-{
-	return array_[i];
-}
-
-inline const real & Array::operator () ( int i ,int j ) const
-{
-	return array_[i + j * xSize_];
-}
-
-inline const real & Array::operator () ( int i, int j, int k ) const
-{
+	ASSERT_MSG(i < xSize_ && j < ySize_ && k < zSize_, "Access value too large");
 	return array_[i + j * xSize_ + k * xSize_ * ySize_];
 }
 
-Array& Array::operator= (const Array& other)
+inline const Real & Array::operator () ( MySize i ) const
 {
-	Array tmp(other);
-	std::swap( size_, tmp.size_);
-	std::swap( xSize_, tmp.xSize_);
-	std::swap( ySize_, tmp.ySize_);
-	std::swap( zSize_, tmp.zSize_);
-	std::swap( array_, tmp.array_);
-	return *this;
+    ASSERT_MSG(i < xSize_, "Access value too large");
+	return array_[i];
 }
 
-Array Array::operator+ (const Array& other)
+inline const Real & Array::operator () ( MySize j ,MySize i ) const
 {
-//	assert( size_ == other.size_);
-	Array result( size_ );
-	for(int i = 0; i < size_; ++i)
-	{
-		result.array_[i] = array_[i] + other.array_[i];
-	}
-	return result;
+    ASSERT_MSG(i < xSize_ && j < ySize_, "Access value too large");
+	return array_[i + j * xSize_];
+}
+
+inline const Real & Array::operator () ( MySize k, MySize j, MySize i ) const
+{
+    ASSERT_MSG(i < xSize_ && j < ySize_ && k < zSize_, "Access value too large");
+	return array_[i + j * xSize_ + k * xSize_ * ySize_];
 }
 
 
