@@ -8,7 +8,7 @@ class SORSolver
 {
 public:
    // Constructor to manually create SORSolver
-   SORSolver ( /* your parameters here*/ );
+   SORSolver (  );
 
    // Constructor to create a SORSolver from a parsed configuration file
    SORSolver ( const FileReader & configuration );
@@ -19,6 +19,9 @@ public:
 
 private:
    // TODO add solver parameters here as member
+   int itermax_;
+   Real eps_; // Epsilon
+   Real omg_; // 
 };
 
 

@@ -23,10 +23,10 @@ class StaggeredGrid
 {
 public:
    // Constructors to manually create staggered grid
-   StaggeredGrid ( int xSize, int ySize, real dx, real dy ); // TODO implement!
+   StaggeredGrid ( int xSize, int ySize, Real dx, Real dy );
 
    // Constructor to create a staggered grid from a parsed configuration file
-   StaggeredGrid ( const FileReader & configuration );       // TODO implement!
+   StaggeredGrid ( const FileReader & configuration );
 
 
    // Getters / Setters for member variables
@@ -36,15 +36,15 @@ public:
    const Array & p()   const { return p_;   }
    const Array & rhs() const { return rhs_; }
 
-   real dx() const { return dx; }
-   real dy() const { return dy; }
+   Real dx() const { return dx; }
+   Real dy() const { return dy; }
 
 protected:
    Array p_;   //< pressure field
    Array rhs_; //< right hand side of the pressure equation
 
-   real dx_;   //< distance between two grid points in x direction
-   real dy_;   //< distance between two grid points in y direction
+   Real dx_;   //< distance between two grid points in x direction
+   Real dy_;   //< distance between two grid points in y direction
 };
 
 
