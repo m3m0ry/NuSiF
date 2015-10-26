@@ -66,7 +66,16 @@ ifeq ($(findstring $(MAKECMDGOALS),clean),)
 -include $(OBJ:.o=.d)
 endif
 
-.PHONY: clean distclean
+.PHONY: clean distclean debug debug-clean debug-distclean
+
+debug:
+	@make TAG=GCCdebug
+
+debug-clean:
+	@make clean TAG=GCCdebug
+
+debug-distclean:
+	@make distclean TAG=GCCdebug
 
 clean:
 	@echo "===>  CLEAN"
