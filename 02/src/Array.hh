@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <cstring>
 
 #include "Types.hh"
 #include "Debug.hh"

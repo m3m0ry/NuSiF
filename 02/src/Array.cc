@@ -54,9 +54,9 @@ Array::Array( size_t xSize, size_t ySize, size_t zSize )
 }
 
 //Copy constructor
-Array::Array(const Array & other) : size_(other.size_), xSize_(other.xSize_), ySize_(other.ySize_), zSize_(other.zSize_)
+Array::Array(const Array & other) : size_(other.size_), xSize_(other.xSize_), ySize_(other.ySize_), zSize_(other.zSize_), array_(0)
 {
-	//TODO memcpy allocate
+	memcpy(array_, other.array_, xSize_ * ySize_ *zSize_);
 }
 
 //Destructor

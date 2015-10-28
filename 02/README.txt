@@ -28,3 +28,7 @@ http://www.cs.berkeley.edu/~smcpeak/autodepend/autodepend.html
 http://make.paulandlesley.org/autodep.html
 
 
+Following Phony change the tag to use GCCdebug:
+		debug
+		debug-clean
+		debug-distclean
