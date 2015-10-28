@@ -6,8 +6,19 @@
 //
 //==================
 
+//Default
+Array::Array( )
+{
+	array_ = 0;
+	size_ = 0;
+	xSize_ = 0;
+	ySize_ = 0;
+	zSize_ = 0;
+	dimension_ = 0;
+}
+
 //1D
-Array::Array( MySize xSize )
+Array::Array( size_t xSize )
 {
 	ASSERT_MSG(xSize > 0, "Array size too small");
 	array_ = new Real[xSize];
@@ -19,7 +30,7 @@ Array::Array( MySize xSize )
 }
 
 //2D
-Array::Array( MySize xSize, MySize ySize )
+Array::Array( size_t xSize, size_t ySize )
 {
 	ASSERT_MSG(xSize > 0 && ySize > 0, "Array size too small");
 	array_ = new Real[xSize * ySize];
@@ -31,7 +42,7 @@ Array::Array( MySize xSize, MySize ySize )
 }
 
 //3D
-Array::Array( MySize xSize, MySize ySize, MySize zSize )
+Array::Array( size_t xSize, size_t ySize, size_t zSize )
 {
 	ASSERT_MSG(xSize > 0 && ySize > 0 && zSize > 0, "Array size too small");
 	array_ = new Real[xSize * ySize * zSize];
@@ -43,9 +54,9 @@ Array::Array( MySize xSize, MySize ySize, MySize zSize )
 }
 
 //Copy constructor
-Array::Array(const Array & other) : size_(other.size_), xSize_(other.xSize_), ySize_(other.ySize_), zSize_(other.zSize_)
+Array::Array(const Array & other) : size_(other.size_), xSize_(other.xSize_), ySize_(other.ySize_), zSize_(other.zSize_), array_(0)
 {
-	//TODO memcpy allocate
+	memcpy(array_, other.array_, xSize_ * ySize_ *zSize_);
 }
 
 //Destructor
@@ -74,12 +85,12 @@ void Array::print()
    // For 2D Arrays the positive x-coordinate goes to the right
    //                   positive y-coordinate goes upwards
    //      -> the line with highest y-value should be printed first
-	for(MySize z = 0; z < zSize_; ++z)
+	for(size_t z = 0; z < zSize_; ++z)
 	{
 		std::cout << "----------------------" << std::endl;
-	   for(MySize y = ySize_ -1; y <ySize_; --y)
+	   for(size_t y = ySize_ -1; y <ySize_; --y)
 	   {
-		   for( MySize x = 0; x < xSize_; ++x)
+		   for( size_t x = 0; x < xSize_; ++x)
 		   {
 			   std::cout << " " << (*this)(z,y,x);
 		   }
@@ -88,7 +99,7 @@ void Array::print()
 	}
 }
 
-MySize Array::getSize( char dimension ) const
+size_t Array::getSize( char dimension ) const
 {
 	ASSERT_MSG(dimension < 3, "Dimension toolarge");
 	if(0 == dimension)
@@ -101,7 +112,7 @@ MySize Array::getSize( char dimension ) const
 }
 
 //return total size of the array
-MySize Array::getSize() const
+size_t Array::getSize() const
 {
    return size_;
 }
@@ -130,11 +141,11 @@ Array Array::operator+ (const Array& other) const
 	ASSERT_MSG(xSize_ == other.xSize_ && ySize_ == other.ySize_ && zSize_ == other.zSize_,
 			"Matrix size not equal");
 	Array result( xSize_, ySize_, zSize_ );
-	for(MySize i = 0; i < zSize_; ++i)
+	for(size_t i = 0; i < zSize_; ++i)
 	{
-		for(MySize j = 0; j < ySize_; ++j)
+		for(size_t j = 0; j < ySize_; ++j)
 		{
-			for(MySize k = 0; k < xSize_; ++k)
+			for(size_t k = 0; k < xSize_; ++k)
 			result(i,j,k) = (*this)(i,j,k) + other(i,j,k);
 		}
 	}
@@ -145,11 +156,11 @@ Array& Array::operator+= (const Array& other)
 {
 	ASSERT_MSG(xSize_ == other.xSize_ && ySize_ == other.ySize_ && zSize_ == other.zSize_,
 			"Matrix size not equal");
-	for(MySize i = 0; i < zSize_; ++i)
+	for(size_t i = 0; i < zSize_; ++i)
 	{
-		for(MySize j = 0; j < ySize_; ++j)
+		for(size_t j = 0; j < ySize_; ++j)
 		{
-			for(MySize k = 0; k < xSize_; ++k)
+			for(size_t k = 0; k < xSize_; ++k)
 			(*this)(i,j,k) += other(i,j,k);
 		}
 	}
@@ -159,11 +170,11 @@ Array& Array::operator+= (const Array& other)
 Array Array::operator+ (const Real value) const
 {
 	Array result( xSize_, ySize_, zSize_ );
-	for(MySize i = 0; i < zSize_; ++i)
+	for(size_t i = 0; i < zSize_; ++i)
 	{
-		for(MySize j = 0; j < ySize_; ++j)
+		for(size_t j = 0; j < ySize_; ++j)
 		{
-			for(MySize k = 0; k < xSize_; ++k)
+			for(size_t k = 0; k < xSize_; ++k)
 			result(i,j,k) = (*this)(i,j,k) + value;
 		}
 	}
