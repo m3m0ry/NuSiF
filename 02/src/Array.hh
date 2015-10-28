@@ -18,6 +18,7 @@ class Array
 {
 public:
    // Constructors for 1D,2D and 3D
+	Array( );
    Array( MySize xSize );
    Array( MySize xSize, MySize ySize );
    Array( MySize xSize, MySize ySize, MySize zSize );

@@ -6,6 +6,17 @@
 //
 //==================
 
+//Default
+Array::Array( )
+{
+	array_ = 0;
+	size_ = 0;
+	xSize_ = 0;
+	ySize_ = 0;
+	zSize_ = 0;
+	dimension_ = 0;
+}
+
 //1D
 Array::Array( MySize xSize )
 {
