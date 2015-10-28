@@ -4,6 +4,7 @@
 
 #include "Types.hh"
 #include "Array.hh"
+#include "FileReader.hh"
 
 
 //*******************************************************************************************************************
@@ -23,10 +24,17 @@ class StaggeredGrid
 {
 public:
    // Constructors to manually create staggered grid
-   StaggeredGrid ( int xSize, int ySize, Real dx, Real dy );
+   StaggeredGrid( );//int xSize, int ySize, Real dx, Real dy );
 
    // Constructor to create a staggered grid from a parsed configuration file
-   StaggeredGrid ( const FileReader & configuration );
+   StaggeredGrid( const FileReader & configuration );
+
+
+	// f(x,y) = 0
+	void initGridSetup1( StaggeredGrid & grid );
+	
+	// f(x,y) = sin(2xPI)
+	void initGridSetup2( StaggeredGrid & grid );
 
 
    // Getters / Setters for member variables
@@ -36,8 +44,8 @@ public:
    const Array & p()   const { return p_;   }
    const Array & rhs() const { return rhs_; }
 
-   Real dx() const { return dx; }
-   Real dy() const { return dy; }
+   Real dx() const { return dx_; }
+   Real dy() const { return dy_; }
 
 protected:
    Array p_;   //< pressure field
