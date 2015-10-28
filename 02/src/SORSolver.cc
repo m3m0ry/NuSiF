@@ -32,7 +32,21 @@ bool SORSolver::solve( StaggeredGrid & grid )
 
 		//TODO calculate r
 		Real r = 0.0;
-
+		Real rTmp = 0.0;
+		Array & p = grid.p();
+		Array & rhs = grid.rhs();
+		size_t imax = p.getSize(0);
+		size_t jmax = rhs.getSize(1);
+		for(size_t i = 1; i < imax + 1; ++i )
+		{
+			for(size_t j = 1; j < jmax + 1; ++j )
+			{
+				rTmp = pow( rhs(i,j) - p(i,j)  , 2 );
+				r += rTmp;
+			}
+		}
+		r = r  / (Real) (imax * jmax);
+		r = sqrt( r );
 
 
 		if( r < eps_)

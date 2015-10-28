@@ -1,5 +1,11 @@
 #include "StaggeredGrid.hh"
 
+//==================
+//
+//  Constructors
+//
+//==================
+
 //Direct Constructor
 StaggeredGrid::StaggeredGrid( int xSize, int ySize, Real dx, Real dy ) : dx_(dx), dy_(dy)
 {
@@ -24,7 +30,7 @@ StaggeredGrid::StaggeredGrid( const FileReader & configuration )
 
 void StaggeredGrid::initGridSetup1( StaggeredGrid & grid )
 {
-	//TODO rhs_ = 0
+	rhs_.fill(0.0);
 }
 
 void StaggeredGrid::initGridSetup2( StaggeredGrid & grid )

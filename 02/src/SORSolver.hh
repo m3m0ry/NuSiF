@@ -1,6 +1,9 @@
 #ifndef SOR_SOLVER_HH
 #define SOR_SOLVER_HH
 
+#include <cmath>
+//#include <ctgmath>
+
 #include "StaggeredGrid.hh"
 #include "Types.hh"
 #include "FileReader.hh"

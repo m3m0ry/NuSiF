@@ -7,7 +7,7 @@
 #include "FileReader.hh"
 
 
-//*******************************************************************************************************************
+//**************************************
 /*! Class for storing all arrays required for the simulation
 *
 * For now it only contains an array for the pressure and another array for the
@@ -19,7 +19,7 @@
 * delete or rename any existing functions, since future skeletons rely on these functions.
 *
 */
-//*******************************************************************************************************************
+//**************************************
 class StaggeredGrid
 {
 public:

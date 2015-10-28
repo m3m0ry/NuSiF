@@ -62,7 +62,9 @@ bool FileReader::readFile(const std::string &name)
 					if(1 == state)
 						state = 2;
 					else if(2 == state)
-						state = 3;
+						state = 2;
+					else if(3 == state)
+						state = 4;
 					continue;
 				}
 				//Read parameter name
@@ -72,12 +74,13 @@ bool FileReader::readFile(const std::string &name)
 					state = 1;
 				}
 				//Read paremeter value
-				else if(2 == state)
+				else if(2 == state || 3 == state)
 				{
 					value = value + c;
+					state = 3;
 				}
 				//Warn if multiple values given
-				else if(3 == state){
+				else if(4 == state){
 					internal::warnFct( "Multiple values for one parameter given", name.c_str(), j);
 					break;
 				}
