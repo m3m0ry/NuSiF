@@ -16,24 +16,25 @@ SORSolver::SORSolver ( const FileReader & configuration )
 
 
 
-// solve the pressure equation on the staggered grid
+// Solve the pressure equation on the staggered grid
 bool SORSolver::solve( StaggeredGrid & grid )
 {
 	Array & p = grid.p();
 	Array & rhs = grid.rhs();
-	size_t imax = p.getSize(0);
-	size_t jmax = p.getSize(1);
+	size_t imax = p.getSize(0) -2;
+	size_t jmax = p.getSize(1) -2;
 	Real dx = grid.dx();
 	Real dy = grid.dy();
+
 	for(int i = 0; i < itermax_; ++i)
 	{
 		//Copy paste boundaries
-		for(size_t j = 0; j < jmax + 2; ++j)
+		for(size_t j = 0; j < jmax + 1; ++j)
 		{
 			p(0, j) = p(1, j);
 			p(imax + 1, j) = p(imax, j);
 		}
-		for(size_t i = 0; i < imax + 2; ++i)
+		for(size_t i = 0; i < imax + 1; ++i)
 		{
 			p(i, 0) = p(i, 1);
 			p(i, jmax + 1) = p(i, jmax);
@@ -76,8 +77,8 @@ bool SORSolver::solve( StaggeredGrid & grid )
 			for(size_t j = 1; j < jmax + 1; ++j )
 			{
 
-				rTmp = 2.0 * (dx*dx + dy*dy) / ( dx*dx * dy*dy ) * p(i,j) + rhs(i,j); //TODO -
-				rTmp = pow( rhs(i,j) - p(i,j)  , 2 );
+				rTmp = 2.0 * (dx*dx + dy*dy) / ( dx*dx * dy*dy ) * p(i,j) + rhs(i,j) - ( ( (p(i+1, j) + p(i-1,j) ) / dx*dx) * ( (p(i,j+1) - p(i,j-1))/dy*dy));
+				rTmp = pow( rTmp , 2 );
 				r += rTmp;
 			}
 		}
@@ -86,9 +87,14 @@ bool SORSolver::solve( StaggeredGrid & grid )
 
 
 		if( r < eps_)
+		{
+			p.print();
+			std::cout << i << std::endl;
 			return true;
+		}
 	}
 
+	p.print();
 	return false;
 
 }

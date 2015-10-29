@@ -18,22 +18,23 @@ StaggeredGrid::StaggeredGrid( const FileReader & configuration )
 {
 	int xSize = configuration.getIntParameter("imax");
 	int ySize = configuration.getIntParameter("jmax");
+
 	p_ = Array(xSize + 2, ySize + 2);
 	rhs_ = Array(xSize + 2, ySize + 2);
-	//TODO +2 ??
-	dx_ = configuration.getRealParameter("xlength")/(xSize+2);
-	dy_ = configuration.getRealParameter("ylength")/(ySize+2);
+
+	dx_ = configuration.getRealParameter("xlength")/(xSize);
+	dy_ = configuration.getRealParameter("ylength")/(ySize);
 }
 
 
 
 
-void StaggeredGrid::initGridSetup1( StaggeredGrid & grid )
+void StaggeredGrid::initGridSetup1( )
 {
-	rhs_.fill(0.0);
+	rhs_.fill(1.0);
 }
 
-void StaggeredGrid::initGridSetup2( StaggeredGrid & grid )
+void StaggeredGrid::initGridSetup2( )
 {
 	//TODO rhs_ = sin(2xPI)
 

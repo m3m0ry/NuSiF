@@ -6,7 +6,6 @@
 #include "Array.hh"
 #include "FileReader.hh"
 
-
 //**************************************
 /*! Class for storing all arrays required for the simulation
 *
@@ -31,10 +30,10 @@ public:
 
 
 	// f(x,y) = 0
-	void initGridSetup1( StaggeredGrid & grid );
+	void initGridSetup1( );
 	
 	// f(x,y) = sin(2xPI)
-	void initGridSetup2( StaggeredGrid & grid );
+	void initGridSetup2( );
 
 
    // Getters / Setters for member variables

@@ -1,7 +1,10 @@
 #include "Array.hh"
 #include "FileReader.hh"
+#include "SORSolver.hh"
+#include "StaggeredGrid.hh"
 
 #include <iostream>
+#include <ostream>
 
 
 int main( int argc, char** argv )
@@ -16,27 +19,27 @@ int main( int argc, char** argv )
 	internal::progress("Starting to process file:", 0, 10);
 	auto filereader = new FileReader();
 	filereader->readFile(argv[1]);
-
 	filereader->printParameters();
-
 	internal::progress("File read", 200,200);
 
-	int height = filereader->getIntParameter("height");
-	int width = filereader->getIntParameter("width");
-	Real initial = filereader->getRealParameter("initial");
+	auto grid = new StaggeredGrid( *filereader );
+	grid->initGridSetup1();
+	Array & p = grid->p();
+	p.fill(20.0);
+	auto solver = new SORSolver( *filereader );
+	internal::progress("Start solving", 0,200);
 
+	if(solver->solve(*grid))
+		std::cout << "yeah" << std::endl;
 
-	int x = filereader->getIntParameter("x");
-	int y = filereader->getIntParameter("y");
+	internal::progress("Solved", 200,200);
 
-	std::cout << "2D array" << std::endl;
-	Array * bla = new Array(height, width);
-	bla->fill(initial);
-	(*bla)(x,y) = (*bla)(x,y) * 2;
-	bla->print();
-	delete bla;
 
 	delete filereader;
+
+	delete grid;
+
+	delete solver;
 
    return 0;
 }

@@ -3,8 +3,11 @@
 
 #include <cmath>
 //#include <ctgmath>
+#include <iostream>
+#include <ostream>
 
 #include "StaggeredGrid.hh"
+#include "Debug.hh"
 #include "Types.hh"
 #include "FileReader.hh"
 
