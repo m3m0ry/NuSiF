@@ -31,7 +31,7 @@ StaggeredGrid::StaggeredGrid( const FileReader & configuration )
 
 void StaggeredGrid::initGridSetup1( )
 {
-	rhs_.fill(1.0);
+	rhs_.fill(0.0);
 }
 
 void StaggeredGrid::initGridSetup2( )

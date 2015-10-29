@@ -57,7 +57,7 @@ Array::Array( size_t xSize, size_t ySize, size_t zSize )
 Array::Array(const Array & other) : size_(other.size_), xSize_(other.xSize_), ySize_(other.ySize_),
 										zSize_(other.zSize_), array_(new Real[xSize_ * ySize_ * zSize_])
 {
-	memcpy(array_, other.array_, xSize_ * ySize_ *zSize_);
+	memcpy(array_, other.array_, xSize_ * ySize_ *zSize_ * sizeof(Real)); 
 }
 
 //Destructor
