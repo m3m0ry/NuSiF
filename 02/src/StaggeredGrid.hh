@@ -1,6 +1,10 @@
 #ifndef STAGGERED_GRID_HH
 #define STAGGERED_GRID_HH
 
+#include <cmath>
+#include <ctgmath>
+
+#define PI           3.14159265358979323846
 
 #include "Types.hh"
 #include "Array.hh"

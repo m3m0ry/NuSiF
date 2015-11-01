@@ -28,14 +28,21 @@ StaggeredGrid::StaggeredGrid( const FileReader & configuration )
 
 
 
-
+// f(x,y) = 0
 void StaggeredGrid::initGridSetup1( )
 {
 	rhs_.fill(0.0);
 }
 
+// f(x,y) = sin(2xPI)
 void StaggeredGrid::initGridSetup2( )
 {
-	//TODO rhs_ = sin(2xPI)
+	for(size_t i = 0; i < rhs_.getSize(0); ++i)
+	{
+		for(size_t j = 0; j < rhs_.getSize(1); ++j)
+		{
+			rhs_(i,j) = sin(2.0 * i * PI);
+		}
+	}
 
 }

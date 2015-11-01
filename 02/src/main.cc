@@ -23,9 +23,12 @@ int main( int argc, char** argv )
 	internal::progress("File read", 200,200);
 
 	auto grid = new StaggeredGrid( *filereader );
-	grid->initGridSetup1();
+	grid->initGridSetup2();
 	Array & p = grid->p();
-	p.fill(20.0);
+	p.fill(0.0);
+	p.print();
+	Array & rhs = grid->rhs();
+	rhs.print();
 	auto solver = new SORSolver( *filereader );
 	internal::progress("Start solving", 0,200);
 
