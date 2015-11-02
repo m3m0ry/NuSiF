@@ -11,6 +11,11 @@
 #include "Types.hh"
 #include "FileReader.hh"
 
+#ifndef NDEBUG
+#include <iostream>
+#include <fstream>
+
+#endif
 
 class SORSolver
 {

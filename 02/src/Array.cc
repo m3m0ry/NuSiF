@@ -81,24 +81,11 @@ void Array::fill( Real value )
 
 
 // Print the whole array (for debugging purposes)
-void Array::print()
+void Array::print() const
 {
-   // For 2D Arrays the positive x-coordinate goes to the right
-   //                   positive y-coordinate goes upwards
-   //      -> the line with highest y-value should be printed first
-	for(size_t z = 0; z < zSize_; ++z)
-	{
-		std::cout << "----------------------" << std::endl;
-	   for(size_t y = ySize_ -1; y <ySize_; --y)
-	   {
-		   for( size_t x = 0; x < xSize_; ++x)
-		   {
-			   std::cout << " " << (*this)(x,y,z);
-		   }
-		   std::cout << std::endl;
-	   }
-	}
+	std::cout << *this;
 }
+
 
 size_t Array::getSize( char dimension ) const
 {
@@ -123,6 +110,25 @@ size_t Array::getSize() const
 //  Operators
 //
 //=================
+std::ostream& operator<<(std::ostream& stream, const Array &a)
+{
+   // For 2D Arrays the positive x-coordinate goes to the right
+   //                   positive y-coordinate goes upwards
+   //      -> the line with highest y-value should be printed first
+	for(size_t z = 0; z < a.getSize(2); ++z)
+	{
+		stream << "#----------------------" << std::endl;
+	   for(size_t y = a.getSize(1) -1; y <a.getSize(1); --y)
+	   {
+		   for( size_t x = 0; x < a.getSize(0); ++x)
+		   {
+			   stream << " " << a(x,y,z);
+		   }
+		   stream << std::endl;
+	   }
+	}
+	return stream;
+}
 
 Array& Array::operator= (const Array& other)
 {

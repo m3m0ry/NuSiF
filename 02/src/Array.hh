@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <ostream>
 #include <cstring>
 
 #include "Types.hh"
@@ -59,7 +60,7 @@ public:
 
 
    // Print the whole array ( for debugging purposes )
-   void print();
+   void print() const;
 
 private:
 	size_t size_;
@@ -70,6 +71,7 @@ private:
 	char dimension_;
 };
 
+std::ostream& operator<< (std::ostream&, const Array&);
 
 //=======================================
 //

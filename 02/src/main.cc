@@ -28,9 +28,10 @@ int main( int argc, char** argv )
 	Array & p = grid->p();
 	std::default_random_engine generator;
 	std::uniform_real_distribution<double> distribution(0.0, 1.0);
-	for(size_t i = 0; i < p.getSize(0)*p.getSize(1); ++i)
+	for(size_t j = 0; j < p.getSize(1); ++j)
 	{
-		p(i) = distribution(generator);
+		for(size_t i = 0; i < p.getSize(0); ++i)
+			p(i,j) = distribution(generator);
 	}
 	p.print();
 	Array & rhs = grid->rhs();
