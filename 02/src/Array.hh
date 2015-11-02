@@ -30,14 +30,14 @@ public:
    //Array operator- (const int value);
 
    // Access Operators for 1D, 2D and 3D
-   inline Real & operator () ( size_t i );
-   inline Real & operator () ( size_t i ,size_t j );
-   inline Real & operator () ( size_t i, size_t j, size_t k );
+   inline Real & operator () ( size_t );
+   inline Real & operator () ( size_t ,size_t );
+   inline Real & operator () ( size_t, size_t, size_t );
 
    // for const Arrays the following access operators are required
-    inline const Real & operator () ( size_t i) const;
-    inline const Real & operator () ( size_t i, size_t j) const;
-    inline const Real & operator () ( size_t i, size_t j, size_t k ) const;
+    inline const Real & operator () ( size_t) const;
+    inline const Real & operator () ( size_t, size_t) const;
+    inline const Real & operator () ( size_t, size_t, size_t ) const;
 
 
 	//Operators
@@ -86,14 +86,14 @@ inline Real& Array::operator ()(size_t i)
 }
 
 // Operator() 2D
-inline Real& Array::operator ()(size_t j,size_t i)
+inline Real& Array::operator ()(size_t i,size_t j)
 {
    ASSERT_MSG(i < xSize_ && j < ySize_, "Access value too large");
    return array_[i + j*xSize_];
 }
 
 // Operator() 3D
-inline Real& Array::operator ()(size_t k, size_t j, size_t i)
+inline Real& Array::operator ()(size_t i, size_t j, size_t k)
 {
 	ASSERT_MSG(i < xSize_ && j < ySize_ && k < zSize_, "Access value too large");
 	return array_[i + j * xSize_ + k * xSize_ * ySize_];
@@ -105,13 +105,13 @@ inline const Real & Array::operator () ( size_t i ) const
 	return array_[i];
 }
 
-inline const Real & Array::operator () ( size_t j ,size_t i ) const
+inline const Real & Array::operator () ( size_t i ,size_t j ) const
 {
     ASSERT_MSG(i < xSize_ && j < ySize_, "Access value too large");
 	return array_[i + j * xSize_];
 }
 
-inline const Real & Array::operator () ( size_t k, size_t j, size_t i ) const
+inline const Real & Array::operator () ( size_t i, size_t j, size_t k ) const
 {
     ASSERT_MSG(i < xSize_ && j < ySize_ && k < zSize_, "Access value too large");
 	return array_[i + j * xSize_ + k * xSize_ * ySize_];

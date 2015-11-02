@@ -25,8 +25,9 @@ bool SORSolver::solve( StaggeredGrid & grid )
 	size_t jmax = p.getSize(1) -2;
 	Real dx = grid.dx();
 	Real dy = grid.dy();
+	Real rFactor = omg_ * (dx*dx*dy*dy/(2.0*(dx*dx+dy*dy)));
 
-	for(int i = 0; i < 10; ++i)
+	for(int i = 0; i < itermax_; ++i)
 	{
 		//Copy paste boundaries
 		for(size_t j = 1; j < jmax + 1; ++j)
@@ -40,67 +41,30 @@ bool SORSolver::solve( StaggeredGrid & grid )
 			p(i, jmax + 1) = p(i, jmax);
 		}
 
-		p.print();
-		std::cout << "dx=" << dx << "dy=" << dy << "omg=" << omg_ << std::endl;
-
-
 		//SOR iteration
-		for(size_t i = 1; i < imax +1; ++i)
+		//Calculate r
+		Real r = 0.0;
+		for(size_t j = 1; j < jmax +1; ++j)
 		{
-			for(size_t j = 1; j < jmax + 1; ++j)
+			for(size_t i = 1; i < imax + 1; ++i)
 			{
-				Real tmp1 = (1.0 - omg_) * p(i,j);
-				Real tmp2 = omg_ / ( (2.0/(dx*dx)) + (2.0/(dy*dy)));
-				Real tmp3 = ( p(i+1,j) + p(i-1,j) ) / (dx*dx);
-				Real tmp4 = ( p(i,j+1) + p(i,j-1) ) / (dy*dy);
-				Real tmp5 = (tmp3 + tmp4) - rhs(i,j);
-				Real tmp6 = tmp2 * tmp5;
-				//std::cout << "tmp1="<< tmp1 << " tmp2= " << tmp2 << " tmp5=" << tmp5 << " tmp6=" << tmp6 << std::endl;
-				p(i,j) = tmp1 + tmp6;
-				std::cout << p(i,j) << std::endl;
+				Real rTmp1 = (p(i+1,j) - 2.0 * p(i,j) + p(i-1,j))/(dx*dx);
+				Real rTmp2 = (p(i,j+1) - 2.0 * p(i,j) + p(i,j-1))/(dy*dy);
+				Real rTmp = rhs(i,j) - (rTmp1 + rTmp2);
+				r += rTmp;
+				p(i,j) = p(i,j) - rFactor * rTmp;
 			}
 		}
 		
-		p.print();
-
-		//Copy paste boundaries
-		for(size_t j = 1; j < jmax + 1; ++j)
-		{
-			p(0, j) = p(1, j);
-			p(imax + 1, j) = p(imax, j);
-		}
-		for(size_t i = 1; i < imax + 1; ++i)
-		{
-			p(i, 0) = p(i, 1);
-			p(i, jmax + 1) = p(i, jmax);
-		}
-
-		//Calculate r
-		Real r = 0.0;
-		for(size_t i = 1; i < imax + 1; ++i )
-		{
-			for(size_t j = 1; j < jmax + 1; ++j )
-			{
-
-				Real rTmp1 = 2.0*(dx*dx + dy*dy)/(dx*dx*dy*dy) * p(i,j);
-				Real rTmp2 = (p(i+1,j) + p(i-1,j))/(dx*dx);
-				Real rTmp3 = (p(i,j+1) + p(i,j-1))/(dy*dy);
-				Real rTmp4 = rTmp2 + rTmp3;
-				Real rTmp = rTmp1 - rTmp4 + rhs(i,j);
-				rTmp = rTmp * rTmp;
-				r += rTmp;
-			}
-		}
 		r = r  / (Real) (imax * jmax);
 		r = sqrt( r );
 
 		if( r < eps_)
 		{
-			//p.print();
 			std::cout << "i = " << i << " r = " << r << std::endl;
 			return true;
 		}
-			//std::cout << "i = " << i << " r = " << r << std::endl;
+		std::cout << "i = " << i << " r = " << r << std::endl;
 	}
 
 	p.print();

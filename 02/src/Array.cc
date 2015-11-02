@@ -93,7 +93,7 @@ void Array::print()
 	   {
 		   for( size_t x = 0; x < xSize_; ++x)
 		   {
-			   std::cout << " " << (*this)(z,y,x);
+			   std::cout << " " << (*this)(x,y,z);
 		   }
 		   std::cout << std::endl;
 	   }
@@ -142,11 +142,11 @@ Array Array::operator+ (const Array& other) const
 	ASSERT_MSG(xSize_ == other.xSize_ && ySize_ == other.ySize_ && zSize_ == other.zSize_,
 			"Matrix size not equal");
 	Array result( xSize_, ySize_, zSize_ );
-	for(size_t i = 0; i < zSize_; ++i)
+	for(size_t k = 0; k < zSize_; ++k)
 	{
 		for(size_t j = 0; j < ySize_; ++j)
 		{
-			for(size_t k = 0; k < xSize_; ++k)
+			for(size_t i = 0; i < xSize_; ++i)
 			result(i,j,k) = (*this)(i,j,k) + other(i,j,k);
 		}
 	}
@@ -157,11 +157,11 @@ Array& Array::operator+= (const Array& other)
 {
 	ASSERT_MSG(xSize_ == other.xSize_ && ySize_ == other.ySize_ && zSize_ == other.zSize_,
 			"Matrix size not equal");
-	for(size_t i = 0; i < zSize_; ++i)
+	for(size_t k = 0; k < zSize_; ++k)
 	{
 		for(size_t j = 0; j < ySize_; ++j)
 		{
-			for(size_t k = 0; k < xSize_; ++k)
+			for(size_t i = 0; i < xSize_; ++i)
 			(*this)(i,j,k) += other(i,j,k);
 		}
 	}
@@ -171,11 +171,11 @@ Array& Array::operator+= (const Array& other)
 Array Array::operator+ (const Real value) const
 {
 	Array result( xSize_, ySize_, zSize_ );
-	for(size_t i = 0; i < zSize_; ++i)
+	for(size_t k = 0; k < zSize_; ++k)
 	{
 		for(size_t j = 0; j < ySize_; ++j)
 		{
-			for(size_t k = 0; k < xSize_; ++k)
+			for(size_t i = 0; i < xSize_; ++i)
 			result(i,j,k) = (*this)(i,j,k) + value;
 		}
 	}

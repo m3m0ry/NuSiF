@@ -37,9 +37,9 @@ void StaggeredGrid::initGridSetup1( )
 // f(x,y) = sin(2xPI)
 void StaggeredGrid::initGridSetup2( )
 {
-	for(size_t i = 0; i < rhs_.getSize(0); ++i)
+	for(size_t j = 0; j < rhs_.getSize(0); ++j)
 	{
-		for(size_t j = 0; j < rhs_.getSize(1); ++j)
+		for(size_t i = 0; i < rhs_.getSize(1); ++i)
 		{
 			rhs_(i,j) = sin(2.0 * i * PI);
 		}
