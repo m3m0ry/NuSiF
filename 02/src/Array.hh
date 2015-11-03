@@ -1,5 +1,4 @@
-#ifndef ARRAY_HH
-#define ARRAY_HH
+#pragma once
 
 #include <cstdlib>
 #include <iostream>
@@ -71,7 +70,7 @@ private:
 	char dimension_;
 };
 
-std::ostream& operator<< (std::ostream&, const Array&);
+friend std::ostream& operator<< (std::ostream&, const Array&);
 
 //=======================================
 //
@@ -118,7 +117,4 @@ inline const Real & Array::operator () ( size_t i, size_t j, size_t k ) const
     ASSERT_MSG(i < xSize_ && j < ySize_ && k < zSize_, "Access value too large");
 	return array_[i + j * xSize_ + k * xSize_ * ySize_];
 }
-
-
-#endif //ARRAY_HH
 

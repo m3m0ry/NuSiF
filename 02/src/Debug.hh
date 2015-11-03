@@ -1,5 +1,4 @@
-#ifndef DEBUG_HH
-#define DEBUG_HH
+#pragma once
 
 #include <sstream>
 
@@ -79,5 +78,3 @@ namespace internal
 }
 
 
-
-#endif // DEBUG_HH

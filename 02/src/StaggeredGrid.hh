@@ -1,5 +1,4 @@
-#ifndef STAGGERED_GRID_HH
-#define STAGGERED_GRID_HH
+#pragma once
 
 #include <cmath>
 #include <ctgmath>
@@ -58,7 +57,4 @@ protected:
    Real dy_;   //< distance between two grid points in y direction
 };
 
-
-
-#endif //STAGGERED_GRID_HH
 

@@ -1,6 +1,4 @@
-#ifndef TYPES_HH
-#define TYPES_HH
-
+#pragma once
 
 #include <cstddef>
 // This typedef makes it possible to switch between float and double accuracy
@@ -13,5 +11,3 @@ using std::size_t;
 // Enumeration of boundary conditions
 typedef enum { NOSLIP, SLIP, OUTFLOW, PERIODIC } BCTYPE;
 
-
-#endif //TYPES_HH

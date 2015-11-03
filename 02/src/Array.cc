@@ -132,6 +132,8 @@ std::ostream& operator<<(std::ostream& stream, const Array &a)
 
 Array& Array::operator= (const Array& other)
 {
+	if( this == &other )
+		return *this;
 	Array tmp(other);
 	std::swap( size_, tmp.size_);
 	std::swap( xSize_, tmp.xSize_);

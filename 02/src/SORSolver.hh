@@ -1,5 +1,4 @@
-#ifndef SOR_SOLVER_HH
-#define SOR_SOLVER_HH
+#pragma once
 
 #include <cmath>
 //#include <ctgmath>
@@ -35,14 +34,5 @@ private:
    Real eps_; // Epsilon
    Real omg_; // 
 };
-
-
-
-
-
-
-#endif //SOR_SOLVER_HH
-
-
 
 

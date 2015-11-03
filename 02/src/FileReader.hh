@@ -1,5 +1,4 @@
-#ifndef FILEREADER_HH
-#define FILEREADER_HH
+#pragma once
 
 #include <string>
 #include <map>
@@ -95,9 +94,4 @@ inline std::string FileReader::getStringParameter(const std::string &key) const
 	return stringParameters.at(key);
 }
 
-
-
-
-
-#endif //FILEREADER_HH
 
