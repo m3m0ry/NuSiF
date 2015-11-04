@@ -105,12 +105,12 @@ bool SORSolver::solve( StaggeredGrid & grid )
 			myfile << p;
 			myfile << std::endl;
 			myfile.close();
-#endif //NDEBUG
 			std::cout << "i = " << nIter << " r = " << r << std::endl;
+#endif //NDEBUG
 			return true;
 		}
-			std::cout << "i = " << nIter << " r = " << r << std::endl;
 #ifndef NDEBUG
+			std::cout << "i = " << nIter << " r = " << r << std::endl;
 		if( nIter % 1000 == 0)
 		{
 			std::ofstream myfile;
