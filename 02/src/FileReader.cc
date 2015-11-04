@@ -1,6 +1,4 @@
-
 #include "FileReader.hh"
-
 
 void FileReader::registerIntParameter(const std::string &key, int init)
 {

@@ -1,9 +1,10 @@
 #pragma once
 
-#include <cstdlib>
+//#include <cstdlib>
 #include <iostream>
-#include <ostream>
+//#include <ostream>
 #include <cstring>
+#include <utility>
 
 #include "Types.hh"
 #include "Debug.hh"
@@ -18,12 +19,19 @@
 class Array
 {
 public:
-   // Constructors for 1D,2D and 3D
+	// Default Constructor
 	Array( );
-   Array( size_t xSize );
-   Array( size_t xSize, size_t ySize );
-   Array( size_t xSize, size_t ySize, size_t zSize );
-   Array(const Array& other);
+	// 1D Constructor
+   Array( size_t );
+	// 2D Constructor
+   Array( size_t, size_t );
+	// 3D Constructor
+   Array( size_t, size_t, size_t );
+	// Copy Constructor
+   Array(const Array&);
+	// Move Constructor
+	Array(Array &&);
+	// Destructor
    ~Array();
 
    //Array operator- (const Array& s);
@@ -41,10 +49,13 @@ public:
 
 
 	//Operators
-	Array& operator= (const Array& other);
-	Array& operator+= (const Array& other);
-	Array operator+ (const Array& other) const;
-	Array operator+ (const Real value) const;
+	// Copy assign operator
+	Array& operator= (const Array&);
+	// Move assign operator
+	Array& operator= (Array&&);
+	Array& operator+= (const Array&);
+	Array operator+ (const Array&) const;
+	Array operator+ (const Real) const;
 
    // initialize the whole array with a constant value
    void fill( Real value );
@@ -70,7 +81,7 @@ private:
 	char dimension_;
 };
 
-friend std::ostream& operator<< (std::ostream&, const Array&);
+std::ostream& operator<< (std::ostream&, const Array&);
 
 //=======================================
 //

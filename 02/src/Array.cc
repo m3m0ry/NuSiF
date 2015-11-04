@@ -6,7 +6,7 @@
 //
 //==================
 
-//Default
+// Default
 Array::Array( )
 {
 	array_ = 0;
@@ -17,7 +17,7 @@ Array::Array( )
 	dimension_ = 0;
 }
 
-//1D
+// 1D
 Array::Array( size_t xSize )
 {
 	ASSERT_MSG(xSize > 0, "Array size too small");
@@ -29,7 +29,7 @@ Array::Array( size_t xSize )
 	dimension_ = 1;
 }
 
-//2D
+// 2D
 Array::Array( size_t xSize, size_t ySize )
 {
 	ASSERT_MSG(xSize > 0 && ySize > 0, "Array size too small");
@@ -41,7 +41,7 @@ Array::Array( size_t xSize, size_t ySize )
 	dimension_ = 2;
 }
 
-//3D
+// 3D
 Array::Array( size_t xSize, size_t ySize, size_t zSize )
 {
 	ASSERT_MSG(xSize > 0 && ySize > 0 && zSize > 0, "Array size too small");
@@ -53,11 +53,21 @@ Array::Array( size_t xSize, size_t ySize, size_t zSize )
 	dimension_ = 3;
 }
 
-//Copy constructor
+// Copy constructor
 Array::Array(const Array & other) : size_(other.size_), xSize_(other.xSize_), ySize_(other.ySize_),
 										zSize_(other.zSize_), array_(new Real[xSize_ * ySize_ * zSize_])
 {
 	memcpy(array_, other.array_, xSize_ * ySize_ *zSize_ * sizeof(Real)); 
+}
+
+// Move constructor
+Array::Array(Array && other)
+{
+	size_ = std::move(other.size_);
+	xSize_ = std::move(other.xSize_);
+	ySize_ = std::move(other.ySize_);
+	zSize_ = std::move(other.zSize_);
+	array_ = std::move(other.array_);
 }
 
 //Destructor
@@ -65,13 +75,11 @@ Array::~Array(){
 	delete[] array_;
 }
 
-
 //===========================
 //
 //  Convenience Functions
 //
 //===========================
-
 
 //Initialize the whole array with a constant value
 void Array::fill( Real value )
@@ -86,7 +94,7 @@ void Array::print() const
 	std::cout << *this;
 }
 
-
+// Get size depending on dimension
 size_t Array::getSize( char dimension ) const
 {
 	ASSERT_MSG(dimension < 3, "Dimension toolarge");
@@ -110,6 +118,8 @@ size_t Array::getSize() const
 //  Operators
 //
 //=================
+
+// Stream out
 std::ostream& operator<<(std::ostream& stream, const Array &a)
 {
    // For 2D Arrays the positive x-coordinate goes to the right
@@ -130,6 +140,7 @@ std::ostream& operator<<(std::ostream& stream, const Array &a)
 	return stream;
 }
 
+// Copy assign operator
 Array& Array::operator= (const Array& other)
 {
 	if( this == &other )
@@ -144,6 +155,16 @@ Array& Array::operator= (const Array& other)
 	return *this;
 }
 
+// Move assign operator
+Array& Array::operator=(Array && other)
+{
+	size_ = std::move(other.size_);
+	xSize_ = std::move(other.xSize_);
+	ySize_ = std::move(other.ySize_);
+	zSize_ = std::move(other.zSize_);
+	array_ = std::move(other.array_);
+	return *this;
+}
 
 Array Array::operator+ (const Array& other) const
 {
