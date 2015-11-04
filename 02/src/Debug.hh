@@ -19,15 +19,17 @@
    if( !(X) ) {  internal::checkFct ( (X), #X, "", __FILE__, __LINE__ ); }
 
 
-
-
 #define WARN(MSG) \
    { std::stringstream ss; \
      ss << MSG; \
      internal::warnFct ( ss.str(), __FILE__, __LINE__ );\
    }
 
-
+#define PROGRESS(MSG, X, MAX) \
+   { std::stringstream ss; \
+     ss << MSG; \
+	  internal::progress(ss.str(), X, MAX);\
+	}
 
 
 //===================================================================================================================
@@ -49,11 +51,17 @@
 #define ASSERT(X) \
    if( !(X) ) {  internal::assertFct ( (X), #X, "", __FILE__, __LINE__ ); }
 
+#define DEBUG_PROGRESS(MSG, X, MAX) \
+   { std::stringstream ss; \
+     ss << MSG; \
+	  internal::progress(ss.str(), X, MAX);\
+	}
 
 #else
 
 #define ASSERT_MSG(X, MSG)
 #define ASSERT(X)
+#define DEBUG_PROGRESS(MSG, X, MAX)
 
 #endif //NDEBUG
 

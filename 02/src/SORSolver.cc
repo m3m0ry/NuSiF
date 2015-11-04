@@ -118,9 +118,10 @@ bool SORSolver::solve( StaggeredGrid & grid )
 			myfile << p;
 			myfile << std::endl;
 			myfile.close();
+			DEBUG_PROGRESS("SOR-Progress", nIter, itermax_);
 		}
 #endif //NDEBUG
-		//std::cout << "i = " << i << " r = " << r << std::endl;
 	}
+	WARN("Did not stop on eps_");
 	return false;
 }
