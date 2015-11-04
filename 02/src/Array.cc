@@ -63,10 +63,12 @@ Array::Array(const Array & other) : size_(other.size_), xSize_(other.xSize_), yS
 // Move constructor
 Array::Array(Array && other)
 {
+	std::cerr << "did move c'tor" << std::endl;
 	size_ = std::move(other.size_);
 	xSize_ = std::move(other.xSize_);
 	ySize_ = std::move(other.ySize_);
 	zSize_ = std::move(other.zSize_);
+	dimension_ = std::move(other.dimension_);
 	array_ = std::move(other.array_);
 }
 
@@ -162,7 +164,9 @@ Array& Array::operator=(Array && other)
 	xSize_ = std::move(other.xSize_);
 	ySize_ = std::move(other.ySize_);
 	zSize_ = std::move(other.zSize_);
-	array_ = std::move(other.array_);
+	dimension_ = std::move(other.dimension_);
+	array_ = other.array_;
+	other.array_ = 0;
 	return *this;
 }
 

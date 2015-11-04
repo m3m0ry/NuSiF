@@ -1,12 +1,12 @@
-#include "Array.hh"
-#include "FileReader.hh"
-#include "SORSolver.hh"
-#include "StaggeredGrid.hh"
-
 #include <iostream>
 #include <ostream>
 #include <random>
 
+#include "Array.hh"
+#include "FileReader.hh"
+#include "SORSolver.hh"
+#include "StaggeredGrid.hh"
+#include "Debug.hh"
 
 int main( int argc, char** argv )
 {
