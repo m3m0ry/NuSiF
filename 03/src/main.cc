@@ -7,6 +7,7 @@
 #include "SORSolver.hh"
 #include "StaggeredGrid.hh"
 #include "Debug.hh"
+#include "FluidSimulator.hh"
 
 int main( int argc, char** argv )
 {

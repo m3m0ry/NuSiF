@@ -12,8 +12,8 @@ StaggeredGrid::StaggeredGrid( int xSize, int ySize, Real dx, Real dy ) : dx_(dx)
 	//TODO not all arrays have the same size????
 	p_ = Array(xSize + 2, ySize + 2);
 	rhs_ = Array(xSize + 2, ySize + 2);
-	u_ = Array(xSize + 2, ySize + 2);
-	v_ = Array(xSize + 2, ySize + 2);
+	u_ = Array(xSize, ySize + 2);
+	v_ = Array(xSize + 2, ySize);
 	f_ = Array(xSize + 2, ySize + 2);
 	g_ = Array(xSize + 2, ySize + 2);
 }

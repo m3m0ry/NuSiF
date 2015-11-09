@@ -12,6 +12,8 @@ SORSolver::SORSolver ( const FileReader & configuration )
 	itermax_ = configuration.getIntParameter("itermax");
 	eps_ = configuration.getRealParameter("eps");
 	omg_ = configuration.getRealParameter("omg");
+	epsFrequency_ = configuration.getIntParameter("checkfrequency");
+	normFrequency_ = configuration.getIntParameter("normalizationfrequency");
 }
 
 
@@ -97,17 +99,19 @@ bool SORSolver::solve( StaggeredGrid & grid )
 		r = r  / ((Real)(imax * jmax));
 		r = sqrt( r );
 
-		if( r < eps_)
-		{
+		if(nIter % epsFrequency_ == 0){
+			if( r < eps_)
+			{
 #ifndef NDEBUG
-			std::ofstream myfile;
-			myfile.open("text.txt", std::ios::out);
-			myfile << p;
-			myfile << std::endl;
-			myfile.close();
-			std::cout << "i = " << nIter << " r = " << r << std::endl;
+				std::ofstream myfile;
+				myfile.open("text.txt", std::ios::out);
+				myfile << p;
+				myfile << std::endl;
+				myfile.close();
+				std::cout << "i = " << nIter << " r = " << r << std::endl;
 #endif //NDEBUG
-			return true;
+				return true;
+			}
 		}
 #ifndef NDEBUG
 			std::cout << "i = " << nIter << " r = " << r << std::endl;
