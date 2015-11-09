@@ -27,7 +27,6 @@ bool SORSolver::solve( StaggeredGrid & grid )
 	size_t jmax = p.getSize(1) -2;
 	Real dx = grid.dx();
 	Real dy = grid.dy();
-	Real rFactor = omg_ * (dx*dx*dy*dy/(2.0*(dx*dx+dy*dy)));
 	for(int nIter = 0; nIter < itermax_; ++nIter)
 	{
 		//Copy paste boundaries
@@ -43,30 +42,17 @@ bool SORSolver::solve( StaggeredGrid & grid )
 		}
 
 		//SOR iteration
-		//for(size_t j = 1; j < jmax +1; ++j)
-		//{
-		//	for(size_t i = 1; i < imax +1; ++i)
-		//	{
-		//		Real tmp1 = (1.0 - omg_)*p(i,j);
-		//		Real tmp2 = omg_ / (2/(dx*dx) + 2/(dy*dy));
-		//		Real tmp3 = (p(i+1,j) + p(i-1,j))/(dx*dx);
-		//		Real tmp4 = (p(i,j+1) + p(i,j-1))/(dy*dy);
-		//		Real tmp5 = (tmp3 + tmp4) - rhs(i,j);
-		//		Real tmp6 = tmp2 * tmp5;
-		//		p(i,j) = tmp1 + tmp6;
-		//	}
-		//}
-		//Calculate r
-		Real r = 0.0;
 		for(size_t j = 1; j < jmax +1; ++j)
 		{
-			for(size_t i = 1; i < imax + 1; ++i)
+			for(size_t i = 1; i < imax +1; ++i)
 			{
-				Real rTmp1 = (p(i+1,j) - 2.0 * p(i,j) + p(i-1,j))/(dx*dx);
-				Real rTmp2 = (p(i,j+1) - 2.0 * p(i,j) + p(i,j-1))/(dy*dy);
-				Real rTmp = rhs(i,j) - (rTmp1 + rTmp2);
-				r += rTmp * rTmp;
-				p(i,j) = p(i,j) - rFactor * rTmp;
+				Real tmp1 = (1.0 - omg_)*p(i,j);
+				Real tmp2 = omg_ / (2/(dx*dx) + 2/(dy*dy));
+				Real tmp3 = (p(i+1,j) + p(i-1,j))/(dx*dx);
+				Real tmp4 = (p(i,j+1) + p(i,j-1))/(dy*dy);
+				Real tmp5 = (tmp3 + tmp4) - rhs(i,j);
+				Real tmp6 = tmp2 * tmp5;
+				p(i,j) = tmp1 + tmp6;
 			}
 		}
 
@@ -82,24 +68,24 @@ bool SORSolver::solve( StaggeredGrid & grid )
 			p(i, jmax + 1) = p(i, jmax);
 		}
 
-
-		//for(size_t j = 1; j < jmax +1; ++j)
-		//{
-		//	for(size_t i = 1; i < imax +1; ++i)
-		//	{
-		//		Real rTmp1 = (2.0 * (dx*dx + dy*dy) ) / (dx*dx*dy*dy) * p(i,j);
-		//		Real rTmp2 = (p(i+1,j) + p(i-1,j))/(dx*dx);
-		//		Real rTmp3 = (p(i,j+1) + p(i,j-1))/(dy*dy);
-		//		Real rTmp4 = rTmp1 + rhs(i,j) - (rTmp2 + rTmp3);
-		//		r += rTmp4 * rTmp4;
-		//		//std::cout <<  rTmp4 * rTmp4 << std::endl;
-		//	}
-		//}
+		//Calculate r
+		Real r = 0.0;
+		for(size_t j = 1; j < jmax +1; ++j)
+		{
+			for(size_t i = 1; i < imax +1; ++i)
+			{
+				Real rTmp1 = (2.0 * (dx*dx + dy*dy) ) / (dx*dx*dy*dy) * p(i,j);
+				Real rTmp2 = (p(i+1,j) + p(i-1,j))/(dx*dx);
+				Real rTmp3 = (p(i,j+1) + p(i,j-1))/(dy*dy);
+				Real rTmp4 = rTmp1 + rhs(i,j) - (rTmp2 + rTmp3);
+				r += rTmp4 * rTmp4;
+				//std::cout <<  rTmp4 * rTmp4 << std::endl;
+			}
+		}
 		
 		r = r  / ((Real)(imax * jmax));
 		r = sqrt( r );
 
-		if(nIter % epsFrequency_ == 0){
 			if( r < eps_)
 			{
 #ifndef NDEBUG
@@ -112,7 +98,6 @@ bool SORSolver::solve( StaggeredGrid & grid )
 #endif //NDEBUG
 				return true;
 			}
-		}
 #ifndef NDEBUG
 			std::cout << "i = " << nIter << " r = " << r << std::endl;
 		if( nIter % 1000 == 0)
@@ -127,5 +112,12 @@ bool SORSolver::solve( StaggeredGrid & grid )
 #endif //NDEBUG
 	}
 	WARN("Did not stop on eps_");
+#ifndef NDEBUG
+		std::ofstream myfile;
+		myfile.open("text.txt", std::ios::out);
+		myfile << p;
+		myfile << std::endl;
+		myfile.close();
+#endif //NDEBUG
 	return false;
 }
