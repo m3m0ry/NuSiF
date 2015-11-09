@@ -335,6 +335,8 @@ in the Navier-Stoke equation the pressure is only determined up to a constant.
 \subsection{Discretization}
 
 \subsubsection{Simple discretization formulas}
+
+\paragraph{Discretization in One Dimension}
 Consider an interval $\Omega = [0,a] \subset \mathds{R}$ on which a different equation must be solved, $i_{max}$ sub-intervals of equal size $\delta x = \frac{a}{i_{max}}$ yielding a grid $x_i = i \delta x$
 \begin{figure}[H]
 	\centering
@@ -478,7 +480,8 @@ The formula~\ref{fig:dcs-method} can be rewritten in the form~\ref{fig:dcs-metho
 	\label{fig:dcs-method-rewritten}
 \end{figure}
 
-Discretization in 2D: initially $\Omega = [0,a] \times [0,b] \subset \mathds{R}^2$
+\paragraph{Discretization in Two Dimensions}
+Initially $\Omega = [0,a] \times [0,b] \subset \mathds{R}^2$
 \[i_{max} : \text{cells in x-Direction} \qquad j_{max} : \text{cells in y-Direction}\]
 \[\delta x  = \frac{a}{i_{max}} \qquad \delta y = \frac{b}{j_{max}}\]
 \[\text{grid} x_{i,j} = (i \delta x, j \delta y), i = 0, \dots, i_{max}, j = 0, \dots, j_{max} \]
@@ -516,6 +519,7 @@ After discretizing Poisson's equation ~\ref{fig:pe-dirich} with Dirichlet bounda
 Boundary conditions can be incorporated by setting $u_{i,j} = g(x_{i,j})$ for $i \in \lbrace 0, i_{max} \rbrace$ or $j \in \lbrace 0,j_{max} \rbrace$. If the PDE contains 1st-order derivatives, it may be necessary to discretize them by techniques introduced in 1D using upwind or donor-cell discretization.
 
 \subsubsection{Discretization of the NS equation}
+\paragraph{Treatment of the Spatial Derivatives}
 We will use a staggered grid, i.e. the unknowns are not located at the same grid points. Positions are shifted by $0.5 \cdot \delta x$ and/or $0.5 \cdot \delta y$.
 \begin{itemize}
 	\item pressure $p$ in cell centers
@@ -587,7 +591,7 @@ j = 1, \dots, j_{max-1}
 	\centering
 	\begin{align*}
 	 	\left[ \frac{\delta(u^2)}{\delta x}\right]_{i,j} =& \frac{1}{\delta x}\left( \left(\frac{u_{i,j} + u_{i+1,j}}{2} \right)^2 - \left(\frac{u_{i-1,j} + u_{i,j}}{2}\right)^2 \right) \\ &+ \gamma\frac{1}{\delta x} \left( \frac{\abs{u_{i,j} +u_{i+1,j}}}{2} \frac{(u_{i,j} - u_{i+1,j})}{2} - \frac{\abs{u_{i-1,j} + u_{i,j}}}{2} \frac{(u_{i-1,j} - u_{i,j})}{2} \right) \\		
-	 	\left[ \frac{\delta(uv)}{\delta y}\right]_{i,j} =& \frac{1}{\delta y} \left( \frac{(v_{i,j} + v_{i+1,j})}{2} \frac{(u_{i,j} + u_{i,j+1})}{2} - \frac{(v_{i,j-1} + v_{i+1,j-1})}{2} \frac{(u_{i,j-1} + u_{i,j}}{2} \right) \\ &+ \gamma \frac{1}{\delta y}  \left( \frac{\abs{v_{i,j} + v_{i+1,j}}}{2} \frac{(u_{i,j} - u_{i+1,j})}{2} - \frac{\abs{v_{i,j-1} + v_{i+1,j-1}}}{2} \frac{(u_{i,j-1} - u_{i,j})}{2} \right) \\
+	 	\left[ \frac{\delta(uv)}{\delta y}\right]_{i,j} =& \frac{1}{\delta y} \left( \frac{(v_{i,j} + v_{i+1,j})}{2} \frac{(u_{i,j} + u_{i,j+1})}{2} - \frac{(v_{i,j-1} + v_{i+1,j-1})}{2} \frac{(u_{i,j-1} + u_{i,j})}{2} \right) \\ &+ \gamma \frac{1}{\delta y}  \left( \frac{\abs{v_{i,j} + v_{i+1,j}}}{2} \frac{(u_{i,j} - u_{i+1,j})}{2} - \frac{\abs{v_{i,j-1} + v_{i+1,j-1}}}{2} \frac{(u_{i,j-1} - u_{i,j})}{2} \right) \\
 	 	\left[ \frac{\delta^2 u}{\delta x^2}\right]_{i,j} =& \frac{u_{i+1, j} - 2u_{i,j} + u_{i-1,j}}{(\delta x)^2} \\
 	 	\left[ \frac{\delta^2 u}{\delta y^2}\right]_{i,j} =& \frac{u_{i, j+1} - 2u_{i,j}  +u_{i,j-1}}{(\delta y)^2} \\
 	 	\left[ \frac{\delta p}{\delta x}\right]_{i,j} =& \frac{p_{i+1,j} - p_{i,j}}{\delta x}
@@ -598,20 +602,39 @@ j = 1, \dots, j_{max-1}
 	\label{fig:disc-spec}
 \end{figure}
 
+
+In \ref{fig:momentumb} for v at midpoint of the \textbf{upper edge} of a cell, for all $i,j = \left\lbrace \begin{matrix}
+i = 1, \dots, i_{max-1} \\
+j = 1, \dots, j_{max-1}
+\end{matrix} \right.$
+
 \begin{figure}[H]
 	\centering
-	%TODO TODO TODO TODO
 	\begin{align*}
-	 	\left[ \frac{\delta(u^2)}{\delta x}\right]_{i,j} =& \frac{1}{\delta x}\left( \left(\frac{u_{i,j} + u_{i+1,j}}{2} \right)^2 - \left(\frac{u_{i-1,j} + u_{i,j}}{2}\right)^2 \right) \\ &+ \gamma\frac{1}{\delta x} \left( \frac{\abs{u_{i,j} +u_{i+1,j}}}{2} \frac{(u_{i,j} - u_{i+1,j})}{2} - \frac{\abs{u_{i-1,j} + u_{i,j}}}{2} \frac{(u_{i-1,j} - u_{i,j})}{2} \right) \\		
-	 	\left[ \frac{\delta(uv)}{\delta y}\right]_{i,j} =& \frac{1}{\delta y} \left( \frac{(v_{i,j} + v_{i+1,j})}{2} \frac{(u_{i,j} + u_{i,j+1})}{2} - \frac{(v_{i,j-1} + v_{i+1,j-1})}{2} \frac{(u_{i,j-1} + u_{i,j}}{2} \right) \\ &+ \gamma \frac{1}{\delta y}  \left( \frac{\abs{v_{i,j} + v_{i+1,j}}}{2} \frac{(u_{i,j} - u_{i+1,j})}{2} - \frac{\abs{v_{i,j-1} + v_{i+1,j-1}}}{2} \frac{(u_{i,j-1} - u_{i,j})}{2} \right) \\
-	 	\left[ \frac{\delta^2 u}{\delta x^2}\right]_{i,j} =& \frac{u_{i+1, j} - 2u_{i,j} + u_{i-1,j}}{(\delta x)^2} \\
-	 	\left[ \frac{\delta^2 u}{\delta y^2}\right]_{i,j} =& \frac{u_{i, j+1} - 2u_{i,j}  +u_{i,j-1}}{(\delta y)^2} \\
-	 	\left[ \frac{\delta p}{\delta x}\right]_{i,j} =& \frac{p_{i+1,j} - p_{i,j}}{\delta x}
+		 	\left[ \frac{\delta(uv)}{\delta x}\right]_{i,j} =& \frac{1}{\delta x} \left( \frac{(u_{i,j} + u_{i,j+1})}{2} \frac{(v_{i,j} + v_{i+1,j})}{2} - \frac{(u_{i-1,j} + u_{i-1,j+1})}{2} \frac{(v_{i-1,j} + v_{i,j}}{2} \right) \\ &+ \gamma \frac{1}{\delta x}  \left( \frac{\abs{u_{i,j} + u_{i,j+1}}}{2} \frac{(v_{i,j} - v_{i+1,j})}{2} - \frac{\abs{u_{i-1,j} + u_{i-1,j+1}}}{2} \frac{(v_{i-1,j} - v_{i,j})}{2} \right) \\
+	 	\left[ \frac{\delta(v^2)}{\delta y}\right]_{i,j} =& \frac{1}{\delta y}\left( \left(\frac{v_{i,j} + v_{i,j+1}}{2} \right)^2 - \left(\frac{v_{i,j-1} + v_{i,j}}{2}\right)^2 \right) \\ &+ \gamma\frac{1}{\delta y} \left( \frac{\abs{v_{i,j} +v_{i,j+1}}}{2} \frac{(v_{i,j} - v_{i,j+1})}{2} - \frac{\abs{v_{i,j-1} + v_{i,j}}}{2} \frac{(v_{i,j-1} - v_{i,j})}{2} \right) \\		
+	 	\left[ \frac{\delta^2 v}{\delta x^2}\right]_{i,j} =& \frac{v_{i+1, j} - 2v_{i,j} + v_{i-1,j}}{(\delta x)^2} \\
+	 	\left[ \frac{\delta^2 v}{\delta y^2}\right]_{i,j} =& \frac{v_{i, j+1} - 2v_{i,j}  +v_{i,j-1}}{(\delta y)^2} \\
+	 	\left[ \frac{\delta p}{\delta y}\right]_{i,j} =& \frac{p_{i,j+1} - p_{i,j}}{\delta x}
 	\end{align*}
 	
 	\renewcommand{\thefigure}{3.19b}
 	\caption{Discretization for momentum equation of u~\ref{fig:momentumb}}
 	\label{fig:disc-spec}
 \end{figure}
+
+The parameter $\gamma: 0 \leq \gamma \leq 1$ should be chosen such that:
+\begin{figure}[H]
+	\centering
+	\[ \gamma \geq \max_{i,j} \left( \abs{\frac{u_{i,j} \delta t}{\delta x}}, abs{\frac{v_{i,j} \delta t}{\delta y}}\right) \]
+	\renewcommand{\thefigure}{3.20}
+	\caption{Hirt et al., 1975}
+	\label{fig:disc-spec}
+\end{figure}
+
+
+\paragraph{Boundary Values for the Discrete Equations}
+
+%TODO
 
 \end{document}
