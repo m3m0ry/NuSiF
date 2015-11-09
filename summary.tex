@@ -57,7 +57,7 @@
 
 \vfill
 
-This summary was written by a student, correctness of the content can not be guaranteed. The script mostly consists of lecture notes. The lecture itself is strongly oriented on the book Numerical Simulation in Fluid Dynamics and thus all formulars or pictures have the same numbering as in the book, in order to facilitate any further research.
+This summary was written by a student, correctness of the content can not be guaranteed. The script mostly consists of lecture notes. The lecture itself is strongly oriented on the book Numerical Simulation in Fluid Dynamics and thus all formulas or pictures have the same numbering as in the book, in order to facilitate any further research.
 
 
 \newpage
@@ -70,7 +70,7 @@ How to uncover laws of nature?
 	\item practical $\rightarrow$ observation of experiments
 	\item theoretical $\rightarrow$ relations ship between mathematical quantities
 	\item[!] often experiments impossible (nuclear reactor, oil sill, too long, too short, where to measure) and mathematical equations too complex (only simplified models)
-	\item[$\rightarrow$] numerical simulation: combines both aproaches, see Figure~\ref{fig:simproc}
+	\item[$\rightarrow$] numerical simulation: combines both approaches, see Figure~\ref{fig:simproc}
 \end{itemize}
 
 \subsection{Simulation Procedure}
@@ -138,7 +138,7 @@ Fluids $\left\{
 \end{tabular}
 \right\}$ are substances that cannot resist shear forces. \\
 Examples: Water, Coffee, Air, Stream, Waterfall\\
-Engeneering: Flow around a car, flow pipeline. Often the iteration of a flow with a solid body, fluid sturcture interaction, multi-phase flows (gas $\leftrightarrow$ liquid).
+Engineering: Flow around a car, flow pipeline. Often the iteration of a flow with a solid body, fluid sturcture interaction, multi-phase flows (gas $\leftrightarrow$ liquid).
 
 \paragraph{Properties of Fluids}
 \begin{itemize}
@@ -204,7 +204,7 @@ Our goal: Simulate unsteady, incompressible, laminar flow, Navier-Stokes equatio
 		\item[$\rightarrow$] Incompressible: $\varrho(\vec{x},t) = \varrho_\infty = \text{const}$
 	\end{itemize}
 \end{itemize}
-Governing equations, a system of partial differential equations (Navier-Stokes eq.) are:
+Governing equations, a system of partial differential equations (Navier-Stokes eq.) are (~\ref{fig:momentum} and ~\ref{fig:cont-eq}):
 
 \begin{figure}[H]
 	\centering
@@ -218,7 +218,7 @@ Governing equations, a system of partial differential equations (Navier-Stokes e
 	\[\text{div} \vec{u} = 0\]
 	\renewcommand{\thefigure}{2.1.b}
     \caption{Continuity Equation}
-	\label{fig:momentum}
+	\label{fig:cont-eq}
 \end{figure}
 
 \begin{itemize}
@@ -266,7 +266,7 @@ Governing equations, a system of partial differential equations (Navier-Stokes e
 	\[ \frac{\delta v}{\delta t} + \frac{\delta p}{\delta y} = \frac{1}{Re} \left( \frac{\delta^2 v}{\delta x^2} + \frac{\delta^2 v}{\delta y^2}\right) - \frac{\delta (uv)}{\delta x} - \frac{\delta (v^2)}{\delta y} + g_y\]
     \renewcommand{\thefigure}{2.2b}
 	\caption{Momentum Equation v}
-	\label{fig:momentuma}
+	\label{fig:momentumb}
 \end{figure}
 \begin{figure}[H]
 	\centering
@@ -382,7 +382,7 @@ Consider an interval $\Omega = [0,a] \subset \mathds{R}$ on which a different eq
 \end{figure}
 
 
-With Figures~\ref{fig:deriv-def} and~\ref{fig:deriv-def2} all necesarry discretization of derivateves is provided. However in some case this discretization results into unphysical oscilations.
+With Figures~\ref{fig:deriv-def} and~\ref{fig:deriv-def2} all necessary discretization of derivatives is provided. However in some case this discretization results into unphysical oscillations.
 
 Consider e.g. a second-order ordinary differential equation (ODE)~\ref{fig:ode} with Dirichlet boundary condition $u(0) = u_0, u(a) = u_{imax}$.
 \begin{figure}[H]
@@ -422,7 +422,7 @@ True solution: $u(x) = e^{k(x-3)} \qquad u_0 = e^{-3k} \approx 0 \qquad u_3 = 1$
 	\end{matrix} \]
 %TODO pictures
 
-With central differences, oscillations will start to occur when $\delta x > \frac{2}{\abs{k}}$ $\rightarrow$ instable discretization.
+With central differences, oscillations will start to occur when $\delta x > \frac{2}{\abs{k}}$ $\rightarrow$ unstable discretization.
 
 For strongly convective terms, either $\delta x$ is very small, or we use an "upwind discretization". Consider situation from above, with backward differences:
 
@@ -452,7 +452,7 @@ In general we can use ~\ref{fig:disc-upwind}. This is always stable, but only $O
 	\label{fig:weighted-average}
 \end{figure}
 
-Alternativly: "donor-cell-scheme" for the discretization of $\frac{d(ku)}{dx}$:
+Alternatively: "donor-cell-scheme" for the discretization of $\frac{d(ku)}{dx}$:
 \begin{figure}[h]
 	\centering
 	\[ \left[\frac{d(k u)}{d x}\right]^{dc}_i = \frac{ k_r u_r - k_l u_l}{ \delta x} \text{ where } u_r = \left\lbrace \begin{matrix}
@@ -508,37 +508,110 @@ After discretizing Poisson's equation ~\ref{fig:pe-dirich} with Dirichlet bounda
 	j = 1, \dots, j_{max}-1
 \end{matrix}\right.	 \]
 	\renewcommand{\thefigure}{3.15}
-	\caption{Linear system of eqations}
+	\caption{Linear system of equations}
 	\label{fig:sys-of-eq}
 \end{figure}
 
 
-Bondary conditions can be incorporated by setting $u_{i,j} = g(x_{i,j})$ for $i \in \lbrace 0, i_{max} \rbrace$ or $j \in \lbrace 0,j_{max} \rbrace$. If the PDE contains 1st-order derivatives, it may be necessary to discretize them by techniques introduced in 1D using upwind or donor-cell discretization.
+Boundary conditions can be incorporated by setting $u_{i,j} = g(x_{i,j})$ for $i \in \lbrace 0, i_{max} \rbrace$ or $j \in \lbrace 0,j_{max} \rbrace$. If the PDE contains 1st-order derivatives, it may be necessary to discretize them by techniques introduced in 1D using upwind or donor-cell discretization.
 
 \subsubsection{Discretization of the NS equation}
 We will use a staggered grid, i.e. the unknowns are not located at the same grid points. Positions are shifted by $0.5 \cdot \delta x$ and/or $0.5 \cdot \delta y$.
 \begin{itemize}
 	\item pressure $p$ in cell centers
 	\item horizontal velocity $u$ in midpoints of vertical cell edges
-	\item vertifal velocity $v$ in midpoints of horizontal cell edges
+	\item vertical velocity $v$ in midpoints of horizontal cell edges
 \end{itemize}
 %TODO picture
 
 
 Problems occur on the boundary: need to introduce a "boundary strip".
 
-Staggered grid $\Rightarrow$ no pressure oscilations\\
+Staggered grid $\Rightarrow$ no pressure oscillations\\
 Consider problem discretized with all unknowns $u,v,p$ on same grid points, then for trivial boundary conditions $(u = 0, v =0, g_x = g_y = 0)$ a solution would be $u = 0, v = 0, p = \text{const}$ on a non staggered grid $u_{i,j} = 0, v_{i,j} = 0$ but $p = \left\lbrace \begin{matrix}
 p1 & i+j \text{even}\\
 p2 & i+j \text{odd}
 \end{matrix}\right.$
 
-Discretization on a staggered grid: Continuity equation TODO2.20 will be discretized at center of each cell $i = 1, \dots, i_{max}; j = 1, \dots, j_{max}$ by replacing $\frac{\delta u}{\delta x}$ and $\frac{\delta v}{\delta y}$ by central differences
+Discretization on a staggered grid: Continuity equation (~\ref{fig:cont}) will be discretized at center of each cell $i = 1, \dots, i_{max}; j = 1, \dots, j_{max}$ by replacing $\frac{\delta u}{\delta x}$ and $\frac{\delta v}{\delta y}$ by central differences ~\ref{fig:dif-cen-stag}.
 
+\begin{figure}[H]
+	\centering
+	\[ \left[ \frac{\delta u}{\delta x}\right]_{i,j} = \frac{u_{i,j} - u_{i-1,j}}{\delta x}; \qquad  \left[ \frac{\delta v}{\delta y}\right]_{i,j} = \frac{v_{i,j} - v_{i,j-1}}{\delta y} \]
+	\renewcommand{\thefigure}{3.16}
+	\caption{Central differences on staggered grid}
+	\label{fig:dif-cen-stag}
+\end{figure}
 
+Momentum equation (\ref{fig:momentuma}) discretized at vertical edge midpoints (where u is)
 
+Momentum equation (\ref{fig:momentumb}) discretized at horizontal edge midpoints (where v is)
 
+Second derivatives $\frac{\delta^2 u}{\delta x^2}, \frac{\delta^2 u}{\delta y^2}, \frac{\delta^2 v}{\delta x^2}, \frac{\delta^2 v}{\delta y^2}$ diffusive terms, can be replaced by formula according to ~\ref{fig:deriv-def2}.
 
+Spatial derivative of pressure: central difference with half the mesh width
 
+%TODO sind die dinger im nenner in quadrat???
+Difficulty: Discretization $\frac{\delta(u^2)}{\delta x}, \frac{\delta(uv)}{\delta y}, \frac{\delta(uv)}{\delta x}, \frac{\delta(v^2)}{\delta y}$
+
+%TODO picture
+At the "x"-points we need approximations of $u \cdot v \rightarrow$ use averages!
+
+\begin{figure}[H]
+	\centering
+	\[ \left[ \frac{\delta (uv)}{\delta y}\right]_{i,j} = \frac{1}{\delta y}\left[ \left( \frac{v_{i,j} + v_{i,j+1}}{2} \cdot \frac{u_{i,j} + u_{i,j+1}}{2} \right) - \left( \frac{v_{i,j-1} + v_{i+1, j-1}}{2} \cdot \frac{u_{i,j-1} + u_{i,j}}{2}\right) \right] \]
+	\renewcommand{\thefigure}{3.17}
+	\caption{Discretization with averages}
+	\label{fig:disc-spec}
+\end{figure}
+
+Similar: $\frac{\delta(u^2)}{\delta x}$ central difference with $\frac{\delta x}{2}$ at "+"-points.
+
+\begin{figure}[H]
+	\centering
+	\[ \left[ \frac{\delta (u)^2}{\delta x}\right]_{i,j} = \frac{1}{\delta x}\left[ \left( \frac{u_{i,j} + u_{i+1,j}}{2}\right)^2 - \left( \frac{u_{i-1,j} + u_{i, j}}{2}\right)^2 \right] \]
+	\renewcommand{\thefigure}{3.18}
+	\caption{Discretization with averages}
+	\label{fig:disc-spec}
+\end{figure}
+
+Because convective terms may be dominant for large u and v, it is necessary to mix central differences with the donor-cell scheme. As in \ref{fig:dcs-method-rewritten} we set:
+\[ k_r = \frac{u_{i,j} + u_{i+1,j}}{2} \qquad k_l = \frac{u_{i-1,j} + u_{i,j}}{2} \text{ for } \frac{delta(u^2)}{\delta x}\]
+\[ k_r = \frac{v_{i,j} + v_{i+1,j}}{2} \qquad k_l = \frac{v_{i,j-1} + v_{i+1,j-1}}{2} \text{ for } \frac{\delta(uv)}{\delta v}\]
+Analogous for $\frac{\delta(uv)}{\delta x}$ and $\frac{\delta(v^2)}{\delta y}$. In total we get in equation \ref{fig:momentuma} for u at the midpoint of the \textbf{right edge} of cell, for all $i,j = \left\lbrace \begin{matrix}
+i = 1, \dots, i_{max-1} \\
+j = 1, \dots, j_{max-1}
+\end{matrix} \right.$
+
+\begin{figure}[H]
+	\centering
+	\begin{align*}
+	 	\left[ \frac{\delta(u^2)}{\delta x}\right]_{i,j} =& \frac{1}{\delta x}\left( \left(\frac{u_{i,j} + u_{i+1,j}}{2} \right)^2 - \left(\frac{u_{i-1,j} + u_{i,j}}{2}\right)^2 \right) \\ &+ \gamma\frac{1}{\delta x} \left( \frac{\abs{u_{i,j} +u_{i+1,j}}}{2} \frac{(u_{i,j} - u_{i+1,j})}{2} - \frac{\abs{u_{i-1,j} + u_{i,j}}}{2} \frac{(u_{i-1,j} - u_{i,j})}{2} \right) \\		
+	 	\left[ \frac{\delta(uv)}{\delta y}\right]_{i,j} =& \frac{1}{\delta y} \left( \frac{(v_{i,j} + v_{i+1,j})}{2} \frac{(u_{i,j} + u_{i,j+1})}{2} - \frac{(v_{i,j-1} + v_{i+1,j-1})}{2} \frac{(u_{i,j-1} + u_{i,j}}{2} \right) \\ &+ \gamma \frac{1}{\delta y}  \left( \frac{\abs{v_{i,j} + v_{i+1,j}}}{2} \frac{(u_{i,j} - u_{i+1,j})}{2} - \frac{\abs{v_{i,j-1} + v_{i+1,j-1}}}{2} \frac{(u_{i,j-1} - u_{i,j})}{2} \right) \\
+	 	\left[ \frac{\delta^2 u}{\delta x^2}\right]_{i,j} =& \frac{u_{i+1, j} - 2u_{i,j} + u_{i-1,j}}{(\delta x)^2} \\
+	 	\left[ \frac{\delta^2 u}{\delta y^2}\right]_{i,j} =& \frac{u_{i, j+1} - 2u_{i,j}  +u_{i,j-1}}{(\delta y)^2} \\
+	 	\left[ \frac{\delta p}{\delta x}\right]_{i,j} =& \frac{p_{i+1,j} - p_{i,j}}{\delta x}
+	\end{align*}
+	
+	\renewcommand{\thefigure}{3.19a}
+	\caption{Discretization for momentum equation of u~\ref{fig:momentuma}}
+	\label{fig:disc-spec}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	%TODO TODO TODO TODO
+	\begin{align*}
+	 	\left[ \frac{\delta(u^2)}{\delta x}\right]_{i,j} =& \frac{1}{\delta x}\left( \left(\frac{u_{i,j} + u_{i+1,j}}{2} \right)^2 - \left(\frac{u_{i-1,j} + u_{i,j}}{2}\right)^2 \right) \\ &+ \gamma\frac{1}{\delta x} \left( \frac{\abs{u_{i,j} +u_{i+1,j}}}{2} \frac{(u_{i,j} - u_{i+1,j})}{2} - \frac{\abs{u_{i-1,j} + u_{i,j}}}{2} \frac{(u_{i-1,j} - u_{i,j})}{2} \right) \\		
+	 	\left[ \frac{\delta(uv)}{\delta y}\right]_{i,j} =& \frac{1}{\delta y} \left( \frac{(v_{i,j} + v_{i+1,j})}{2} \frac{(u_{i,j} + u_{i,j+1})}{2} - \frac{(v_{i,j-1} + v_{i+1,j-1})}{2} \frac{(u_{i,j-1} + u_{i,j}}{2} \right) \\ &+ \gamma \frac{1}{\delta y}  \left( \frac{\abs{v_{i,j} + v_{i+1,j}}}{2} \frac{(u_{i,j} - u_{i+1,j})}{2} - \frac{\abs{v_{i,j-1} + v_{i+1,j-1}}}{2} \frac{(u_{i,j-1} - u_{i,j})}{2} \right) \\
+	 	\left[ \frac{\delta^2 u}{\delta x^2}\right]_{i,j} =& \frac{u_{i+1, j} - 2u_{i,j} + u_{i-1,j}}{(\delta x)^2} \\
+	 	\left[ \frac{\delta^2 u}{\delta y^2}\right]_{i,j} =& \frac{u_{i, j+1} - 2u_{i,j}  +u_{i,j-1}}{(\delta y)^2} \\
+	 	\left[ \frac{\delta p}{\delta x}\right]_{i,j} =& \frac{p_{i+1,j} - p_{i,j}}{\delta x}
+	\end{align*}
+	
+	\renewcommand{\thefigure}{3.19b}
+	\caption{Discretization for momentum equation of u~\ref{fig:momentumb}}
+	\label{fig:disc-spec}
+\end{figure}
 
 \end{document}
