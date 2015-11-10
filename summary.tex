@@ -664,17 +664,85 @@ v_{0,j}, v_{i_{max+1},j} \text{ for } j = 1, \dots, j_{max}
 
 \begin{enumerate}
 	\item No-slip boundary condition: continuous velocities must vanish on the boundary ( or be the same velocity as the wall)
-For values directly on the boundary, set %TODO finish
+For values directly on the boundary, set
 \begin{figure}[H]
 	\centering
 	\[ u_{0,j} = 0, \qquad u_{i_{max},j} = 0, \qquad j = 1,\dots,j_{max} \]
 	\[ v_{i,0} = 0, \qquad v_{i,j_{max}} = 0, \qquad i = 1,\dots,i_{max} \]
 	\renewcommand{\thefigure}{3.21}
 	\caption{Discretization of the No-slip condition}
-	\label{fig:gamma}
+	\label{fig:disc-nosplipa}
 \end{figure}
 
-	\item More will follow
+\begin{figure}[H]
+	\centering
+	\[ v_r = \frac{v_u + v_i}{2} = 0 \Rightarrow v_a = -v_i\]
+	\renewcommand{\thefigure}{3.22}
+	\caption{Discretization of the No-slip condition}
+	\label{fig:disc-nosplipb}
+\end{figure}
+
+This leads to:
+%TODO this figure and checko following
+\begin{figure}[H]
+	\centering
+	\[ v_r = \frac{v_u + v_i}{2} = 0 \Rightarrow v_a = -v_i\]
+	\renewcommand{\thefigure}{3.23}
+	\caption{Discretization of the No-slip condition}
+	\label{fig:disc-nosplipc}
+\end{figure}
+
+	\item Free-slip
+\begin{figure}[H]
+	\centering
+	\[ u_{0,j} = 0, \qquad u_{i_{max},j} = 0, \qquad j = 1,\dots,j_{max} \]
+	\[ v_{i,0} = 0, \qquad v_{i,j_{max}} = 0, \qquad i = 1,\dots,i_{max} \]
+	\renewcommand{\thefigure}{3.24}
+	\caption{Discretization of the No-slip condition}
+	\label{fig:disc-freesplipa}
+\end{figure}
+%TODO picture
+
+Because the normal derivative $\delta v/ \delta x$ has to be $0 \Rightarrow v_a = v_i$ Further boundary conditions:
+\begin{figure}[H]
+	\centering
+	\[ v_{0,j} = v_{1,j}, \qquad v_{i_{max},j} = v_{i_{max+1}, j}, \qquad j = 1,\dots,j_{max} \]
+	\[ u_{i,0} = u_{i,1}, \qquad u_{i,j_{max}} = u_{i,j_{max+1}}, \qquad i = 1,\dots,i_{max} \]
+	\renewcommand{\thefigure}{3.25}
+	\caption{Discretization of the No-slip condition}
+	\label{fig:disc-freesplipb}
+\end{figure}
+	
+	
+	\item Outflow boundary condition
+Normal derivative of both velocity components set to 0
+\begin{figure}[H]
+	\centering
+	%TODO make 2 times matrix
+	\[ u_{0,j} = u_{1,j}, \qquad u_{i_{max},j} = u_{i_{max+1}, j}, \qquad j = 1,\dots,j_{max} \]
+	\[ v_{0,j} = v_{1,j}, \qquad v_{i_{max+1},j} = v_{i_{max}, j}, \qquad j = 1,\dots,j_{max} \]
+	\[ u_{i,0} = u_{i,1}, \qquad u_{i,j_{max+1}} = u_{i,j_{max}}, \qquad i = 1,\dots,i_{max} \]
+	\[ v_{i,0} = v_{i,1}, \qquad v_{i,j_{max}} = v_{i,j_{max+1}}, \qquad i = 1,\dots,i_{max} \]
+	\renewcommand{\thefigure}{3.26}
+	\caption{Discretization of the Overflow condition}
+	\label{fig:disc-outflow}
+\end{figure}
+
+
+	\item Inflow conditions: Velocity explicitly tangential velocity components by averaging simillar to \ref{fig:disc-nosplipb}
+	\item Periodic boundary conditions, e.g. periodic in x direction
+
+\begin{figure}[H]
+	\centering
+	\[ u_{0,j} = u_{i_{max-1},j}, \qquad u_{i_{max},j} = u_{1,j}, \qquad p_{i,j} = p_{i_{max},j} \]
+	\[ v_{0,j} = v_{i_{max-1},j}, \qquad v_{1,j} = v_{i_{max},j}, \qquad v_{i_{max+1},j} = v_{2,j}\]
+	\renewcommand{\thefigure}{3.27}
+	\caption{Discretization of the Periodic boundary condition}
+	\label{fig:disc-freesplipb}
+\end{figure}
+there, different from continuos domain, we have an overlap of one cell width. Periodic in y works analogously.
+
+
 \end{enumerate}
 \paragraph{Discretization of the time derivative}
 %TODO bla
@@ -688,12 +756,80 @@ For values directly on the boundary, set %TODO finish
 
 
 
+%TODO on notes
 
 
 
+%TODO Should be 3.4 and 3.4.1
+\subsection{Treatment of general Domains}
 
+\subsubsection{Introduction of obstacle domains}
+\begin{itemize}
+	\item flow domain $\Omega$ embeded into rectangle $G$, smallest possible size, grid for $G$ as in Sect 3.1 %TODO reference on section
+	\item cells of $G$ are divided into
+	\begin{itemize}
+		\item fluid cells (completly or mostly filled with fluid)
+		\item obstacle cells (completly or mostly filled with obstacle)
+	\end{itemize}
+	\item edges between fluid and obstacle cells $\rightarrow$ \textbf{boundary edges}
+	\item solve only in fluid cells
+	\item cells $(i,j), i \in \{0, i_{max+1}\}; j \in \{0,j_{max+1}\}$
+	(artificial boundary strip) are also treated as obstacle cells
+	\item obstacle cells which share an edge with at least one fluid cell are called boundary cells
+	\item Fluid cells that are adjacent to the obstacle cells: Compute F,G according to (3.36) (3.37)%TODO ref
+	$\Rightarrow$ Need: 
+	\begin{itemize}
+		\item nomal velocity on the boundary edge
+		\item tangential velocity components on edges between boundary cells
+	\end{itemize}
+	\item[$\Rightarrow$] F,G values at boundary edges needed to compute pressure in fluid cells adjacent to boundary cells $\Rightarrow$ pressure equation modified according to (3.43) %TODO ref
+	Alternative: set the pressure in the boundary cell equal to the value in neighborhing fluid cell
+	Later (for visualization) we also need velocity values for edges that hit the fluid cell - see picture %TODO picture
+\end{itemize}
 
+In the program: Use a flag array int ** FLAG (better maybe char)\\
+initialize $FLAG[i][j]$ with C\_F fluid cells
+C\_B obstacle cells
 
+More info in each cell needed (one possible implementation - alternatives in excercises/assignemnts)
 
+B\_W, B\_S, B\_E, B\_N to denote which neighbor of a boundary cell is a fluid cell, also B\_SW, B\_NE possible. We assume here that boundary cells have one or at most two fluid neighbors. In case of two fluid neighbors: corner cell. Boundary cells with two opposite or 3 or 4 fluid neighbors are undinssible %TODO last word wtf?
+
+Example No-slip condition:
+%TODO picture
+\begin{figure}[H]
+	\centering
+	\[ v_{i,j} = 0; \qquad G_{i,j} = v_{i,j} \]
+	\[ u_{i-1,j} = -u_{i-1,j+1}; \qquad u_{i,j} = - u_{i,j+1} \]
+	\renewcommand{\thefigure}{TODO}
+	\caption{B\_N: northern-edge-cell}
+	\label{fig:disc-freesplipb}
+\end{figure}
+
+%TODO picture
+\begin{figure}[H]
+	\centering
+	\[ u_{i,j} = 0; v_{i,j} = 0; \qquad u_{i-1,j} = - u_{i-1,j+1} \]
+	\[ F_{i,j} = u_{i,j}; \qquad G_{i,j} = v_{i,j} \]
+	\renewcommand{\thefigure}{3.53}
+	\caption{B\_NE: corner cell}
+	\label{fig:disc-freesplipb}
+\end{figure}
+
+In case the pressure is not modified in the boundary cells as in (3.43) %TODO ref
+, then pressure in edge cells must be set equal to the pressure in neighboring fluid cells. For B\_N : $p_{i,j} = p_{i,j+1}$ for B\_W: $p_{i,j} = p_{i-1,j}$, etc. Pressure in corner cells B\_NE : $p_{i,j} = \frac{p_{i,j} + p_{i_1,j}}{2}$, ...
+
+Pressure equation (3.43) %TODO ref
+only solved in fluid cells, F,G-values are only updated between two fluid cells
+\begin{itemize}
+	\item fluid cells
+	\item obstacle cells
+	\item boundary cells
+	\item edge cells
+	\item corner cells
+	\item innevicible cells
+	\item boundary edges
+	%TODO untermengen?
+\end{itemize}
 
 \end{document}
