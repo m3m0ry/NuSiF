@@ -351,7 +351,7 @@ Consider an interval $\Omega = [0,a] \subset \mathds{R}$ on which a different eq
 	\[ \left[\frac{d u}{d x}\right]^r_i = \frac{u(x_{i+1}) - u(x_i)}{\delta x}\]
     \renewcommand{\thefigure}{3.2}
 	\caption{Forward difference}
-	\label{fig:deriv-def}
+	\label{fig:deriv-forward}
 \end{figure}
 
 \begin{figure}[H]
@@ -359,7 +359,7 @@ Consider an interval $\Omega = [0,a] \subset \mathds{R}$ on which a different eq
 	\[ \left[\frac{d u}{d x}\right]^l_i = \frac{u(x_i) - u(x_{i+1})}{\delta x}\]
     \renewcommand{\thefigure}{3.3}
 	\caption{Backward difference}
-	\label{fig:deriv-def}
+	\label{fig:deriv-backward}
 \end{figure}
 
 \begin{figure}[H]
@@ -367,7 +367,7 @@ Consider an interval $\Omega = [0,a] \subset \mathds{R}$ on which a different eq
 	\[ \left[\frac{d u}{d x}\right]^c_i = \frac{u(x_{i+1}) - u(x_{i-1})}{2 \delta x}\]
     \renewcommand{\thefigure}{3.4}
 	\caption{Central difference}
-	\label{fig:deriv-def}
+	\label{fig:deriv-central}
 \end{figure}
 
 \begin{itemize}
@@ -457,13 +457,13 @@ In general we can use ~\ref{fig:disc-upwind}. This is always stable, but only $O
 Alternatively: "donor-cell-scheme" for the discretization of $\frac{d(ku)}{dx}$:
 \begin{figure}[h]
 	\centering
-	\[ \left[\frac{d(k u)}{d x}\right]^{dc}_i = \frac{ k_r u_r - k_l u_l}{ \delta x} \text{ where } u_r = \left\lbrace \begin{matrix}
+	\[ \left[\frac{d(k u)}{d x}\right]^{dc}_i = \frac{ k_r u_r - k_l u_l}{ \delta x} \text{ where } u_r = \begin{cases}
 	u_i & k_r > 0\\
 	u_{i+1} & k_r < 0
-\end{matrix} \right. ; u_l = \left\lbrace \begin{matrix}
+\end{cases} ; u_l = \begin{cases}
 u_{i-1} & k_l > 0\\
 u_{i} & k_l < 0
-\end{matrix}\right.	 \]
+\end{cases} \]
 	\renewcommand{\thefigure}{3.11}
 	\caption{Discretization with the donor-cell scheme}
 	\label{fig:dcs-method}
@@ -506,10 +506,10 @@ After discretizing Poisson's equation ~\ref{fig:pe-dirich} with Dirichlet bounda
 
 \begin{figure}[H]
 	\centering
-	\[ \frac{1}{(\delta x)^2} (u_{i+1,j} - 2u_{i,j} + u_{i-1,j}) + \frac{1}{(\delta y)^2} (u_{i,j+1} - 2u_{i,j} + u_{i,j-1}) = f(x_{i,j}) \text{ for } \left\lbrace \begin{matrix}
+	\[ \frac{1}{(\delta x)^2} (u_{i+1,j} - 2u_{i,j} + u_{i-1,j}) + \frac{1}{(\delta y)^2} (u_{i,j+1} - 2u_{i,j} + u_{i,j-1}) = f(x_{i,j}) \text{ for } \begin{cases}
 	i = 1, \dots, i_{max}-1 \\
 	j = 1, \dots, j_{max}-1
-\end{matrix}\right.	 \]
+\end{cases} \]
 	\renewcommand{\thefigure}{3.15}
 	\caption{Linear system of equations}
 	\label{fig:sys-of-eq}
@@ -532,10 +532,10 @@ We will use a staggered grid, i.e. the unknowns are not located at the same grid
 Problems occur on the boundary: need to introduce a "boundary strip".
 
 Staggered grid $\Rightarrow$ no pressure oscillations\\
-Consider problem discretized with all unknowns $u,v,p$ on same grid points, then for trivial boundary conditions $(u = 0, v =0, g_x = g_y = 0)$ a solution would be $u = 0, v = 0, p = \text{const}$ on a non staggered grid $u_{i,j} = 0, v_{i,j} = 0$ but $p = \left\lbrace \begin{matrix}
+Consider problem discretized with all unknowns $u,v,p$ on same grid points, then for trivial boundary conditions $(u = 0, v =0, g_x = g_y = 0)$ a solution would be $u = 0, v = 0, p = \text{const}$ on a non staggered grid $u_{i,j} = 0, v_{i,j} = 0$ but $p = \begin{cases}
 p1 & i+j \text{even}\\
 p2 & i+j \text{odd}
-\end{matrix}\right.$
+\end{cases}$
 
 Discretization on a staggered grid: Continuity equation (~\ref{fig:cont}) will be discretized at center of each cell $i = 1, \dots, i_{max}; j = 1, \dots, j_{max}$ by replacing $\frac{\delta u}{\delta x}$ and $\frac{\delta v}{\delta y}$ by central differences ~\ref{fig:dif-cen-stag}.
 
@@ -582,10 +582,10 @@ Similar: $\frac{\delta(u^2)}{\delta x}$ central difference with $\frac{\delta x}
 Because convective terms may be dominant for large u and v, it is necessary to mix central differences with the donor-cell scheme. As in \ref{fig:dcs-method-rewritten} we set:
 \[ k_r = \frac{u_{i,j} + u_{i+1,j}}{2} \qquad k_l = \frac{u_{i-1,j} + u_{i,j}}{2} \text{ for } \frac{delta(u^2)}{\delta x}\]
 \[ k_r = \frac{v_{i,j} + v_{i+1,j}}{2} \qquad k_l = \frac{v_{i,j-1} + v_{i+1,j-1}}{2} \text{ for } \frac{\delta(uv)}{\delta v}\]
-Analogous for $\frac{\delta(uv)}{\delta x}$ and $\frac{\delta(v^2)}{\delta y}$. In total we get in equation \ref{fig:momentuma} for u at the midpoint of the \textbf{right edge} of cell, for all $i,j = \left\lbrace \begin{matrix}
+Analogous for $\frac{\delta(uv)}{\delta x}$ and $\frac{\delta(v^2)}{\delta y}$. In total we get in equation \ref{fig:momentuma} for u at the midpoint of the \textbf{right edge} of cell, for all $i,j = \begin{cases}
 i = 1, \dots, i_{max-1} \\
 j = 1, \dots, j_{max-1}
-\end{matrix} \right.$
+\end{cases}$
 
 \begin{figure}[H]
 	\centering
@@ -599,14 +599,14 @@ j = 1, \dots, j_{max-1}
 	
 	\renewcommand{\thefigure}{3.19a}
 	\caption{Discretization for momentum equation of u~\ref{fig:momentuma}}
-	\label{fig:disc-spec}
+	\label{fig:disc-moma}
 \end{figure}
 
 
-In \ref{fig:momentumb} for v at midpoint of the \textbf{upper edge} of a cell, for all $i,j = \left\lbrace \begin{matrix}
+In \ref{fig:momentumb} for v at midpoint of the \textbf{upper edge} of a cell, for all $i,j = \begin{cases}
 i = 1, \dots, i_{max-1} \\
 j = 1, \dots, j_{max-1}
-\end{matrix} \right.$
+\end{cases}$
 
 \begin{figure}[H]
 	\centering
@@ -620,7 +620,7 @@ j = 1, \dots, j_{max-1}
 	
 	\renewcommand{\thefigure}{3.19b}
 	\caption{Discretization for momentum equation of u~\ref{fig:momentumb}}
-	\label{fig:disc-spec}
+	\label{fig:disc-momb}
 \end{figure}
 
 The parameter $\gamma: 0 \leq \gamma \leq 1$ should be chosen such that:
@@ -629,12 +629,60 @@ The parameter $\gamma: 0 \leq \gamma \leq 1$ should be chosen such that:
 	\[ \gamma \geq \max_{i,j} \left( \abs{\frac{u_{i,j} \delta t}{\delta x}}, abs{\frac{v_{i,j} \delta t}{\delta y}}\right) \]
 	\renewcommand{\thefigure}{3.20}
 	\caption{Hirt et al., 1975}
-	\label{fig:disc-spec}
+	\label{fig:gamma}
 \end{figure}
 
 
 \paragraph{Boundary Values for the Discrete Equations}
 
-%TODO
+\ref{fig:disc-moma} for \ref{fig:momentuma} for $u$ involves $u$-values for $i = 1, \dots, i_{max-1}, \left\{
+\begin{tabular}{c}
+    u-values on boundary \\
+    u-values outside boundary
+\end{tabular}
+\right\} \text{ for }  j = 1, j = j_{max}$
+
+\ref{fig:disc-momb} for \ref{fig:momentumb} for $v$ involves $v$-values for $j = 1, \dots, j_{max-1}, \left\{
+\begin{tabular}{c}
+    v-values on boundary \\
+    v-values outside boundary
+\end{tabular}
+\right\} \text{ for }  i = 1, i = i_{max}$
+
+In total: \begin{tabular}{cc}
+on boundary & $\begin{cases}
+u_{0,j}, u_{i_{max},j} \text{ for } j = 1, \dots, j_{max}\\ 
+v_{i,0}, v_{i,j_{max}} \text{ for } i = 1, \dots, i_{max} 
+\end{cases}$ \\
+outside boundary & $\begin{cases}
+u_{i,0}, u_{i,j_{max+1}} \text{ for } i = 1 , \dots, i_{max} \\ 
+v_{0,j}, v_{i_{max+1},j} \text{ for } j = 1, \dots, j_{max} 
+\end{cases}$ 
+\end{tabular}
+
+%TODO picture
+
+%TODO boundaries
+
+\paragraph{Discretization of the time derivative}
+
+%TODO bla
+
+
+\subsection{The Algorithm}
+
+\subsubsection{The time-stepping loop}
+
+%TODO gehen essen
+
+
+
+
+
+
+
+
+
+
 
 \end{document}
