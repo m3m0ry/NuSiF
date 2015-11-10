@@ -662,10 +662,21 @@ v_{0,j}, v_{i_{max+1},j} \text{ for } j = 1, \dots, j_{max}
 
 %TODO picture
 
-%TODO boundaries
+\begin{enumerate}
+	\item No-slip boundary condition: continuous velocities must vanish on the boundary ( or be the same velocity as the wall)
+For values directly on the boundary, set %TODO finish
+\begin{figure}[H]
+	\centering
+	\[ u_{0,j} = 0, \qquad u_{i_{max},j} = 0, \qquad j = 1,\dots,j_{max} \]
+	\[ v_{i,0} = 0, \qquad v_{i,j_{max}} = 0, \qquad i = 1,\dots,i_{max} \]
+	\renewcommand{\thefigure}{3.21}
+	\caption{Discretization of the No-slip condition}
+	\label{fig:gamma}
+\end{figure}
 
+	\item More will follow
+\end{enumerate}
 \paragraph{Discretization of the time derivative}
-
 %TODO bla
 
 
