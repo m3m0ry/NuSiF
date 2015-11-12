@@ -33,8 +33,8 @@ class FluidSimulator
 		Real dt_;
 		Real gamma_;
 
-		int imax_;
-		int jmax_;
+		size_t imax_;
+		size_t jmax_;
 };
 
 

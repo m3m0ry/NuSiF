@@ -93,10 +93,10 @@ bool FileReader::readFile(const std::string &name)
 			else if( !key.empty() && !value.empty())
 			{
 				//INT
-				if( value.find_first_not_of("0123456789") == std::string::npos)
+				if( value.find_first_not_of("-0123456789") == std::string::npos)
 					registerIntParameter(key, stoi(value));
 				//Real
-				else if( value.find_first_not_of(".0123456789") == std::string::npos)
+				else if( value.find_first_not_of("-e.0123456789") == std::string::npos)
 					registerRealParameter(key, stod(value));
 				//STRING
 				else

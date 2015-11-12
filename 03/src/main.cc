@@ -11,6 +11,7 @@
 
 int main( int argc, char** argv )
 {
+	// Done checked by Christoph :)
 	if(argc < 2)
 	{
 		std::cerr << "No configuration file given" << std::endl;
@@ -24,34 +25,65 @@ int main( int argc, char** argv )
 	filereader->printParameters();
 	internal::progress("File read", 200,200);
 
-	auto grid = new StaggeredGrid( *filereader );
-	grid->initGridSetup2();
+
+	Real uInit = filereader->getRealParameter("U_init");
+	Real vInit = filereader->getRealParameter("V_init");
+	Real pInit = filereader->getRealParameter("P_init");
+
+	auto sim = new FluidSimulator( *filereader );
+	auto grid = & sim->grid();
+	Array & u = grid->u();
+	for(size_t j = 0; j < u.getSize(1); ++j)
+	{
+		for(size_t i = 0; i < u.getSize(0); ++i)
+			u(i,j) = i;
+	}
+
+	Array & v = grid->v();
+	for(size_t j = 0; j < v.getSize(1); ++j)
+	{
+		for(size_t i = 0; i < v.getSize(0); ++i)
+			v(i,j) = 0.0;
+	}
+
 	Array & p = grid->p();
-	std::default_random_engine generator;
-	std::uniform_real_distribution<double> distribution(0.0, 1.0);
 	for(size_t j = 0; j < p.getSize(1); ++j)
 	{
 		for(size_t i = 0; i < p.getSize(0); ++i)
-			p(i,j) = distribution(generator);
+			p(i,j) = pInit;
 	}
-	p.print();
-	Array & rhs = grid->rhs();
-	rhs.print();
-	auto solver = new SORSolver( *filereader );
-	internal::progress("Start solving", 0,200);
 
-	if(solver->solve(*grid))
-		std::cout << "yeah" << std::endl;
+	Array & f = grid->f();
+	for(size_t j = 0; j < f.getSize(1); ++j)
+	{
+		for(size_t i = 0; i < f.getSize(0); ++i)
+			f(i,j) = 2.0;
+	}
+	
+	Array & g = grid->g();
+	for(size_t j = 0; j < g.getSize(1); ++j)
+	{
+		for(size_t i = 0; i < g.getSize(0); ++i)
+			g(i,j) = 2.0;
+	}
 
-	internal::progress("Solved", 200,200);
-	p.print();
+	Real wert = 0.9938;
+	sim->simulate(1.0);
+	for(size_t j = 0; j < f.getSize(1); ++j)
+	{
+			if( f(1,j) != wert)
+					std::cout << "Help!" << std::endl;
+	}
+	v.print();
+	f.print();
+	g.print();
 
 
 	delete filereader;
 
 	delete grid;
 
-	delete solver;
+	//delete solver;
 
    return 0;
 }

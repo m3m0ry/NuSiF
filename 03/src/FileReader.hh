@@ -78,19 +78,19 @@ private:
 
 inline int FileReader::getIntParameter(const std::string &key) const
 {
-	CHECK_MSG( intParameters.end() != intParameters.find(key), "Parameter not found!");
+	CHECK_MSG( intParameters.end() != intParameters.find(key), "Parameter " + key + " not found!");
 	return intParameters.at(key);
 }
 
 inline Real FileReader::getRealParameter(const std::string &key) const
 {
-	CHECK_MSG( RealParameters.end() != RealParameters.find(key), "Parameter not found!");
+	CHECK_MSG( RealParameters.end() != RealParameters.find(key), "Parameter " + key + " not found!");
 	return RealParameters.at(key);
 }
 
 inline std::string FileReader::getStringParameter(const std::string &key) const
 {
-	CHECK_MSG( stringParameters.end() != stringParameters.find(key), "Parameter not found!");
+	CHECK_MSG( stringParameters.end() != stringParameters.find(key), "Parameter " + key + " not found!");
 	return stringParameters.at(key);
 }
 
