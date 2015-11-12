@@ -12,6 +12,8 @@ SORSolver::SORSolver ( const FileReader & configuration )
 	itermax_ = configuration.getIntParameter("itermax");
 	eps_ = configuration.getRealParameter("eps");
 	omg_ = configuration.getRealParameter("omg");
+	epsFrequency_ = configuration.getIntParameter("checkfrequency");
+	normFrequency_ = configuration.getIntParameter("normalizationfrequency");
 }
 
 
@@ -25,7 +27,6 @@ bool SORSolver::solve( StaggeredGrid & grid )
 	size_t jmax = p.getSize(1) -2;
 	Real dx = grid.dx();
 	Real dy = grid.dy();
-	//Real rFactor = omg_ * (dx*dx*dy*dy/(2.0*(dx*dx+dy*dy)));
 	for(int nIter = 0; nIter < itermax_; ++nIter)
 	{
 		//Copy paste boundaries
@@ -54,19 +55,6 @@ bool SORSolver::solve( StaggeredGrid & grid )
 				p(i,j) = tmp1 + tmp6;
 			}
 		}
-		//Calculate r
-		Real r = 0.0;
-		//for(size_t j = 1; j < jmax +1; ++j)
-		//{
-		//	for(size_t i = 1; i < imax + 1; ++i)
-		//	{
-		//		Real rTmp1 = (p(i+1,j) - 2.0 * p(i,j) + p(i-1,j))/(dx*dx);
-		//		Real rTmp2 = (p(i,j+1) - 2.0 * p(i,j) + p(i,j-1))/(dy*dy);
-		//		Real rTmp = rhs(i,j) - (rTmp1 + rTmp2);
-		//		r += rTmp * rTmp;
-		//		p(i,j) = p(i,j) - rFactor * rTmp;
-		//	}
-		//}
 
 		//Copy paste boundaries
 		for(size_t j = 1; j < jmax + 1; ++j)
@@ -80,7 +68,8 @@ bool SORSolver::solve( StaggeredGrid & grid )
 			p(i, jmax + 1) = p(i, jmax);
 		}
 
-
+		//Calculate r
+		Real r = 0.0;
 		for(size_t j = 1; j < jmax +1; ++j)
 		{
 			for(size_t i = 1; i < imax +1; ++i)
@@ -123,10 +112,12 @@ bool SORSolver::solve( StaggeredGrid & grid )
 #endif //NDEBUG
 	}
 	WARN("Did not stop on eps_");
-				std::ofstream myfile;
-				myfile.open("text.txt", std::ios::out);
-				myfile << p;
-				myfile << std::endl;
-				myfile.close();
+#ifndef NDEBUG
+		std::ofstream myfile;
+		myfile.open("text.txt", std::ios::out);
+		myfile << p;
+		myfile << std::endl;
+		myfile.close();
+#endif //NDEBUG
 	return false;
 }
