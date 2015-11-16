@@ -39,6 +39,14 @@ class FluidSimulator
 		// Update boundaries
 		void refreshBoundaries();
 
+
+		// Return the boundary condition
+		BCTYPE boundaryCondition( const std::string &);
+
+		// Set the velocity values of a boundary
+		void setVelocityValues( const std::string &);	
+
+
 		StaggeredGrid grid_;
 		SORSolver solver_;
 
@@ -48,6 +56,16 @@ class FluidSimulator
 		Real dt_;
 		Real gamma_;
 		Real tau_;
+
+		BCTYPE conditionNorth_;
+		BCTYPE conditionSouth_;
+		BCTYPE conditionWest_;
+		BCTYPE conditionEast_;
+
+		BCTYPE velocityNorth_;
+		BCTYPE velocitySouth_;
+		BCTYPE velocityWest_;
+		BCTYPE velocityEast_;
 
 		size_t imax_;
 		size_t jmax_;

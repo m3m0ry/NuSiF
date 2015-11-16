@@ -25,6 +25,12 @@
      internal::warnFct ( ss.str(), __FILE__, __LINE__ );\
    }
 
+#define ABORT(MSG) \
+	{ std::stringstream ss; \
+	  ss << MSG; \
+	  internal::checkFct( false, ss.str(), __FILE__, __LINE__);\
+	}
+
 #define PROGRESS(MSG, X, MAX) \
    { std::stringstream ss; \
      ss << MSG; \

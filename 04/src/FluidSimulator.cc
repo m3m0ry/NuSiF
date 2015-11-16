@@ -12,9 +12,18 @@ FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(
 	imax_ = conf.getIntParameter("imax");
 	jmax_ = conf.getIntParameter("jmax");
 	tau_ = conf.getRealParameter("safetyfactor");
+
+	//Set and test boundaries
+	EnumParser<BCTYPE> parser;
+	// Set boundary condition
+	conditionNorth_ = boundaryCondition("boundary_condition_N");
+	conditionSouth_ = boundaryCondition("boundary_condition_S");
+	conditionEast_ = boundaryCondition("boundary_condition_E");
+	conditionWest_ = boundaryCondition("boundary_condition_W");
+
+	// Set boundary velocity
+	setVelocityValues("boundary_velocity_N");
 }
-
-
 
 void FluidSimulator::simulate( Real duration )
 {
@@ -23,25 +32,54 @@ void FluidSimulator::simulate( Real duration )
 	solver_.solve(grid_);
 	updateVelocities();
 	determineNextDT();
-
 }
-
-
 
 void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
 {
 	computeFG();
 }
 
-
-
 void refreshBoundaries()
 {
 
 
 }
+void setVelocityValues( const std::string & name )
+	if( name.empty)
+		ABORT("Cannot check for empty string!");
 
+	if( isStringParameter("boundary_velocity_N"))
+	{
+		//TODO finish
+		switch(conditionNorth_){
+			case NOSLIP: //TODO tangential 
+				break;
+			case INFLOW: //TODO normal
+				break;
+			case OUTFLOW
+				ABORT("Cannot have a velocity for an OUTFLOW boundary!");
+				break;
+			case SLIP: //TODO
+				break;
+			case PERIODIC //TODO
+				break;
+		}
+	}
+	else
+	{
 
+	}
+
+BCTYPE boundaryCondition( const std::string & name)
+{
+	if( name.empty)
+		ABORT("Cannot check for empty string!");
+
+	if( isStringParameter(name))	
+		return parser.Parse(getStringParameter(name));
+	else
+		return = NOSLIP;
+}
 
 void determineNextDT()
 {

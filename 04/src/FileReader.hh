@@ -10,7 +10,7 @@
 #include "Debug.hh"
 
 
-//*******************************************************************************************************************
+//******************************************************************************************
 /*! Class for reading configuration from a file
 *
 * Configuration File Syntax:
@@ -29,7 +29,7 @@
 *      template<typename ExpectedType>
 *      ExpectedType getValue( const std::string & key );
 */
-//*******************************************************************************************************************
+//******************************************************************************************
 class FileReader
 {
 public:
@@ -60,6 +60,11 @@ public:
 
 	// get the string value of key 
 	std::string getStringParameter( const std::string & key ) const;
+
+	// Check if parameter availible
+	bool isIntParameter( const std::string & key ) const;
+	bool isRealParameter( const std::string & key ) const;
+	bool isStringParameter( const std::string & key ) const;
 
 	//try to read all registered parameters from file name
 	bool readFile( const std::string & name );
@@ -92,6 +97,21 @@ inline std::string FileReader::getStringParameter(const std::string &key) const
 {
 	CHECK_MSG( stringParameters.end() != stringParameters.find(key), "Parameter " + key + " not found!");
 	return stringParameters.at(key);
+}
+
+inline bool FileReader::isIntParameter( const std::string &key ) const
+{
+	return intParameters.end() != intParameters.find(key);
+}
+
+inline bool FileReader::isRealParameter( const std::string &key ) const
+{
+	return RealParameters.end() != RealParameters.find(key);
+}
+
+inline bool FileReader::isStringParameter( const std::string &key ) const
+{
+	return stringParameters.end() != stringParameters.find(key);
 }
 
 
