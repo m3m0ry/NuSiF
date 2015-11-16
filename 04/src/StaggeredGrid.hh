@@ -56,6 +56,17 @@ public:
    Real dx() const { return dx_; }
    Real dy() const { return dy_; }
 
+
+	inline Real dpdx(size_t i, size_t j) const
+	{
+		return (p_(i+1,j) - p(i,j)) / dx_;
+	}
+
+	inline Real dpdy(size_t i, size_t j) const
+	{
+		return (p_(i,j+1) - p(i,j)) / dy_;
+	}
+
 	inline Real d2udx2(size_t i, size_t j) const
 	{
 		return ( u_(i+1,j) - 2.0*u_(i,j) + u_(i-1,j) ) / (dx_*dx_);
