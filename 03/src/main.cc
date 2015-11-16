@@ -36,15 +36,17 @@ int main( int argc, char** argv )
 	for(size_t j = 0; j < u.getSize(1); ++j)
 	{
 		for(size_t i = 0; i < u.getSize(0); ++i)
-			u(i,j) = i;
+			u(i,j) = uInit;
 	}
 
+	u(1,1) = 3.0;
 	Array & v = grid->v();
 	for(size_t j = 0; j < v.getSize(1); ++j)
 	{
 		for(size_t i = 0; i < v.getSize(0); ++i)
-			v(i,j) = 0.0;
+			v(i,j) = vInit;
 	}
+	v(1,1) = 3.0;
 
 	Array & p = grid->p();
 	for(size_t j = 0; j < p.getSize(1); ++j)
@@ -67,14 +69,7 @@ int main( int argc, char** argv )
 			g(i,j) = 2.0;
 	}
 
-	Real wert = 0.9938;
 	sim->simulate(1.0);
-	for(size_t j = 0; j < f.getSize(1); ++j)
-	{
-			if( f(1,j) != wert)
-					std::cout << "Help!" << std::endl;
-	}
-	v.print();
 	f.print();
 	g.print();
 

@@ -107,7 +107,7 @@ public:
 	{
 		Real tmp0 = (( u_(i,j) + u_(i,j+1) ) /2) * (( v_(i,j) + v_(i+1,j) ) /2);
 		Real tmp1 = (( u_(i-1,j) + u_(i-1, j+1) ) /2) * (( v_(i-1, j) + v_(i,j) ) /2);
-		Real tmp2 = (1.0 /(dx_*dx_)) * ( tmp0 - tmp1 );
+		Real tmp2 = (1.0 /(dx_)) * ( tmp0 - tmp1 );
 
 		Real tmp3 = (fabs( u_(i,j) + u_(i,j+1) ) /2) * (( v_(i,j) -v_(i+1,j) ) /2);
 		Real tmp4 = (fabs( u_(i-1,j) + u_(i-1,j+1) ) /2) * ( (v_(i-1,j) - v_(i,j)) /2);
