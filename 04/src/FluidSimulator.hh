@@ -1,6 +1,8 @@
 #ifndef __FLUID_SIMULATOR_H__
 #define __FLUID_SIMULATOR_H__
 
+#include <string>
+
 
 #include "StaggeredGrid.hh"
 #include "FileReader.hh"

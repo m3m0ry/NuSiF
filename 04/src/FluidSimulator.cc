@@ -23,6 +23,9 @@ FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(
 
 	// Set boundary velocity
 	setVelocityValues("boundary_velocity_N");
+	setVelocityValues("boundary_velocity_S");
+	setVelocityValues("boundary_velocity_E");
+	setVelocityValues("boundary_velocity_W");
 }
 
 void FluidSimulator::simulate( Real duration )
@@ -44,31 +47,108 @@ void refreshBoundaries()
 
 
 }
+
 void setVelocityValues( const std::string & name )
+{
 	if( name.empty)
 		ABORT("Cannot check for empty string!");
 
-	if( isStringParameter("boundary_velocity_N"))
+	if( name.back() == 'N' )
 	{
-		//TODO finish
-		switch(conditionNorth_){
-			case NOSLIP: //TODO tangential 
-				break;
-			case INFLOW: //TODO normal
-				break;
-			case OUTFLOW
-				ABORT("Cannot have a velocity for an OUTFLOW boundary!");
-				break;
-			case SLIP: //TODO
-				break;
-			case PERIODIC //TODO
-				break;
+		if( isStringParameter("boundary_velocity_N"))
+		{
+			switch(conditionNorth_){
+				case NOSLIP: //TODO tangential 
+					break;
+				case INFLOW: //TODO normal
+					break;
+				case OUTFLOW
+					ABORT("Cannot have a velocity for an OUTFLOW boundary!");
+					break;
+				case SLIP: //TODO
+					break;
+				case PERIODIC //TODO
+					break;
+			}
+		}
+		else
+		{
+			//TODO set to 0
+		}
+	else if( name.back() == 'S' )
+	{
+		if( isStringParameter("boundary_velocity_S"))
+		{
+			switch(conditionNorth_){
+				case NOSLIP: //TODO tangential 
+					break;
+				case INFLOW: //TODO normal
+					break;
+				case OUTFLOW
+					ABORT("Cannot have a velocity for an OUTFLOW boundary!");
+					break;
+				case SLIP: //TODO
+					break;
+				case PERIODIC //TODO
+					break;
+			}
+		}
+		else
+		{
+			//TODO set to 0
+		}
+	}
+	else if ( name.back() == 'E' )
+	{
+		if( isStringParameter("boundary_velocity_E"))
+		{
+			switch(conditionNorth_){
+				case NOSLIP: //TODO tangential 
+					break;
+				case INFLOW: //TODO normal
+					break;
+				case OUTFLOW
+					ABORT("Cannot have a velocity for an OUTFLOW boundary!");
+					break;
+				case SLIP: //TODO
+					break;
+				case PERIODIC //TODO
+					break;
+			}
+		}
+		else
+		{
+			//TODO set to 0
+		}
+	}
+	else if ( name.back() == 'W' )
+	{
+		if( isStringParameter("boundary_velocity_W"))
+		{
+			switch(conditionNorth_){
+				case NOSLIP: //TODO tangential 
+					break;
+				case INFLOW: //TODO normal
+					break;
+				case OUTFLOW
+					ABORT("Cannot have a velocity for an OUTFLOW boundary!");
+					break;
+				case SLIP: //TODO
+					break;
+				case PERIODIC //TODO
+					break;
+			}
+		}
+		else
+		{
+			//TODO set to 0
 		}
 	}
 	else
 	{
-
+		ABORT("Wrong velocity direction given!");
 	}
+}
 
 BCTYPE boundaryCondition( const std::string & name)
 {
