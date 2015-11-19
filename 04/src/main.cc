@@ -62,9 +62,9 @@ int main( int argc, char** argv )
 	g.print();
 
 
+	delete sim;
 	delete filereader;
 
-	delete sim;
 
 	//delete solver;
 
