@@ -34,31 +34,19 @@ class FileReader
 {
 public:
 
-	//register a new parameter with name key and initial int value
+	//register a new parameter with name key and initial value
 	void registerIntParameter( const std::string & key, int init = 0 );
-
-	//register a new parameter with name key and initial double value
 	void registerRealParameter( const std::string & key, Real init = 0 );
-
-	//register a new parameter with name key and initial string value
 	void registerStringParameter( const std::string & key, const std::string & init = "" );
 
-	//set a value for the key string with value in
+	//set a value for the key with value in
 	void setParameter( const std::string & key, const std::string & in );
-
-	//set a value for the key string with value in
 	void setParameter( const std::string & key, Real in );
-
-	//set a value for the key string with value in
 	void setParameter( const std::string & key, int in );
 
-	// get the int value of key 
+	// get the value of key 
 	int getIntParameter( const std::string & key ) const;
-
-	// get the double value of key 
 	Real getRealParameter( const std::string & key ) const;
-
-	// get the string value of key 
 	std::string getStringParameter( const std::string & key ) const;
 
 	// Check if parameter availible

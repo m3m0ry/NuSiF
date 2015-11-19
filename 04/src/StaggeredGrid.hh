@@ -53,18 +53,23 @@ public:
    const Array & f()   const { return f_;   }
    const Array & g()   const { return g_;   }
 
-   Real dx() const { return dx_; }
-   Real dy() const { return dy_; }
+   Real & dx()		{ return dx_; }
+	const Real & dx() const { return dx_; }
+   Real & dy()		{ return dy_; }
+	const Real & dy() const { return dy_; }
+
+	int xSize() const		{ return xSize_; }
+	int ySize() const		{ return ySize_; }
 
 
 	inline Real dpdx(size_t i, size_t j) const
 	{
-		return (p_(i+1,j) - p(i,j)) / dx_;
+		return (p_(i+1,j) - p_(i,j)) / dx_;
 	}
 
 	inline Real dpdy(size_t i, size_t j) const
 	{
-		return (p_(i,j+1) - p(i,j)) / dy_;
+		return (p_(i,j+1) - p_(i,j)) / dy_;
 	}
 
 	inline Real d2udx2(size_t i, size_t j) const
@@ -148,6 +153,8 @@ protected:
 
    Real dx_;   //< distance between two grid points in x direction
    Real dy_;   //< distance between two grid points in y direction
+	int xSize_;
+	int ySize_;
 };
 
 

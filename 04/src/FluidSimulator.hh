@@ -7,6 +7,7 @@
 #include "StaggeredGrid.hh"
 #include "FileReader.hh"
 #include "SORSolver.hh"
+#include "Types.hh"
 
 
 class FluidSimulator
@@ -17,8 +18,6 @@ class FluidSimulator
       // Simulates a given time-length
       void simulate( Real );
       void simulateTimeStepCount( unsigned int nrOfTimeSteps );
-
-
 
 
       // Getter functions for the internally stored StaggeredGrid
@@ -49,8 +48,11 @@ class FluidSimulator
 		void setVelocityValues( const std::string &);	
 
 
+		//TODO delete
+		const FileReader * reader_;
 		StaggeredGrid grid_;
 		SORSolver solver_;
+		EnumParser parser_;
 
 		Real gx_;
 		Real gy_;

@@ -26,12 +26,13 @@ int main( int argc, char** argv )
 	internal::progress("File read", 200,200);
 
 
-	Real uInit = filereader->getRealParameter("U_init");
-	Real vInit = filereader->getRealParameter("V_init");
-	Real pInit = filereader->getRealParameter("P_init");
+	Real uInit = filereader->getRealParameter("U_INIT");
+	Real vInit = filereader->getRealParameter("V_INIT");
+	Real pInit = filereader->getRealParameter("P_INIT");
 
 	auto sim = new FluidSimulator( *filereader );
 	auto grid = & sim->grid();
+
 	Array & u = grid->u();
 	for(size_t j = 0; j < u.getSize(1); ++j)
 	{
@@ -39,14 +40,12 @@ int main( int argc, char** argv )
 			u(i,j) = uInit;
 	}
 
-	u(1,1) = 3.0;
 	Array & v = grid->v();
 	for(size_t j = 0; j < v.getSize(1); ++j)
 	{
 		for(size_t i = 0; i < v.getSize(0); ++i)
 			v(i,j) = vInit;
 	}
-	v(1,1) = 3.0;
 
 	Array & p = grid->p();
 	for(size_t j = 0; j < p.getSize(1); ++j)
@@ -56,18 +55,7 @@ int main( int argc, char** argv )
 	}
 
 	Array & f = grid->f();
-	for(size_t j = 0; j < f.getSize(1); ++j)
-	{
-		for(size_t i = 0; i < f.getSize(0); ++i)
-			f(i,j) = 2.0;
-	}
-	
 	Array & g = grid->g();
-	for(size_t j = 0; j < g.getSize(1); ++j)
-	{
-		for(size_t i = 0; i < g.getSize(0); ++i)
-			g(i,j) = 2.0;
-	}
 
 	sim->simulate(1.0);
 	f.print();
@@ -76,7 +64,7 @@ int main( int argc, char** argv )
 
 	delete filereader;
 
-	delete grid;
+	delete sim;
 
 	//delete solver;
 

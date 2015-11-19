@@ -4,8 +4,9 @@
 FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(conf)),
 		solver_(SORSolver(conf))
 {
-	gx_ = conf.getRealParameter("gx");
-	gy_ = conf.getRealParameter("gy");
+	reader_ = &conf;
+	gx_ = conf.getRealParameter("GX");
+	gy_ = conf.getRealParameter("GY");
 	re_ = conf.getRealParameter("Re");
 	dt_ = conf.getRealParameter("dt");
 	gamma_ = conf.getRealParameter("gamma");
@@ -14,7 +15,7 @@ FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(
 	tau_ = conf.getRealParameter("safetyfactor");
 
 	//Set and test boundaries
-	EnumParser<BCTYPE> parser;
+	//EnumParser<BCTYPE> parser;
 	// Set boundary condition
 	conditionNorth_ = boundaryCondition("boundary_condition_N");
 	conditionSouth_ = boundaryCondition("boundary_condition_S");
@@ -42,106 +43,185 @@ void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
 	computeFG();
 }
 
-void refreshBoundaries()
+void FluidSimulator::refreshBoundaries()
 {
 
 
 }
 
-void setVelocityValues( const std::string & name )
+void FluidSimulator::setVelocityValues( const std::string & name )
 {
-	if( name.empty)
+	if( name.empty())
 		ABORT("Cannot check for empty string!");
 
+	Array & u = grid_.u();
+	Array & v = grid_.v();
 	if( name.back() == 'N' )
 	{
-		if( isStringParameter("boundary_velocity_N"))
+		// North:
+		// u(i, jmax+1)
+		// v(i, jmax)
+		if( reader_->isRealParameter("boundary_velocity_N"))
 		{
+			Real val = reader_->getRealParameter("boundary_velocity_N");
 			switch(conditionNorth_){
-				case NOSLIP: //TODO tangential 
+				case NOSLIP: //tangential 
+					for(size_t i = 1; i<= imax_; ++i)
+					{
+						u(i, jmax_+1) = val;
+						v(i, jmax_) = 0.0;
+					}
 					break;
-				case INFLOW: //TODO normal
+				case INFLOW: // normal
+					for(size_t i = 1; i<= imax_; ++i)
+					{
+						u(i, jmax_+1) = 0.0;
+						v(i, jmax_) = val;
+					}
 					break;
-				case OUTFLOW
+				case OUTFLOW:
 					ABORT("Cannot have a velocity for an OUTFLOW boundary!");
 					break;
 				case SLIP: //TODO
 					break;
-				case PERIODIC //TODO
+				case PERIODIC: //TODO
 					break;
 			}
 		}
 		else
 		{
-			//TODO set to 0
+			// Set to 0
+			for(size_t i = 1; i<= imax_; ++i)
+			{
+				u(i, jmax_+1) = 0.0;
+				v(i, jmax_) = 0.0;
+			}
 		}
+	}
 	else if( name.back() == 'S' )
 	{
-		if( isStringParameter("boundary_velocity_S"))
+		//South:
+		//u(i, 0)
+		//v(i, 0)
+		if( reader_->isStringParameter("boundary_velocity_S"))
 		{
+			Real val = reader_->getRealParameter("boundary_velocity_S");
 			switch(conditionNorth_){
-				case NOSLIP: //TODO tangential 
+				case NOSLIP: // tangential 
+					for(size_t i = 1; i<= imax_; ++i)
+					{
+						u(i,0) = val;
+						v(i,0) = 0.0;
+					}
 					break;
-				case INFLOW: //TODO normal
+				case INFLOW: // normal
+					for(size_t i = 1; i<= imax_; ++i)
+					{
+						u(i,0) = 0.0;
+						v(i,0) = val;
+					}
 					break;
-				case OUTFLOW
+				case OUTFLOW:
 					ABORT("Cannot have a velocity for an OUTFLOW boundary!");
 					break;
 				case SLIP: //TODO
 					break;
-				case PERIODIC //TODO
+				case PERIODIC: //TODO
 					break;
 			}
 		}
 		else
 		{
-			//TODO set to 0
+			// Set to 0
+			for(size_t i = 1; i<= imax_; ++i)
+			{
+				u(i,0) = 0.0;
+				v(i,0) = 0.0;
+			}
 		}
 	}
 	else if ( name.back() == 'E' )
 	{
-		if( isStringParameter("boundary_velocity_E"))
+		// East
+		// u(imax,j)
+		// v(imax+1 j)
+		if( reader_->isStringParameter("boundary_velocity_E"))
 		{
+			Real val = reader_->getRealParameter("boundary_velocity_E");
 			switch(conditionNorth_){
-				case NOSLIP: //TODO tangential 
+				case NOSLIP: // tangential 
+					for(size_t j = 1; j<= imax_; ++j)
+					{
+						u(imax_,j) = 0.0;
+						v(imax_+1,j) = val;
+					}
 					break;
-				case INFLOW: //TODO normal
+				case INFLOW: // normal
+					for(size_t j = 1; j<= imax_; ++j)
+					{
+						u(imax_,j) = val;
+						v(imax_+1,j) = 0.0;
+					}
 					break;
-				case OUTFLOW
+				case OUTFLOW:
 					ABORT("Cannot have a velocity for an OUTFLOW boundary!");
 					break;
 				case SLIP: //TODO
 					break;
-				case PERIODIC //TODO
+				case PERIODIC: //TODO
 					break;
 			}
 		}
 		else
 		{
-			//TODO set to 0
+			// Set to 0
+			for(size_t j = 1; j<= imax_; ++j)
+			{
+				u(imax_,j) = 0.0;
+				v(imax_+1,j) = 0.0;
+			}
 		}
 	}
 	else if ( name.back() == 'W' )
 	{
-		if( isStringParameter("boundary_velocity_W"))
+		// West:
+		// u(0, j)
+		// v(0, j)
+		if( reader_->isStringParameter("boundary_velocity_W"))
 		{
+			Real val = reader_->getRealParameter("boundary_velocity_E");
 			switch(conditionNorth_){
-				case NOSLIP: //TODO tangential 
+				case NOSLIP: // tangential 
+					for(size_t j = 1; j <= jmax_; ++j)
+					{
+						u(0,j) = 0.0;
+						v(0,j) = val;
+					}
 					break;
-				case INFLOW: //TODO normal
+				case INFLOW: // normal
+					for(size_t j = 1; j <= jmax_; ++j)
+					{
+						u(0,j) = val;
+						v(0,j) = 0.0;
+					}
 					break;
-				case OUTFLOW
+				case OUTFLOW:
 					ABORT("Cannot have a velocity for an OUTFLOW boundary!");
 					break;
 				case SLIP: //TODO
 					break;
-				case PERIODIC //TODO
+				case PERIODIC: //TODO
 					break;
 			}
 		}
 		else
 		{
-			//TODO set to 0
+			// Set to 0
+			for(size_t j = 1; j <= jmax_; ++j)
+			{
+				u(0,j) = 0.0;
+				v(0,j) = 0.0;
+			}
 		}
 	}
 	else
@@ -150,28 +230,30 @@ void setVelocityValues( const std::string & name )
 	}
 }
 
-BCTYPE boundaryCondition( const std::string & name)
+BCTYPE FluidSimulator::boundaryCondition( const std::string & name)
 {
-	if( name.empty)
+	if( name.empty())
 		ABORT("Cannot check for empty string!");
 
-	if( isStringParameter(name))	
-		return parser.Parse(getStringParameter(name));
+	if( reader_->isStringParameter(name))	
+		return parser_.Parse(reader_->getStringParameter(name));
 	else
-		return = NOSLIP;
+		return NOSLIP;
 }
 
-void determineNextDT()
+void FluidSimulator::determineNextDT()
 {
-	Real & dx = grid_.dx();
-	Real & dy = grid_.dy();
+	const Real & dx = grid_.dx();
+	const Real & dy = grid_.dy();
+	Array & u = grid_.u();
+	Array & v = grid_.v();
 
 	if( tau_ <= 0.0 )
 		return;
 	Real umax = 0.0;
-	for(size_t j = 0; i <= jmax_+1; ++j)
+	for(size_t j = 0; j <= jmax_+1; ++j)
 	{
-		for(size_t i = 0; j <= imax_; ++i)
+		for(size_t i = 0; i <= imax_; ++i)
 		{
 			Real abs = fabs(u(i,j));
 			if( umax < abs )
@@ -180,11 +262,11 @@ void determineNextDT()
 	}
 
 	Real vmax = 0.0;
-	for(size_t j = 0; i <= jmax_; ++j)
+	for(size_t j = 0; j <= jmax_; ++j)
 	{
-		for(size_t i = 0; j <= imax_+1; ++i)
+		for(size_t i = 0; i <= imax_+1; ++i)
 		{
-			Real abs = fabs(u(i,j));
+			Real abs = fabs(v(i,j));
 			if( vmax < abs )
 				vmax = abs;
 		}
@@ -211,44 +293,44 @@ void determineNextDT()
 
 
 
-void updateVelocities()
+void FluidSimulator::updateVelocities()
 {
 	Array & u = grid_.u();
 	Array & v = grid_.v();
 	Array & F = grid_.f();
 	Array & G = grid_.g();
 
-	for(size_t j = 1; i <= jmax_; ++j)
+	for(size_t j = 1; j <= jmax_; ++j)
 	{
-		for(size_t i = 1; j <= imax_-1; ++i)
+		for(size_t i = 1; i <= imax_-1; ++i)
 		{
-			u(i,j) = F(i,j) - dt_ * dpdx;
+			u(i,j) = F(i,j) - dt_ * grid_.dpdx(i,j);
 		}
 	}
 	
-	for(size_t j = 1; i <= jmax_-1; ++j)
+	for(size_t j = 1; j <= jmax_-1; ++j)
 	{
-		for(size_t i = 1; j <= imax_; ++i)
+		for(size_t i = 1; i <= imax_; ++i)
 		{
-			v(i,j) = G(i,j) - dt_ * dpdy;
+			v(i,j) = G(i,j) - dt_ * grid_.dpdy(i,j);
 		}
 	}
 }
 
 
-void composeRHS()
+void FluidSimulator::composeRHS()
 {
 
 	Array & rhs = grid_.rhs();
 	Array & F = grid_.f();
 	Array & G = grid_.g();
-	int & dx = grid_.dx();
-	int & dy = grid_.dy();
+	const Real & dx = grid_.dx();
+	const Real & dy = grid_.dy();
 
 
-	for(size_t j = 1; i <= jmax_; ++j)
+	for(size_t j = 1; j <= jmax_; ++j)
 	{
-		for(size_t i = 1; j <= imax_; ++i)
+		for(size_t i = 1; i <= imax_; ++i)
 		{
 			rhs(i,j) = (1.0 / dt_) * ( ( F(i,j) - F(i-1,j) )/dx + ( G(i,j) - G(i,j-1) )/dy);
 
@@ -277,14 +359,14 @@ void FluidSimulator::computeFG()
 		G(i, jmax_) = v(i, jmax_);
 	}
 
-	for(size_t j = 1; i <= jmax_; ++j)
+	for(size_t j = 1; j <= jmax_; ++j)
 	{
-		for(size_t i = 1; j < imax_; ++i)
+		for(size_t i = 1; i < imax_; ++i)
 		{
 			F(i,j) = u(i,j) + dt_* ( (1.0 / re_) * ( grid_.d2udx2(i,j) + grid_.d2udy2(i,j)) - grid_.du2dx(i,j,gamma_) - grid_.duvdy(i,j, gamma_) + gx_);
 		}
 	}
-	for(size_t j = 1; i < jmax_; ++j)
+	for(size_t j = 1; j < jmax_; ++j)
 	{
 		for(size_t i = 1; i <= imax_; ++i)
 		{

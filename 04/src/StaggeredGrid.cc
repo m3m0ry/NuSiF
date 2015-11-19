@@ -7,31 +7,31 @@
 //==================
 
 //Direct Constructor
-StaggeredGrid::StaggeredGrid( int xSize, int ySize, Real dx, Real dy ) : dx_(dx), dy_(dy)
+StaggeredGrid::StaggeredGrid( int xSize, int ySize, Real dx, Real dy ) : dx_(dx), dy_(dy), xSize_(xSize), ySize_(ySize)
 {
-	p_ = Array(xSize + 2, ySize + 2);
-	rhs_ = Array(xSize + 2, ySize + 2);
-	u_ = Array(xSize + 1, ySize + 2);
-	v_ = Array(xSize + 2, ySize + 1);
-	f_ = Array(xSize + 1, ySize + 2);
-	g_ = Array(xSize + 2, ySize + 1);
+	p_ = Array(xSize_ + 2, ySize_ + 2);
+	rhs_ = Array(xSize_ + 2, ySize_ + 2);
+	u_ = Array(xSize_ + 1, ySize_ + 2);
+	v_ = Array(xSize_ + 2, ySize_ + 1);
+	f_ = Array(xSize_ + 1, ySize_ + 2);
+	g_ = Array(xSize_ + 2, ySize_ + 1);
 }
 
 //Constructor from configuration
 StaggeredGrid::StaggeredGrid( const FileReader & configuration )
 {
-	int xSize = configuration.getIntParameter("imax");
-	int ySize = configuration.getIntParameter("jmax");
+	xSize_ = configuration.getIntParameter("imax");
+	ySize_ = configuration.getIntParameter("jmax");
 
-	p_ = Array(xSize + 2, ySize + 2);
-	rhs_ = Array(xSize + 2, ySize + 2);
-	u_ = Array(xSize + 1, ySize + 2);
-	v_ = Array(xSize + 2, ySize + 1);
-	f_ = Array(xSize + 1, ySize + 2);
-	g_ = Array(xSize + 2, ySize + 1);
+	p_ = Array(xSize_ + 2, ySize_ + 2);
+	rhs_ = Array(xSize_ + 2, ySize_ + 2);
+	u_ = Array(xSize_ + 1, ySize_ + 2);
+	v_ = Array(xSize_ + 2, ySize_ + 1);
+	f_ = Array(xSize_ + 1, ySize_ + 2);
+	g_ = Array(xSize_ + 2, ySize_ + 1);
 
-	dx_ = configuration.getRealParameter("xlength")/(xSize);
-	dy_ = configuration.getRealParameter("ylength")/(ySize);
+	dx_ = configuration.getRealParameter("xlength")/(xSize_);
+	dy_ = configuration.getRealParameter("ylength")/(ySize_);
 }
 
 

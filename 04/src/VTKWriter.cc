@@ -1,10 +1,10 @@
-#include "VTKWriter.hh"
-#include "Debug.hh"
-
 #include <fstream>
 #include <sstream>
 #include <iomanip>
 
+#include "VTKWriter.hh"
+#include "Debug.hh"
+#include "StaggeredGrid.hh"
 
 template<typename T> struct RealTypeToString         {};
 template<>           struct RealTypeToString<float>  { static const char * str; };
@@ -45,13 +45,13 @@ void VTKWriter::write()
 
    if ( writeVelocity_ )
    {
-      fileStream << "VECTORS velocity " << RealTypeToString<real>::str << "\n";
+      fileStream << "VECTORS velocity " << RealTypeToString<Real>::str << "\n";
 
       for ( int j = 0; j < grid_.ySize (); ++j )
          for ( int i = 0; i < grid_.xSize (); ++i )
          {
-				const real u = 0.5 * ( grid_.u() ( i, j + 1 ) + grid_.u() ( i + 1, j + 1 ) );
-				const real v = 0.5 * ( grid_.v() ( i + 1, j ) + grid_.v() ( i + 1, j + 1 ) ) ;
+				const Real u = 0.5 * ( grid_.u() ( i, j + 1 ) + grid_.u() ( i + 1, j + 1 ) );
+				const Real v = 0.5 * ( grid_.v() ( i + 1, j ) + grid_.v() ( i + 1, j + 1 ) ) ;
 
             fileStream << u << " " << v << " " << " 0\n";
          }
@@ -61,7 +61,7 @@ void VTKWriter::write()
 
    if ( writePressure_ )
    {
-      fileStream << "SCALARS pressure " << RealTypeToString<real>::str << " 1\n";
+      fileStream << "SCALARS pressure " << RealTypeToString<Real>::str << " 1\n";
       fileStream << "LOOKUP_TABLE default\n";
 
       for ( int j = 0; j < grid_.ySize (); ++j )
