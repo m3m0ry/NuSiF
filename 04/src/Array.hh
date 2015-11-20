@@ -19,19 +19,19 @@
 class Array
 {
 public:
-	// Default Constructor
-	Array( );
-	// 1D Constructor
+   // Default Constructor
+   Array( );
+   // 1D Constructor
    Array( size_t );
-	// 2D Constructor
+   // 2D Constructor
    Array( size_t, size_t );
-	// 3D Constructor
+   // 3D Constructor
    Array( size_t, size_t, size_t );
-	// Copy Constructor
+   // Copy Constructor
    Array(const Array&);
-	// Move Constructor
-	Array(Array &&);
-	// Destructor
+   // Move Constructor
+   Array(Array &&);
+   // Destructor
    ~Array();
 
    //Array operator- (const Array& s);
@@ -48,14 +48,14 @@ public:
     inline const Real & operator () ( size_t, size_t, size_t ) const;
 
 
-	//Operators
-	// Copy assign operator
-	Array& operator= (const Array&);
-	// Move assign operator
-	Array& operator= (Array&&);
-	Array& operator+= (const Array&);
-	Array operator+ (const Array&) const;
-	Array operator+ (const Real) const;
+   //Operators
+   // Copy assign operator
+   Array& operator= (const Array&);
+   // Move assign operator
+   Array& operator= (Array&&);
+   Array& operator+= (const Array&);
+   Array operator+ (const Array&) const;
+   Array operator+ (const Real) const;
 
    // initialize the whole array with a constant value
    void fill( Real value );
@@ -73,12 +73,12 @@ public:
    void print() const;
 
 private:
-	size_t size_;
-	size_t xSize_;
-	size_t ySize_;
-	size_t zSize_;
-	Real * array_;
-	char dimension_;
+   size_t size_;
+   size_t xSize_;
+   size_t ySize_;
+   size_t zSize_;
+   Real * array_;
+   char dimension_;
 };
 
 std::ostream& operator<< (std::ostream&, const Array&);
@@ -107,25 +107,25 @@ inline Real& Array::operator ()(size_t i,size_t j)
 // Operator() 3D
 inline Real& Array::operator ()(size_t i, size_t j, size_t k)
 {
-	ASSERT_MSG(i < xSize_ && j < ySize_ && k < zSize_, "Access value too large");
-	return array_[i + j * xSize_ + k * xSize_ * ySize_];
+   ASSERT_MSG(i < xSize_ && j < ySize_ && k < zSize_, "Access value too large");
+   return array_[i + j * xSize_ + k * xSize_ * ySize_];
 }
 
 inline const Real & Array::operator () ( size_t i ) const
 {
     ASSERT_MSG(i < xSize_, "Access value too large");
-	return array_[i];
+   return array_[i];
 }
 
 inline const Real & Array::operator () ( size_t i ,size_t j ) const
 {
     ASSERT_MSG(i < xSize_ && j < ySize_, "Access value too large");
-	return array_[i + j * xSize_];
+   return array_[i + j * xSize_];
 }
 
 inline const Real & Array::operator () ( size_t i, size_t j, size_t k ) const
 {
     ASSERT_MSG(i < xSize_ && j < ySize_ && k < zSize_, "Access value too large");
-	return array_[i + j * xSize_ + k * xSize_ * ySize_];
+   return array_[i + j * xSize_ + k * xSize_ * ySize_];
 }
 

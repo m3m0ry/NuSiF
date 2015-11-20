@@ -34,8 +34,8 @@
 #define PROGRESS(MSG, X, MAX) \
    { std::stringstream ss; \
      ss << MSG; \
-	  internal::progress(ss.str(), X, MAX);\
-	}
+     internal::progress(ss.str(), X, MAX);\
+   }
 
 
 //====================================================================================
@@ -60,8 +60,8 @@
 #define DEBUG_PROGRESS(MSG, X, MAX) \
    { std::stringstream ss; \
      ss << MSG; \
-	  internal::progress(ss.str(), X, MAX);\
-	}
+     internal::progress(ss.str(), X, MAX);\
+   }
 
 #else
 

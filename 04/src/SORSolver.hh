@@ -33,9 +33,9 @@ private:
    int itermax_;
    Real eps_; // Epsilon
    Real omg_; // 
-	
-	int epsFrequency_;
-	int normFrequency_;
+   
+   int epsFrequency_;
+   int normFrequency_;
 };
 
 

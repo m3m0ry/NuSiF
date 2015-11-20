@@ -34,36 +34,36 @@ class FileReader
 {
 public:
 
-	//register a new parameter with name key and initial value
-	void registerIntParameter( const std::string & key, int init = 0 );
-	void registerRealParameter( const std::string & key, Real init = 0 );
-	void registerStringParameter( const std::string & key, const std::string & init = "" );
+   //register a new parameter with name key and initial value
+   void registerIntParameter( const std::string & key, int init = 0 );
+   void registerRealParameter( const std::string & key, Real init = 0 );
+   void registerStringParameter( const std::string & key, const std::string & init = "" );
 
-	//set a value for the key with value in
-	void setParameter( const std::string & key, const std::string & in );
-	void setParameter( const std::string & key, Real in );
-	void setParameter( const std::string & key, int in );
+   //set a value for the key with value in
+   void setParameter( const std::string & key, const std::string & in );
+   void setParameter( const std::string & key, Real in );
+   void setParameter( const std::string & key, int in );
 
-	// get the value of key 
-	int getIntParameter( const std::string & key ) const;
-	Real getRealParameter( const std::string & key ) const;
-	std::string getStringParameter( const std::string & key ) const;
+   // get the value of key 
+   int getIntParameter( const std::string & key ) const;
+   Real getRealParameter( const std::string & key ) const;
+   std::string getStringParameter( const std::string & key ) const;
 
-	// Check if parameter availible
-	bool isIntParameter( const std::string & key ) const;
-	bool isRealParameter( const std::string & key ) const;
-	bool isStringParameter( const std::string & key ) const;
+   // Check if parameter availible
+   bool isIntParameter( const std::string & key ) const;
+   bool isRealParameter( const std::string & key ) const;
+   bool isStringParameter( const std::string & key ) const;
 
-	//try to read all registered parameters from file name
-	bool readFile( const std::string & name );
+   //try to read all registered parameters from file name
+   bool readFile( const std::string & name );
 
-	//print out all parameters to std:out
-	void printParameters() const;
+   //print out all parameters to std:out
+   void printParameters() const;
 
 private:
-	std::map<std::string, int> intParameters;
-	std::map<std::string, Real> RealParameters;
-	std::map<std::string, std::string> stringParameters;
+   std::map<std::string, int> intParameters;
+   std::map<std::string, Real> RealParameters;
+   std::map<std::string, std::string> stringParameters;
 
 };
 
@@ -71,35 +71,35 @@ private:
 
 inline int FileReader::getIntParameter(const std::string &key) const
 {
-	CHECK_MSG( intParameters.end() != intParameters.find(key), "Parameter " + key + " not found!");
-	return intParameters.at(key);
+   CHECK_MSG( intParameters.end() != intParameters.find(key), "Parameter " + key + " not found!");
+   return intParameters.at(key);
 }
 
 inline Real FileReader::getRealParameter(const std::string &key) const
 {
-	CHECK_MSG( RealParameters.end() != RealParameters.find(key), "Parameter " + key + " not found!");
-	return RealParameters.at(key);
+   CHECK_MSG( RealParameters.end() != RealParameters.find(key), "Parameter " + key + " not found!");
+   return RealParameters.at(key);
 }
 
 inline std::string FileReader::getStringParameter(const std::string &key) const
 {
-	CHECK_MSG( stringParameters.end() != stringParameters.find(key), "Parameter " + key + " not found!");
-	return stringParameters.at(key);
+   CHECK_MSG( stringParameters.end() != stringParameters.find(key), "Parameter " + key + " not found!");
+   return stringParameters.at(key);
 }
 
 inline bool FileReader::isIntParameter( const std::string &key ) const
 {
-	return intParameters.end() != intParameters.find(key);
+   return intParameters.end() != intParameters.find(key);
 }
 
 inline bool FileReader::isRealParameter( const std::string &key ) const
 {
-	return RealParameters.end() != RealParameters.find(key);
+   return RealParameters.end() != RealParameters.find(key);
 }
 
 inline bool FileReader::isStringParameter( const std::string &key ) const
 {
-	return stringParameters.end() != stringParameters.find(key);
+   return stringParameters.end() != stringParameters.find(key);
 }
 
 

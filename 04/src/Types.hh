@@ -19,49 +19,49 @@ typedef enum { NOSLIP, SLIP, INFLOW, OUTFLOW, PERIODIC } BCTYPE;
 //template <typename T>
 //class EnumParser
 //{
-//	public:
-//		EnumParser(){};
+// public:
+//    EnumParser(){};
 //
-//		T Parse(const std::string &value)
-//		{ 
-//			std::map<std::string, T>::const_iterator iValue = enumMap.find(value);
-//			
-//			CHECK_MSG(iValue != enumMap.end(), "Wrong string to parse!");
-//			return iValue->second;
-//		}
-//	private:
-//		std::map <std::string, T> enumMap;
+//    T Parse(const std::string &value)
+//    { 
+//       std::map<std::string, T>::const_iterator iValue = enumMap.find(value);
+//       
+//       CHECK_MSG(iValue != enumMap.end(), "Wrong string to parse!");
+//       return iValue->second;
+//    }
+// private:
+//    std::map <std::string, T> enumMap;
 //};
 //
 //EnumParser<BCTYPE>::EnumParser()
 //{
-//	enumMap["noslip"] = NOSLIP;
-//	enumMap["slip"] = SLIP;
-//	enumMap["inflow"] = INFLOW;
-//	enumMap["outflow"] = OUTFLOW;
-//	enumMap["periodic"] = PERIODIC;
+// enumMap["noslip"] = NOSLIP;
+// enumMap["slip"] = SLIP;
+// enumMap["inflow"] = INFLOW;
+// enumMap["outflow"] = OUTFLOW;
+// enumMap["periodic"] = PERIODIC;
 //}
 
 // String search for enum
 class EnumParser
 {
-	public:
-		EnumParser(){
-			enumMap["noslip"] = NOSLIP;
-			enumMap["slip"] = SLIP;
-			enumMap["inflow"] = INFLOW;
-			enumMap["outflow"] = OUTFLOW;
-			enumMap["periodic"] = PERIODIC;
-		}
+   public:
+      EnumParser(){
+         enumMap["noslip"] = NOSLIP;
+         enumMap["slip"] = SLIP;
+         enumMap["inflow"] = INFLOW;
+         enumMap["outflow"] = OUTFLOW;
+         enumMap["periodic"] = PERIODIC;
+      }
 
-		BCTYPE Parse(const std::string &value)
-		{ 
-			std::map<std::string, BCTYPE>::const_iterator iValue = enumMap.find(value);
-			
-			CHECK_MSG(iValue != enumMap.end(), "Wrong string to parse!");
-			return iValue->second;
-		}
-	//private:
-		std::map <std::string, BCTYPE> enumMap;
+      BCTYPE Parse(const std::string &value)
+      { 
+         std::map<std::string, BCTYPE>::const_iterator iValue = enumMap.find(value);
+         
+         CHECK_MSG(iValue != enumMap.end(), "Wrong string to parse!");
+         return iValue->second;
+      }
+   //private:
+      std::map <std::string, BCTYPE> enumMap;
 };
 
