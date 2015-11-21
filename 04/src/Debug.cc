@@ -63,17 +63,17 @@ namespace internal
       std::cerr <<  "\t" << message << std::endl;
    }
 
-   void progress(const std::string & message, int parts, int whole){
-      CHECK_MSG( parts >= 0 && whole > 0, "Progress values are negative"); 
+   void progress(const std::string & message, unsigned int parts, unsigned int whole){
+      CHECK_MSG( whole > parts, "Progress values are negative"); 
       if ( message.size() > 0 )
          std::cerr << message;
 
       std::cerr << "\t[" << GREEN;
-      for(int i = 0; i < (parts *20) /whole -1 ; ++i){
+      for(unsigned int i = 0; i < (parts *20) /whole -1 ; ++i){
          std::cerr << "=";
       }
       std::cerr << ">" << BROWN;
-      for(int i = 0; i < 20 - (parts*20)/whole; ++i){
+      for(unsigned int i = 0; i < 20 - (parts*20)/whole; ++i){
          std::cerr << "%";
       }
       std::cerr << DEFAULTCOLOR << "]" << std::endl;

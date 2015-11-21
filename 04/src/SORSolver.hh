@@ -20,7 +20,7 @@ class SORSolver
 {
 public:
    // Constructor to manually create SORSolver
-   SORSolver( int itermax, Real eps, Real omg );
+   SORSolver(unsigned int itermax, Real eps, Real omg );
 
    // Constructor to create a SORSolver from a parsed configuration file
    SORSolver( const FileReader & configuration );
@@ -30,12 +30,12 @@ public:
    bool solve( StaggeredGrid & grid );
 
 private:
-   int itermax_;
+   unsigned int itermax_;
    Real eps_; // Epsilon
    Real omg_; // 
    
-   int epsFrequency_;
-   int normFrequency_;
+   unsigned int epsFrequency_;
+   unsigned int normFrequency_;
 };
 
 

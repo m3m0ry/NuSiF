@@ -1,7 +1,7 @@
 #include "SORSolver.hh"
 
 // Constructor to manually create SORSolver
-SORSolver::SORSolver( int itermax, Real eps, Real omg ) : itermax_(itermax), eps_(eps), omg_(omg)
+SORSolver::SORSolver(unsigned int itermax, Real eps, Real omg ) : itermax_(itermax), eps_(eps), omg_(omg)
 {
 
 }
@@ -9,11 +9,18 @@ SORSolver::SORSolver( int itermax, Real eps, Real omg ) : itermax_(itermax), eps
 // Constructor to create a SORSolver from a parsed configuration file
 SORSolver::SORSolver ( const FileReader & configuration )
 {
-   itermax_ = configuration.getIntParameter("itermax");
+   int test = 0;
+   test = configuration.getIntParameter("itermax");
+   CHECK_MSG(test >= 0, "Itermax is less then 0");
+   itermax_ = (unsigned int) test;
    eps_ = configuration.getRealParameter("eps");
    omg_ = configuration.getRealParameter("omg");
-   epsFrequency_ = configuration.getIntParameter("checkfrequency");
-   normFrequency_ = configuration.getIntParameter("normalizationfrequency");
+   test = configuration.getIntParameter("checkfrequency");
+   CHECK_MSG(test >= 0, "Checkfrequency is less then 0");
+   epsFrequency_ = (unsigned int) test;
+   test = configuration.getIntParameter("normalizationfrequency");
+   CHECK_MSG(test >= 0, "Checkfrequency is less then 0");
+   normFrequency_ = (unsigned int) test;
 }
 
 
@@ -23,11 +30,12 @@ bool SORSolver::solve( StaggeredGrid & grid )
 {
    Array & p = grid.p();
    Array & rhs = grid.rhs();
+   //TODO wraparound
    size_t imax = p.getSize(0) -2;
    size_t jmax = p.getSize(1) -2;
    Real dx = grid.dx();
    Real dy = grid.dy();
-   for(int nIter = 0; nIter < itermax_; ++nIter)
+   for(unsigned int nIter = 0; nIter < itermax_; ++nIter)
    {
       //Copy paste boundaries
       for(size_t j = 1; j < jmax + 1; ++j)

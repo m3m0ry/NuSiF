@@ -43,7 +43,7 @@ bool FileReader::readFile(const std::string &name)
    std::ifstream parameterFile(name);
    if(parameterFile.is_open())
    {
-      for(size_t j = 1; getline(parameterFile, line); j++)
+      for(int j = 1; getline(parameterFile, line); j++)
       {
          //DELETE Comments
          line = line.substr(0, line.find('#'));
@@ -52,7 +52,7 @@ bool FileReader::readFile(const std::string &name)
          std::string key;
          std::string value;
          int state = 0;
-         for( int i = 0; '\0' != (c = line[i]); ++i)
+         for( size_t i = 0; '\0' != (c = line[i]); ++i)
          {
             //Ignore whitespace
             if(isspace(c))

@@ -26,10 +26,10 @@ class StaggeredGrid
 {
 public:
    // Constructors to manually create staggered grid
-   StaggeredGrid( int xSize, int ySize, Real dx, Real dy );
+   StaggeredGrid( size_t, size_t, Real, Real);
 
    // Constructor to create a staggered grid from a parsed configuration file
-   StaggeredGrid( const FileReader & configuration );
+   StaggeredGrid( const FileReader & );
 
 
    // f(x,y) = 0
@@ -58,8 +58,8 @@ public:
    Real & dy()    { return dy_; }
    const Real & dy() const { return dy_; }
 
-   int xSize() const    { return xSize_; }
-   int ySize() const    { return ySize_; }
+   size_t xSize() const    { return xSize_; }
+   size_t ySize() const    { return ySize_; }
 
 
    inline Real dpdx(size_t i, size_t j) const
@@ -153,8 +153,8 @@ protected:
 
    Real dx_;   //< distance between two grid points in x direction
    Real dy_;   //< distance between two grid points in y direction
-   int xSize_;
-   int ySize_;
+   size_t xSize_;
+   size_t ySize_;
 };
 
 

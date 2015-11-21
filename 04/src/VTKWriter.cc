@@ -47,8 +47,8 @@ void VTKWriter::write()
    {
       fileStream << "VECTORS velocity " << RealTypeToString<Real>::str << "\n";
 
-      for ( int j = 0; j < grid_.ySize (); ++j )
-         for ( int i = 0; i < grid_.xSize (); ++i )
+      for ( size_t j = 0; j < grid_.ySize (); ++j )
+         for ( size_t i = 0; i < grid_.xSize (); ++i )
          {
             const Real u = 0.5 * ( grid_.u() ( i, j + 1 ) + grid_.u() ( i + 1, j + 1 ) );
             const Real v = 0.5 * ( grid_.v() ( i + 1, j ) + grid_.v() ( i + 1, j + 1 ) ) ;
@@ -64,8 +64,8 @@ void VTKWriter::write()
       fileStream << "SCALARS pressure " << RealTypeToString<Real>::str << " 1\n";
       fileStream << "LOOKUP_TABLE default\n";
 
-      for ( int j = 0; j < grid_.ySize (); ++j )
-         for ( int i = 0; i < grid_.xSize (); ++i )
+      for ( size_t j = 0; j < grid_.ySize (); ++j )
+         for ( size_t i = 0; i < grid_.xSize (); ++i )
             fileStream << grid_.p()( i+1, j+1 ) << "\n";
    }
 

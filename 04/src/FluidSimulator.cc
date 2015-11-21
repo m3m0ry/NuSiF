@@ -10,8 +10,13 @@ FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(
    re_ = conf.getRealParameter("Re");
    dt_ = conf.getRealParameter("dt");
    gamma_ = conf.getRealParameter("gamma");
-   imax_ = conf.getIntParameter("imax");
-   jmax_ = conf.getIntParameter("jmax");
+   int test = 0;
+   test = conf.getIntParameter("imax");
+   CHECK_MSG(test >= 0, "Imax is lesser then 0");
+   imax_ = (size_t) test;
+   test = conf.getIntParameter("jmax");
+   CHECK_MSG(test >= 0, "Jmax is lesser then 0");
+   jmax_ = (size_t) test;
    tau_ = conf.getRealParameter("safetyfactor");
 
    //Set and test boundaries

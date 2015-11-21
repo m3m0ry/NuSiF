@@ -87,7 +87,7 @@ namespace internal
    void warnFct( const std::string & message,
                  const char * const filename, int line );
    
-   void progress( const std::string & message, int parts , int whole);
+   void progress( const std::string & message, unsigned int parts , unsigned int whole);
 
 }
 

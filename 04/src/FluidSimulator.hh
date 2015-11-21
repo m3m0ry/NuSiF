@@ -8,6 +8,7 @@
 #include "FileReader.hh"
 #include "SORSolver.hh"
 #include "Types.hh"
+#include "Debug.hh"
 
 
 class FluidSimulator
