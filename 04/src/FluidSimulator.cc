@@ -4,14 +4,12 @@
 FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(conf)),
       solver_(SORSolver(conf))
 {
-   reader_ = &conf;
    gx_ = conf.getRealParameter("GX");
    gy_ = conf.getRealParameter("GY");
    re_ = conf.getRealParameter("Re");
    dt_ = conf.getRealParameter("dt");
    gamma_ = conf.getRealParameter("gamma");
-   int test = 0;
-   test = conf.getIntParameter("imax");
+   int test = conf.getIntParameter("imax");
    CHECK_MSG(test >= 0, "Imax is lesser then 0");
    imax_ = (size_t) test;
    test = conf.getIntParameter("jmax");
@@ -22,39 +20,64 @@ FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(
    //Set and test boundaries
    //EnumParser<BCTYPE> parser;
    // Set boundary condition
-   conditionNorth_ = boundaryCondition("boundary_condition_N");
-   conditionSouth_ = boundaryCondition("boundary_condition_S");
-   conditionEast_ = boundaryCondition("boundary_condition_E");
-   conditionWest_ = boundaryCondition("boundary_condition_W");
+   conditionNorth_ = boundaryCondition("boundary_condition_N", conf);
+   conditionSouth_ = boundaryCondition("boundary_condition_S", conf);
+   conditionEast_ = boundaryCondition("boundary_condition_E", conf);
+   conditionWest_ = boundaryCondition("boundary_condition_W", conf);
 
    // Set boundary velocity
-   setVelocityValues("boundary_velocity_N");
-   setVelocityValues("boundary_velocity_S");
-   setVelocityValues("boundary_velocity_E");
-   setVelocityValues("boundary_velocity_W");
+   setVelocityValues("boundary_velocity_N", conf);
+   setVelocityValues("boundary_velocity_S", conf);
+   setVelocityValues("boundary_velocity_E", conf);
+   setVelocityValues("boundary_velocity_W", conf);
+
+   // Init Arrays
+   grid_.u().fill(conf.getRealParameter("U_INIT"));
+   grid_.v().fill(conf.getRealParameter("V_INIT"));
+   grid_.p().fill(conf.getRealParameter("P_INIT"));
 }
 
 void FluidSimulator::simulate( Real duration )
 {
-   computeFG();
-   composeRHS();
-   solver_.solve(grid_);
-   updateVelocities();
-   determineNextDT();
+   // Init values (i do it in the constructor)
+   Real t = 0.0;
+   
+   while(t<=duration)
+   {
+      determineNextDT();
+      //TODO set boundary values for u and v
+      computeFG();
+      composeRHS();
+      //TODO maxiter, normalization, residial frequency
+      // SOR-solver
+      solver_.solve(grid_);
+      updateVelocities();
+      t += dt_;
+   }
 }
 
 void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
 {
-   computeFG();
+   for (unsigned int i = 0; i < nrOfTimeSteps; ++i)
+   {
+      determineNextDT();
+      //TODO set boundary values for u and v
+      computeFG();
+      composeRHS();
+      //TODO maxiter, normalization, residial frequency
+      // SOR-solver
+      solver_.solve(grid_);
+      updateVelocities();
+   }
+
 }
 
 void FluidSimulator::refreshBoundaries()
 {
 
-
 }
 
-void FluidSimulator::setVelocityValues( const std::string & name )
+void FluidSimulator::setVelocityValues( const std::string & name, const FileReader & conf )
 {
    if( name.empty())
       ABORT("Cannot check for empty string!");
@@ -66,9 +89,9 @@ void FluidSimulator::setVelocityValues( const std::string & name )
       // North:
       // u(i, jmax+1)
       // v(i, jmax)
-      if( reader_->isRealParameter("boundary_velocity_N"))
+      if( conf.isRealParameter("boundary_velocity_N"))
       {
-         Real val = reader_->getRealParameter("boundary_velocity_N");
+         Real val = conf.getRealParameter("boundary_velocity_N");
          switch(conditionNorth_){
             case NOSLIP: //tangential 
                for(size_t i = 1; i<= imax_; ++i)
@@ -91,6 +114,9 @@ void FluidSimulator::setVelocityValues( const std::string & name )
                break;
             case PERIODIC: //TODO
                break;
+            default:
+               ABORT("Wrong boundary parameter given");
+               break;
          }
       }
       else
@@ -108,9 +134,9 @@ void FluidSimulator::setVelocityValues( const std::string & name )
       //South:
       //u(i, 0)
       //v(i, 0)
-      if( reader_->isStringParameter("boundary_velocity_S"))
+      if( conf.isStringParameter("boundary_velocity_S"))
       {
-         Real val = reader_->getRealParameter("boundary_velocity_S");
+         Real val = conf.getRealParameter("boundary_velocity_S");
          switch(conditionNorth_){
             case NOSLIP: // tangential 
                for(size_t i = 1; i<= imax_; ++i)
@@ -133,6 +159,9 @@ void FluidSimulator::setVelocityValues( const std::string & name )
                break;
             case PERIODIC: //TODO
                break;
+            default:
+               ABORT("Wrong boundary parameter given");
+               break;
          }
       }
       else
@@ -150,9 +179,9 @@ void FluidSimulator::setVelocityValues( const std::string & name )
       // East
       // u(imax,j)
       // v(imax+1 j)
-      if( reader_->isStringParameter("boundary_velocity_E"))
+      if( conf.isStringParameter("boundary_velocity_E"))
       {
-         Real val = reader_->getRealParameter("boundary_velocity_E");
+         Real val = conf.getRealParameter("boundary_velocity_E");
          switch(conditionNorth_){
             case NOSLIP: // tangential 
                for(size_t j = 1; j<= imax_; ++j)
@@ -175,6 +204,9 @@ void FluidSimulator::setVelocityValues( const std::string & name )
                break;
             case PERIODIC: //TODO
                break;
+            default:
+               ABORT("Wrong boundary parameter given");
+               break;
          }
       }
       else
@@ -192,9 +224,9 @@ void FluidSimulator::setVelocityValues( const std::string & name )
       // West:
       // u(0, j)
       // v(0, j)
-      if( reader_->isStringParameter("boundary_velocity_W"))
+      if( conf.isStringParameter("boundary_velocity_W"))
       {
-         Real val = reader_->getRealParameter("boundary_velocity_E");
+         Real val = conf.getRealParameter("boundary_velocity_E");
          switch(conditionNorth_){
             case NOSLIP: // tangential 
                for(size_t j = 1; j <= jmax_; ++j)
@@ -217,6 +249,9 @@ void FluidSimulator::setVelocityValues( const std::string & name )
                break;
             case PERIODIC: //TODO
                break;
+            default:
+               ABORT("Wrong boundary parameter given");
+               break;
          }
       }
       else
@@ -235,13 +270,13 @@ void FluidSimulator::setVelocityValues( const std::string & name )
    }
 }
 
-BCTYPE FluidSimulator::boundaryCondition( const std::string & name)
+BCTYPE FluidSimulator::boundaryCondition( const std::string & name, const FileReader & conf)
 {
    if( name.empty())
       ABORT("Cannot check for empty string!");
 
-   if( reader_->isStringParameter(name))  
-      return parser_.Parse(reader_->getStringParameter(name));
+   if( conf.isStringParameter(name))  
+      return parser_.Parse(conf.getStringParameter(name));
    else
       return NOSLIP;
 }

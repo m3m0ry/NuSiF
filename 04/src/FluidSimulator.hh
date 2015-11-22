@@ -3,7 +3,6 @@
 
 #include <string>
 
-
 #include "StaggeredGrid.hh"
 #include "FileReader.hh"
 #include "SORSolver.hh"
@@ -14,11 +13,11 @@
 class FluidSimulator
 {
   public:
-      FluidSimulator( const FileReader & conf );
+      FluidSimulator( const FileReader & );
 
       // Simulates a given time-length
       void simulate( Real );
-      void simulateTimeStepCount( unsigned int nrOfTimeSteps );
+      void simulateTimeStepCount( unsigned int );
 
 
       // Getter functions for the internally stored StaggeredGrid
@@ -43,14 +42,12 @@ class FluidSimulator
 
 
 		// Return the boundary condition
-		BCTYPE boundaryCondition( const std::string &);
+		BCTYPE boundaryCondition( const std::string &, const FileReader &);
 
 		// Set the velocity values of a boundary
-		void setVelocityValues( const std::string &);	
+		void setVelocityValues( const std::string &, const FileReader &);	
 
 
-		//TODO delete
-		const FileReader * reader_;
 		StaggeredGrid grid_;
 		SORSolver solver_;
 		EnumParser parser_;
