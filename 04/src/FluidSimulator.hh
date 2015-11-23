@@ -50,7 +50,7 @@ class FluidSimulator
 
 		StaggeredGrid grid_;
 		SORSolver solver_;
-		EnumParser parser_;
+		//EnumParser<BCTYPE> parser_;
 
 		Real gx_;
 		Real gy_;

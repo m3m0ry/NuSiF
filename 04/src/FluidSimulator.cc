@@ -20,21 +20,21 @@ FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(
    //Set and test boundaries
    //EnumParser<BCTYPE> parser;
    // Set boundary condition
-   conditionNorth_ = boundaryCondition("boundary_condition_N", conf);
-   conditionSouth_ = boundaryCondition("boundary_condition_S", conf);
-   conditionEast_ = boundaryCondition("boundary_condition_E", conf);
-   conditionWest_ = boundaryCondition("boundary_condition_W", conf);
-
-   // Set boundary velocity
-   setVelocityValues("boundary_velocity_N", conf);
-   setVelocityValues("boundary_velocity_S", conf);
-   setVelocityValues("boundary_velocity_E", conf);
-   setVelocityValues("boundary_velocity_W", conf);
+   //conditionNorth_ = boundaryCondition("boundary_condition_N", conf);
+   //conditionSouth_ = boundaryCondition("boundary_condition_S", conf);
+   //conditionEast_ = boundaryCondition("boundary_condition_E", conf);
+   //conditionWest_ = boundaryCondition("boundary_condition_W", conf);
 
    // Init Arrays
    grid_.u().fill(conf.getRealParameter("U_INIT"));
    grid_.v().fill(conf.getRealParameter("V_INIT"));
    grid_.p().fill(conf.getRealParameter("P_INIT"));
+
+   // Set boundary velocity
+   //setVelocityValues("boundary_velocity_N", conf);
+   //setVelocityValues("boundary_velocity_S", conf);
+   //setVelocityValues("boundary_velocity_E", conf);
+   //setVelocityValues("boundary_velocity_W", conf);
 }
 
 void FluidSimulator::simulate( Real duration )
@@ -75,210 +75,6 @@ void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
 void FluidSimulator::refreshBoundaries()
 {
 
-}
-
-void FluidSimulator::setVelocityValues( const std::string & name, const FileReader & conf )
-{
-   if( name.empty())
-      ABORT("Cannot check for empty string!");
-
-   Array & u = grid_.u();
-   Array & v = grid_.v();
-   if( name.back() == 'N' )
-   {
-      // North:
-      // u(i, jmax+1)
-      // v(i, jmax)
-      if( conf.isRealParameter("boundary_velocity_N"))
-      {
-         Real val = conf.getRealParameter("boundary_velocity_N");
-         switch(conditionNorth_){
-            case NOSLIP: //tangential 
-               for(size_t i = 1; i<= imax_; ++i)
-               {
-                  u(i, jmax_+1) = val;
-                  v(i, jmax_) = 0.0;
-               }
-               break;
-            case INFLOW: // normal
-               for(size_t i = 1; i<= imax_; ++i)
-               {
-                  u(i, jmax_+1) = 0.0;
-                  v(i, jmax_) = val;
-               }
-               break;
-            case OUTFLOW:
-               ABORT("Cannot have a velocity for an OUTFLOW boundary!");
-               break;
-            case SLIP: //TODO
-               break;
-            case PERIODIC: //TODO
-               break;
-            default:
-               ABORT("Wrong boundary parameter given");
-               break;
-         }
-      }
-      else
-      {
-         // Set to 0
-         for(size_t i = 1; i<= imax_; ++i)
-         {
-            u(i, jmax_+1) = 0.0;
-            v(i, jmax_) = 0.0;
-         }
-      }
-   }
-   else if( name.back() == 'S' )
-   {
-      //South:
-      //u(i, 0)
-      //v(i, 0)
-      if( conf.isStringParameter("boundary_velocity_S"))
-      {
-         Real val = conf.getRealParameter("boundary_velocity_S");
-         switch(conditionNorth_){
-            case NOSLIP: // tangential 
-               for(size_t i = 1; i<= imax_; ++i)
-               {
-                  u(i,0) = val;
-                  v(i,0) = 0.0;
-               }
-               break;
-            case INFLOW: // normal
-               for(size_t i = 1; i<= imax_; ++i)
-               {
-                  u(i,0) = 0.0;
-                  v(i,0) = val;
-               }
-               break;
-            case OUTFLOW:
-               ABORT("Cannot have a velocity for an OUTFLOW boundary!");
-               break;
-            case SLIP: //TODO
-               break;
-            case PERIODIC: //TODO
-               break;
-            default:
-               ABORT("Wrong boundary parameter given");
-               break;
-         }
-      }
-      else
-      {
-         // Set to 0
-         for(size_t i = 1; i<= imax_; ++i)
-         {
-            u(i,0) = 0.0;
-            v(i,0) = 0.0;
-         }
-      }
-   }
-   else if ( name.back() == 'E' )
-   {
-      // East
-      // u(imax,j)
-      // v(imax+1 j)
-      if( conf.isStringParameter("boundary_velocity_E"))
-      {
-         Real val = conf.getRealParameter("boundary_velocity_E");
-         switch(conditionNorth_){
-            case NOSLIP: // tangential 
-               for(size_t j = 1; j<= imax_; ++j)
-               {
-                  u(imax_,j) = 0.0;
-                  v(imax_+1,j) = val;
-               }
-               break;
-            case INFLOW: // normal
-               for(size_t j = 1; j<= imax_; ++j)
-               {
-                  u(imax_,j) = val;
-                  v(imax_+1,j) = 0.0;
-               }
-               break;
-            case OUTFLOW:
-               ABORT("Cannot have a velocity for an OUTFLOW boundary!");
-               break;
-            case SLIP: //TODO
-               break;
-            case PERIODIC: //TODO
-               break;
-            default:
-               ABORT("Wrong boundary parameter given");
-               break;
-         }
-      }
-      else
-      {
-         // Set to 0
-         for(size_t j = 1; j<= imax_; ++j)
-         {
-            u(imax_,j) = 0.0;
-            v(imax_+1,j) = 0.0;
-         }
-      }
-   }
-   else if ( name.back() == 'W' )
-   {
-      // West:
-      // u(0, j)
-      // v(0, j)
-      if( conf.isStringParameter("boundary_velocity_W"))
-      {
-         Real val = conf.getRealParameter("boundary_velocity_E");
-         switch(conditionNorth_){
-            case NOSLIP: // tangential 
-               for(size_t j = 1; j <= jmax_; ++j)
-               {
-                  u(0,j) = 0.0;
-                  v(0,j) = val;
-               }
-               break;
-            case INFLOW: // normal
-               for(size_t j = 1; j <= jmax_; ++j)
-               {
-                  u(0,j) = val;
-                  v(0,j) = 0.0;
-               }
-               break;
-            case OUTFLOW:
-               ABORT("Cannot have a velocity for an OUTFLOW boundary!");
-               break;
-            case SLIP: //TODO
-               break;
-            case PERIODIC: //TODO
-               break;
-            default:
-               ABORT("Wrong boundary parameter given");
-               break;
-         }
-      }
-      else
-      {
-         // Set to 0
-         for(size_t j = 1; j <= jmax_; ++j)
-         {
-            u(0,j) = 0.0;
-            v(0,j) = 0.0;
-         }
-      }
-   }
-   else
-   {
-      ABORT("Wrong velocity direction given!");
-   }
-}
-
-BCTYPE FluidSimulator::boundaryCondition( const std::string & name, const FileReader & conf)
-{
-   if( name.empty())
-      ABORT("Cannot check for empty string!");
-
-   if( conf.isStringParameter(name))  
-      return parser_.Parse(conf.getStringParameter(name));
-   else
-      return NOSLIP;
 }
 
 void FluidSimulator::determineNextDT()

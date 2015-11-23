@@ -2,6 +2,7 @@
 #include <ostream>
 #include <random>
 
+#include "Types.hh"
 #include "Array.hh"
 #include "FileReader.hh"
 #include "SORSolver.hh"

@@ -10,58 +10,62 @@
 typedef double Real;
 using std::size_t;
 
-
-
 // Enumeration of boundary conditions
 typedef enum { NOSLIP, SLIP, INFLOW, OUTFLOW, PERIODIC } BCTYPE;
+// Enumaration of the oriantation
+typedef enum { NORTH, SOUTH, EAST, WEST } DIRECTION;
 
 // String search for enum
-//template <typename T>
-//class EnumParser
-//{
-// public:
-//    EnumParser(){};
-//
-//    T Parse(const std::string &value)
-//    { 
-//       std::map<std::string, T>::const_iterator iValue = enumMap.find(value);
-//       
-//       CHECK_MSG(iValue != enumMap.end(), "Wrong string to parse!");
-//       return iValue->second;
-//    }
-// private:
-//    std::map <std::string, T> enumMap;
-//};
-//
-//EnumParser<BCTYPE>::EnumParser()
-//{
-// enumMap["noslip"] = NOSLIP;
-// enumMap["slip"] = SLIP;
-// enumMap["inflow"] = INFLOW;
-// enumMap["outflow"] = OUTFLOW;
-// enumMap["periodic"] = PERIODIC;
-//}
-
-// String search for enum
+template <typename T>
 class EnumParser
 {
-   public:
-      EnumParser(){
-         enumMap["noslip"] = NOSLIP;
-         enumMap["slip"] = SLIP;
-         enumMap["inflow"] = INFLOW;
-         enumMap["outflow"] = OUTFLOW;
-         enumMap["periodic"] = PERIODIC;
-      }
+public:
+    EnumParser(){};
 
-      BCTYPE Parse(const std::string &value)
-      { 
-         std::map<std::string, BCTYPE>::const_iterator iValue = enumMap.find(value);
-         
-         CHECK_MSG(iValue != enumMap.end(), "Wrong string to parse!");
-         return iValue->second;
-      }
-   //private:
-      std::map <std::string, BCTYPE> enumMap;
+    T Parse(const std::string &value)
+    { 
+      //std::map<std::string, T>::const_iterator iValue = enumMap.find(value);
+      typename std::map <std::string, T>::const_iterator iValue = enumMap.find(value);
+
+      CHECK_MSG(iValue != enumMap.end(), "Wrong string to parse!");
+      return iValue->second;
+   }
+private:
+   std::map <std::string, T> enumMap;
 };
 
+template <>
+inline EnumParser<BCTYPE>::EnumParser()
+{
+   enumMap["noslip"] = NOSLIP;
+   enumMap["slip"] = SLIP;
+   enumMap["inflow"] = INFLOW;
+   enumMap["outflow"] = OUTFLOW;
+   enumMap["periodic"] = PERIODIC;
+}
+
+static EnumParser<BCTYPE> bcParser;
+
+//template <>
+//class EnumParser<BCTYPE>{
+//public:
+//    EnumParser()
+//    {
+//      enumMap["noslip"] = NOSLIP;
+//      enumMap["slip"] = SLIP;
+//      enumMap["inflow"] = INFLOW;
+//      enumMap["outflow"] = OUTFLOW;
+//      enumMap["periodic"] = PERIODIC;
+//    };
+//
+//    BCTYPE Parse(const std::string &value)
+//    { 
+//      //std::map<std::string, T>::const_iterator iValue = enumMap.find(value);
+//      auto iValue = enumMap.find(value);
+//
+//      CHECK_MSG(iValue != enumMap.end(), "Wrong string to parse!");
+//      return iValue->second;
+//   }
+//private:
+//   std::map <std::string, BCTYPE> enumMap;
+//};
