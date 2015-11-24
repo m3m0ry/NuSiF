@@ -30,10 +30,8 @@ int main( int argc, char** argv )
 
    auto sim = FluidSimulator( filereader );
 
-   sim.simulate(10.0);
+   sim.simulateTimeStepCount(1000);
 
-   VTKWriter writer(sim.grid(), filereader.getStringParameter("name"), true, true);
-   writer.write();
 
    return 0;
 }

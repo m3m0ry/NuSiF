@@ -86,24 +86,24 @@ public:
 
    inline Real du2dx(size_t i, size_t j, Real gamma) const
    {
-      Real tmp0 = ( (u_(i,j) + u_(i+1,j) ) /2);
-      Real tmp1 = ( (u_(i-1,j) + u_(i,j) ) /2);
+      Real tmp0 = ( (u_(i,j) + u_(i+1,j) ) *0.5);
+      Real tmp1 = ( (u_(i-1,j) + u_(i,j) ) *0.5);
       Real tmp2 = (1.0/dx_) * ( tmp0*tmp0 - tmp1*tmp1 );
       
-      Real tmp3 = (fabs( u_(i,j) + u_(i+1,j) ) /2) * (( u_(i,j) - u_(i+1,j) ) /2);
-      Real tmp4 = (fabs( u_(i-1,j) + u_(i,j) ) /2) * (( u_(i-1,j) - u_(i,j) ) /2);
+      Real tmp3 = (fabs( u_(i,j) + u_(i+1,j) ) *0.5) * (( u_(i,j) - u_(i+1,j) ) *0.5);
+      Real tmp4 = (fabs( u_(i-1,j) + u_(i,j) ) *0.5) * (( u_(i-1,j) - u_(i,j) ) *0.5);
       Real tmp5 = ( gamma / dx_ ) * ( tmp3 - tmp4 );
       return tmp2 + tmp5;
    }
 
    inline Real duvdy(size_t i, size_t j, Real gamma) const
    {
-      Real tmp0 = (( v_(i,j) + v_(i+1,j) ) /2) * (( u_(i,j) + u_(i,j+1) ) /2);
-      Real tmp1 = (( v_(i,j-1) + v_(i+1,j-1) ) /2) * (( u_(i,j-1) + u_(i,j) ) /2);
+      Real tmp0 = (( v_(i,j) + v_(i+1,j) ) *0.5) * (( u_(i,j) + u_(i,j+1) ) *0.5);
+      Real tmp1 = (( v_(i,j-1) + v_(i+1,j-1) ) *0.5) * (( u_(i,j-1) + u_(i,j) ) *0.5);
       Real tmp2 = (1.0/dy_) * ( tmp0 - tmp1 );
 
-      Real tmp3 = (fabs( v_(i,j) + v_(i+1, j) )/2) * ( ( u_(i,j)  - u_(i,j+1)) /2);
-      Real tmp4 = (fabs( v_(i,j-1) + v_(i+1, j-1) )/2) * ( ( u_(i,j-1)- u_(i,j) ) /2);
+      Real tmp3 = (fabs( v_(i,j) + v_(i+1, j) )*0.5) * ( ( u_(i,j)  - u_(i,j+1)) *0.5);
+      Real tmp4 = (fabs( v_(i,j-1) + v_(i+1, j-1) )*0.5) * ( ( u_(i,j-1)- u_(i,j) ) *0.5);
       Real tmp5 = ( gamma / dy_ ) * (tmp3 - tmp4);
       return tmp2 + tmp5;
    }
@@ -121,24 +121,24 @@ public:
 
    inline Real duvdx( size_t i, size_t j, Real gamma) const
    {
-      Real tmp0 = (( u_(i,j) + u_(i,j+1) ) /2) * (( v_(i,j) + v_(i+1,j) ) /2);
-      Real tmp1 = (( u_(i-1,j) + u_(i-1, j+1) ) /2) * (( v_(i-1, j) + v_(i,j) ) /2);
+      Real tmp0 = (( u_(i,j) + u_(i,j+1) ) *0.5) * (( v_(i,j) + v_(i+1,j) ) *0.5);
+      Real tmp1 = (( u_(i-1,j) + u_(i-1, j+1) ) *0.5) * (( v_(i-1, j) + v_(i,j) ) *0.5);
       Real tmp2 = (1.0 /(dx_)) * ( tmp0 - tmp1 );
 
-      Real tmp3 = (fabs( u_(i,j) + u_(i,j+1) ) /2) * (( v_(i,j) -v_(i+1,j) ) /2);
-      Real tmp4 = (fabs( u_(i-1,j) + u_(i-1,j+1) ) /2) * ( (v_(i-1,j) - v_(i,j)) /2);
+      Real tmp3 = (fabs( u_(i,j) + u_(i,j+1) ) *0.5) * (( v_(i,j) -v_(i+1,j) ) *0.5);
+      Real tmp4 = (fabs( u_(i-1,j) + u_(i-1,j+1) ) *0.5) * ( (v_(i-1,j) - v_(i,j)) *0.5);
       Real tmp5 = ( gamma / dx_) * ( tmp3 - tmp4 );
       return tmp2 + tmp5;
    }
 
    inline Real dv2dy( size_t i, size_t j, Real gamma) const
    {
-      Real tmp0 = (( v_(i,j) + v_(i,j+1) ) /2);
-      Real tmp1 = (( v_(i,j-1) + v_(i,j) ) /2);
+      Real tmp0 = (( v_(i,j) + v_(i,j+1) ) *0.5);
+      Real tmp1 = (( v_(i,j-1) + v_(i,j) ) *0.5);
       Real tmp2 = (1.0/ dy_) * ( tmp0*tmp0 - tmp1*tmp1 );
 
-      Real tmp3 = (fabs(v_(i,j) + v_(i,j+1) ) /2) * ((v_(i,j) - v_(i,j+1) ) /2);
-      Real tmp4 = (fabs(v_(i,j-1) + v_(i,j)) /2) * (( v_(i,j-1) - v_(i,j)) /2);
+      Real tmp3 = (fabs(v_(i,j) + v_(i,j+1) ) *0.5) * ((v_(i,j) - v_(i,j+1) ) *0.5);
+      Real tmp4 = (fabs(v_(i,j-1) + v_(i,j)) *0.5) * (( v_(i,j-1) - v_(i,j)) *0.5);
       Real tmp5 = (gamma / dy_) * ( tmp3 - tmp4);
       return tmp2 + tmp5;
    }

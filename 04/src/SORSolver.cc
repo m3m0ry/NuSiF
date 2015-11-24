@@ -45,6 +45,7 @@ bool SORSolver::solve( StaggeredGrid & grid )
    for(unsigned int nIter = 0; nIter < itermax_; ++nIter)
    {
       //SOR iteration
+      #pragma omp parallel for
       for(size_t j = 1; j < jmax +1; ++j)
       {
          for(size_t i = 1; i < imax +1; ++i)
@@ -75,6 +76,7 @@ bool SORSolver::solve( StaggeredGrid & grid )
       {
          //Calculate r
          Real r = 0.0;
+         #pragma omp parallel for reduction(+:r)
          for(size_t j = 1; j < jmax +1; ++j)
          {
             for(size_t i = 1; i < imax +1; ++i)

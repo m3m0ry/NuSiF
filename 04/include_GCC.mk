@@ -8,7 +8,7 @@ ANSI_CFLAGS += -std=c++0x
 ANSI_CFLAGS += -pedantic
 ANSI_CFLAGS += -Wextra
 
-CFLAGS   = -O3 -Wno-format  -Wall $(ANSI_CFLAGS)
+CFLAGS   = -O3 -Wno-format  -Wall $(ANSI_CFLAGS) -fopenmp
 # More warning pls
 CFLAGS   += -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align  -Wstrict-overflow=5 -Wwrite-strings -Waggregate-return
 # Maybe too much warnings

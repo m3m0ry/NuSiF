@@ -4,6 +4,7 @@
 //#include <ctgmath>
 #include <iostream>
 #include <ostream>
+#include <omp.h>
 
 #include "StaggeredGrid.hh"
 #include "Debug.hh"

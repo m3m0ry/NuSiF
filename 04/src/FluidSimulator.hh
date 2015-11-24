@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "VTKWriter.hh"
 #include "StaggeredGrid.hh"
 #include "Array.hh"
 #include "FileReader.hh"
@@ -79,6 +80,10 @@ class FluidSimulator
 		size_t jmax_;
 
       unsigned int normFreqency_;
+
+      VTKWriter writer_;
+      unsigned int outputInterval_;
+
 };
 
 
