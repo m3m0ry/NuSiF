@@ -4,6 +4,7 @@
 FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(conf)),
       solver_(SORSolver(conf))
 {
+   // Init all values
    gx_ = conf.getRealParameter("GX");
    gy_ = conf.getRealParameter("GY");
    re_ = conf.getRealParameter("Re");
@@ -16,25 +17,33 @@ FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(
    CHECK_MSG(test >= 0, "Jmax is lesser then 0");
    jmax_ = (size_t) test;
    tau_ = conf.getRealParameter("safetyfactor");
-
-   //Set and test boundaries
-   //EnumParser<BCTYPE> parser;
-   // Set boundary condition
-   //conditionNorth_ = boundaryCondition("boundary_condition_N", conf);
-   //conditionSouth_ = boundaryCondition("boundary_condition_S", conf);
-   //conditionEast_ = boundaryCondition("boundary_condition_E", conf);
-   //conditionWest_ = boundaryCondition("boundary_condition_W", conf);
+   test = conf.getIntParameter("normalizationfrequency");
+   CHECK_MSG(test >= 0, "Normalization frequency is lesser then 0");
+   normFreqency_ = (unsigned) test;
 
    // Init Arrays
    grid_.u().fill(conf.getRealParameter("U_INIT"));
    grid_.v().fill(conf.getRealParameter("V_INIT"));
    grid_.p().fill(conf.getRealParameter("P_INIT"));
 
+   //Set boundaries
+   north_ = boundaryCondition(NORTH, conf);
+   south_ = boundaryCondition(SOUTH, conf);
+   west_ = boundaryCondition(WEST, conf);
+   east_ = boundaryCondition(EAST, conf);
    // Set boundary velocity
-   //setVelocityValues("boundary_velocity_N", conf);
-   //setVelocityValues("boundary_velocity_S", conf);
-   //setVelocityValues("boundary_velocity_E", conf);
-   //setVelocityValues("boundary_velocity_W", conf);
+   north_->setVelocityValues(grid_.u(), grid_.v());
+   south_->setVelocityValues(grid_.u(), grid_.v());
+   west_->setVelocityValues(grid_.u(), grid_.v());
+   east_->setVelocityValues(grid_.u(), grid_.v());
+}
+
+FluidSimulator::~FluidSimulator()
+{
+   delete north_;
+   delete south_;
+   delete west_;
+   delete east_;
 }
 
 void FluidSimulator::simulate( Real duration )
@@ -45,12 +54,11 @@ void FluidSimulator::simulate( Real duration )
    while(t<=duration)
    {
       determineNextDT();
-      //TODO set boundary values for u and v
+      refreshBoundaries();
       computeFG();
       composeRHS();
-      //TODO maxiter, normalization, residial frequency
-      // SOR-solver
-      solver_.solve(grid_);
+      //TODO normalization
+      solvePoisson();
       updateVelocities();
       t += dt_;
    }
@@ -61,20 +69,85 @@ void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
    for (unsigned int i = 0; i < nrOfTimeSteps; ++i)
    {
       determineNextDT();
-      //TODO set boundary values for u and v
       computeFG();
       composeRHS();
-      //TODO maxiter, normalization, residial frequency
-      // SOR-solver
-      solver_.solve(grid_);
+      //TODO normalization
+      solvePoisson();
       updateVelocities();
    }
+}
 
+Boundary* FluidSimulator::boundaryCondition( DIRECTION direction, const FileReader & conf)
+{
+   // Determine strings of conf file
+   std::string condition;
+   std::string velocity;
+   switch(direction){
+      case NORTH:
+         condition = "boundary_condition_N";
+         velocity = "boundary_velocity_N";
+         break;
+      case SOUTH:
+         condition = "boundary_condition_N";
+         velocity = "boundary_velocity_S";
+         break;
+      case WEST:
+         condition = "boundary_condition_N";
+         velocity = "boundary_velocity_W";
+         break;
+      case EAST:
+         condition = "boundary_condition_N";
+         velocity = "boundary_velocity_E";
+         break;
+      default:
+         ABORT("No direction given");
+   }
+
+   // Set the right velocity
+   BCTYPE type = NOSLIP;
+   if(conf.isStringParameter(condition))
+      type = bcParser.Parse(conf.getStringParameter(condition));
+   Real vel = 0.0;
+   if(conf.isRealParameter(velocity))
+      vel = conf.getRealParameter(velocity);
+   Boundary * boundary;
+   switch(type){
+      case NOSLIP:
+         boundary = new NoslipBoundary(direction, imax_, jmax_, vel);
+         break;
+      case INFLOW:
+         boundary = new InflowBoundary(direction, imax_, jmax_, vel);
+         break;
+      case OUTFLOW:
+         boundary = new OutflowBoundary(direction, imax_, jmax_, vel);
+         break;
+      case SLIP:
+         boundary = 0;
+         ABORT("Slip not yet implemented");
+         break;
+      case PERIODIC:
+         boundary = 0;
+         ABORT("Periodic not yet implemented");
+         break;
+      default:
+         boundary = 0;
+         ABORT("No condition given");
+         break;
+   }
+   return boundary;
 }
 
 void FluidSimulator::refreshBoundaries()
 {
+   north_->updateBoundaries( grid_.u(), grid_.v());
+   south_->updateBoundaries( grid_.u(), grid_.v());
+   west_->updateBoundaries( grid_.u(), grid_.v());
+   east_->updateBoundaries( grid_.u(), grid_.v());
+}
 
+void FluidSimulator::solvePoisson()
+{
+   solver_.solve(grid_);
 }
 
 void FluidSimulator::determineNextDT()

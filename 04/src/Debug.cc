@@ -64,12 +64,13 @@ namespace internal
    }
 
    void progress(const std::string & message, unsigned int parts, unsigned int whole){
-      CHECK_MSG( whole > parts, "Progress values are negative"); 
+      CHECK_MSG( whole >= parts, "Progress values are negative"); 
       if ( message.size() > 0 )
          std::cerr << message;
 
       std::cerr << "\t[" << GREEN;
-      for(unsigned int i = 0; i < (parts *20) /whole -1 ; ++i){
+      //TODO -1
+      for(unsigned int i = 0; i < (parts *20) / whole; ++i){
          std::cerr << "=";
       }
       std::cerr << ">" << BROWN;

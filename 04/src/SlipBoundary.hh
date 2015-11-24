@@ -4,13 +4,13 @@
 #include "Debug.hh"
 #include "Array.hh"
 
-class InflowBoundary : public Boundary
+class SlipBoundary : public Boundary
 {
 public:
-   InflowBoundary(DIRECTION direction, size_t imax, size_t jmax, Real velocity);
+   SlipBoundary(DIRECTION direction, size_t imax, size_t jmax, Real velocity);
    void setVelocityValues(Array & u, Array & v) override final;
    void updateBoundaries(Array & u, Array & v) override final;
-   //virtual ~InflowBoundary () {};
+   //virtual ~SlipBoundary () {};
 
 private:
 };

@@ -35,7 +35,6 @@ private:
    Real omg_; // 
    
    unsigned int epsFrequency_;
-   unsigned int normFrequency_;
 };
 
 

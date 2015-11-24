@@ -4,20 +4,30 @@
 #include <string>
 
 #include "StaggeredGrid.hh"
+#include "Array.hh"
 #include "FileReader.hh"
 #include "SORSolver.hh"
 #include "Types.hh"
 #include "Debug.hh"
+#include "Boundary.hh"
+#include "NoslipBoundary.hh"
+#include "InflowBoundary.hh"
+#include "OutflowBoundary.hh"
+//TODO Slip, Periodic
 
 
 class FluidSimulator
 {
   public:
-      FluidSimulator( const FileReader & );
+     // c'tor
+      FluidSimulator( const FileReader & conf );
+      // d'tor
+      ~FluidSimulator();
+      //TODO rule of 3
 
       // Simulates a given time-length
-      void simulate( Real );
-      void simulateTimeStepCount( unsigned int );
+      void simulate( Real duration );
+      void simulateTimeStepCount( unsigned int nrOfTimeSteps );
 
 
       // Getter functions for the internally stored StaggeredGrid
@@ -40,13 +50,14 @@ class FluidSimulator
 		// Update boundaries
 		void refreshBoundaries();
 
+      // Solve the poisson eq.
+      void solvePoisson();
 
-		// Return the boundary condition
-		BCTYPE boundaryCondition( const std::string &, const FileReader &);
+		// Return the boundary for given direction, condition and velocity
+		Boundary* boundaryCondition( DIRECTION direction, const FileReader & conf);
 
 		// Set the velocity values of a boundary
 		void setVelocityValues( const std::string &, const FileReader &);	
-
 
 		StaggeredGrid grid_;
 		SORSolver solver_;
@@ -59,18 +70,15 @@ class FluidSimulator
 		Real gamma_;
 		Real tau_;
 
-		BCTYPE conditionNorth_;
-		BCTYPE conditionSouth_;
-		BCTYPE conditionWest_;
-		BCTYPE conditionEast_;
-
-		BCTYPE velocityNorth_;
-		BCTYPE velocitySouth_;
-		BCTYPE velocityWest_;
-		BCTYPE velocityEast_;
+		Boundary * north_;
+		Boundary * south_;
+		Boundary * west_;
+		Boundary * east_;
 
 		size_t imax_;
 		size_t jmax_;
+
+      unsigned int normFreqency_;
 };
 
 
