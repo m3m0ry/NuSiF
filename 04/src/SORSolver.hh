@@ -4,7 +4,10 @@
 //#include <ctgmath>
 #include <iostream>
 #include <ostream>
-#include <omp.h>
+//because clang is stupid and cannot include omp.h
+#if defined(_OPENMP)
+   #include <omp.h>
+#endif
 
 #include "StaggeredGrid.hh"
 #include "Debug.hh"

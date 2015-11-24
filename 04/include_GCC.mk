@@ -8,7 +8,7 @@ ANSI_CFLAGS += -std=c++0x
 ANSI_CFLAGS += -pedantic
 ANSI_CFLAGS += -Wextra
 
-CFLAGS   = -O3 -Wno-format  -Wall $(ANSI_CFLAGS) -fopenmp
+CFLAGS   = -O3 -Wno-format  -Wall $(ANSI_CFLAGS) 
 # More warning pls
 CFLAGS   += -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align  -Wstrict-overflow=5 -Wwrite-strings -Waggregate-return
 # Maybe too much warnings
@@ -18,7 +18,7 @@ CXXFLAGS := $(CFLAGS)
 CFLAGS   := $(CFLAGS) -Wstrict-prototypes
 FCFLAGS  = 
 CPPFLAGS = -std=c++0x
-LFLAGS   =  
+LFLAGS   = -fopenmp
 DEFINES  = -D_GNU_SOURCE -DNDEBUG
 INCLUDES =
 LIBS     =
