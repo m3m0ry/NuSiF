@@ -38,6 +38,8 @@ public:
    // f(x,y) = sin(2xPI)
    void initGridSetup2( );
 
+   void normalizePressure();
+
    // Getters / Setters for member variables
    Array & p()    { return p_;    }
    Array & rhs()  { return rhs_;  }

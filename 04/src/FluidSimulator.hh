@@ -14,7 +14,9 @@
 #include "NoslipBoundary.hh"
 #include "InflowBoundary.hh"
 #include "OutflowBoundary.hh"
-//TODO Slip, Periodic
+#include "FreeSlipBoundary.hh"
+
+//Slip, Periodic
 
 
 class FluidSimulator
@@ -53,6 +55,9 @@ class FluidSimulator
 
       // Solve the poisson eq.
       void solvePoisson();
+
+      // Normalize the pressure grid
+      void normalizePressure();
 
 		// Return the boundary for given direction, condition and velocity
 		Boundary* boundaryCondition( DIRECTION direction, const FileReader & conf);

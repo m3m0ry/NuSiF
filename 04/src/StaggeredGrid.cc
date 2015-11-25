@@ -56,5 +56,25 @@ void StaggeredGrid::initGridSetup2( )
          rhs_(i,j) = sin(2.0 * PI * ((Real)(i-1)*dx_ + (dx_/2)));
       }
    }
+}
+
+void StaggeredGrid::normalizePressure()
+{
+   Real norm = 0.0;
+   for(size_t j = 0; j < p_.getSize(1); ++j)
+   {
+      for(size_t i = 0; i < p_.getSize(0); ++i)
+      {
+         norm += p_(i,j);
+      }
+   }
+   norm = norm / (p_.getSize(0) * p_.getSize(1));
+   for(size_t j = 0; j < p_.getSize(1); ++j)
+   {
+      for(size_t i = 0; i < p_.getSize(0); ++i)
+      {
+         p_(i,j) = p_(i,j) - norm;
+      }
+   }
 
 }

@@ -57,18 +57,19 @@ void FluidSimulator::simulate( Real duration )
    Real t = 0.0;
    
    writer_.write();
-   for(unsigned int i =0; t<=duration; ++i)
+   for(unsigned int i = 0; t<=duration; ++i)
    {
       determineNextDT();
       refreshBoundaries();
       computeFG();
       composeRHS();
-      //TODO normalization
       solvePoisson();
       updateVelocities();
-      t += dt_;
+      if(i % normFreqency_ == 0)
+         normalizePressure();
       if(i % outputInterval_ == 0)
          writer_.write();
+      t += dt_;
    }
 }
 
@@ -78,11 +79,13 @@ void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
    for (unsigned int i = 0; i < nrOfTimeSteps; ++i)
    {
       determineNextDT();
+      refreshBoundaries();
       computeFG();
       composeRHS();
-      //TODO normalization
       solvePoisson();
       updateVelocities();
+      if(i % normFreqency_ == 0)
+         normalizePressure();
       if(i % outputInterval_ == 0)
          writer_.write();
    }
@@ -148,6 +151,11 @@ Boundary* FluidSimulator::boundaryCondition( DIRECTION direction, const FileRead
    return boundary;
 }
 
+void FluidSimulator::normalizePressure()
+{
+   grid_.normalizePressure();
+}
+
 void FluidSimulator::refreshBoundaries()
 {
    north_->updateBoundaries( grid_.u(), grid_.v());
@@ -165,8 +173,8 @@ void FluidSimulator::determineNextDT()
 {
    const Real & dx = grid_.dx();
    const Real & dy = grid_.dy();
-   Array & u = grid_.u();
-   Array & v = grid_.v();
+   const Array & u = grid_.u();
+   const Array & v = grid_.v();
 
    if( tau_ <= 0.0 )
       return;
@@ -210,9 +218,6 @@ void FluidSimulator::determineNextDT()
    dt_ = tau_ * min;
 }
 
-
-
-
 void FluidSimulator::updateVelocities()
 {
    Array & u = grid_.u();
@@ -237,28 +242,25 @@ void FluidSimulator::updateVelocities()
    }
 }
 
-
 void FluidSimulator::composeRHS()
 {
 
    Array & rhs = grid_.rhs();
    Array & F = grid_.f();
    Array & G = grid_.g();
-   const Real & dx = grid_.dx();
-   const Real & dy = grid_.dy();
+   const Real dx_in = 1.0/grid_.dx();
+   const Real dy_in = 1.0/grid_.dy();
+   const Real dt_in = 1.0/dt_;
 
 
    for(size_t j = 1; j <= jmax_; ++j)
    {
       for(size_t i = 1; i <= imax_; ++i)
       {
-         rhs(i,j) = (1.0 / dt_) * ( ( F(i,j) - F(i-1,j) )/dx + ( G(i,j) - G(i,j-1) )/dy);
-
+         rhs(i,j) = dt_in * ( ( F(i,j) - F(i-1,j) )*dx_in + ( G(i,j) - G(i,j-1) )*dy_in);
       }
    }
 }
-
-
 
 void FluidSimulator::computeFG()
 {
@@ -266,6 +268,7 @@ void FluidSimulator::computeFG()
    Array & G = grid_.g();
    Array & u = grid_.u();
    Array & v = grid_.v();
+   Real re_in = 1.0 / re_;
 
    for(size_t j = 1; j <= jmax_; ++j)
    {
@@ -283,14 +286,14 @@ void FluidSimulator::computeFG()
    {
       for(size_t i = 1; i <= imax_-1; ++i)
       {
-         F(i,j) = u(i,j) + dt_* ( (1.0 / re_) * ( grid_.d2udx2(i,j) + grid_.d2udy2(i,j)) - grid_.du2dx(i,j,gamma_) - grid_.duvdy(i,j, gamma_) + gx_);
+         F(i,j) = u(i,j) + dt_* ( re_in * ( grid_.d2udx2(i,j) + grid_.d2udy2(i,j)) - grid_.du2dx(i,j,gamma_) - grid_.duvdy(i,j, gamma_) + gx_);
       }
    }
    for(size_t j = 1; j <= jmax_-1; ++j)
    {
       for(size_t i = 1; i <= imax_; ++i)
       {
-         G(i,j) = v(i,j) + dt_* ( (1.0 / re_) * ( grid_.d2vdx2(i,j) + grid_.d2vdy2(i,j)) - grid_.duvdx(i,j, gamma_) - grid_.dv2dy(i,j, gamma_) + gy_);
+         G(i,j) = v(i,j) + dt_* ( re_in * ( grid_.d2vdx2(i,j) + grid_.d2vdy2(i,j)) - grid_.duvdx(i,j, gamma_) - grid_.dv2dy(i,j, gamma_) + gy_);
       }
    }
 }

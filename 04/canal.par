@@ -19,7 +19,7 @@ boundary_condition_E   outflow     # outflow condition at east boundary
 GX            0.0                  # Body forces (e.g. gravity)
 GY            0.0                  #
 
-Re            100	                 # Reynolds number
+Re            100.0                # Reynolds number
  
 U_INIT        0.0                  # initial value for velocity in x-direction
 V_INIT        0.0                  # initial value for velocity in y-direction

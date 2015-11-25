@@ -29,8 +29,10 @@ int main( int argc, char** argv )
 
 
    auto sim = FluidSimulator( filereader );
-
-   sim.simulateTimeStepCount(1000);
+   if(filereader.isRealParameter("time"))
+      sim.simulate(filereader.getRealParameter("time"));
+   else
+      sim.simulateTimeStepCount(filereader.getIntParameter("timesteps"));
 
 
    return 0;
