@@ -44,32 +44,37 @@ bool SORSolver::solve( StaggeredGrid & grid )
    }
    for(unsigned int nIter = 0; nIter < itermax_; ++nIter)
    {
-      //SOR iteration
-      #pragma omp parallel for
-      for(size_t j = 1; j < jmax +1; ++j)
+      #pragma omp parallel
       {
-         for(size_t i = 1; i < imax +1; ++i)
+         //SOR iteration
+         #pragma omp for
+         for(size_t j = 1; j < jmax +1; ++j)
          {
-            Real tmp1 = (1.0 - omg_)*p(i,j);
-            Real tmp2 = omg_ / (2/(dx*dx) + 2/(dy*dy));
-            Real tmp3 = (p(i+1,j) + p(i-1,j))/(dx*dx);
-            Real tmp4 = (p(i,j+1) + p(i,j-1))/(dy*dy);
-            Real tmp5 = (tmp3 + tmp4) - rhs(i,j);
-            Real tmp6 = tmp2 * tmp5;
-            p(i,j) = tmp1 + tmp6;
+            for(size_t i = 1; i < imax +1; ++i)
+            {
+               Real tmp1 = (1.0 - omg_)*p(i,j);
+               Real tmp2 = omg_ / (2/(dx*dx) + 2/(dy*dy));
+               Real tmp3 = (p(i+1,j) + p(i-1,j))/(dx*dx);
+               Real tmp4 = (p(i,j+1) + p(i,j-1))/(dy*dy);
+               Real tmp5 = (tmp3 + tmp4) - rhs(i,j);
+               Real tmp6 = tmp2 * tmp5;
+               p(i,j) = tmp1 + tmp6;
+            }
          }
-      }
 
-      //Copy paste boundaries
-      for(size_t j = 1; j < jmax + 1; ++j)
-      {
-         p(0, j) = p(1, j);
-         p(imax + 1, j) = p(imax, j);
-      }
-      for(size_t i = 1; i < imax + 1; ++i)
-      {
-         p(i, 0) = p(i, 1);
-         p(i, jmax + 1) = p(i, jmax);
+         //Copy paste boundaries
+         #pragma omp for
+         for(size_t j = 1; j < jmax + 1; ++j)
+         {
+            p(0, j) = p(1, j);
+            p(imax + 1, j) = p(imax, j);
+         }
+         #pragma omp for
+         for(size_t i = 1; i < imax + 1; ++i)
+         {
+            p(i, 0) = p(i, 1);
+            p(i, jmax + 1) = p(i, jmax);
+         }
       }
 
       if(nIter % epsFrequency_ == 0)
@@ -110,6 +115,8 @@ bool SORSolver::solve( StaggeredGrid & grid )
       }
 #endif //NDEBUG
    }
+
+   //No more omp here
    WARN("Did not stop on eps_");
 #ifndef NDEBUG
       std::ofstream myfile;
