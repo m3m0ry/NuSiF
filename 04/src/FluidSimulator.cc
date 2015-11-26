@@ -56,7 +56,6 @@ void FluidSimulator::simulate( Real duration )
    // Init values (i do it in the constructor)
    Real t = 0.0;
    
-   writer_.write();
    for(unsigned int i = 0; t<=duration; ++i)
    {
       determineNextDT();
@@ -75,7 +74,6 @@ void FluidSimulator::simulate( Real duration )
 
 void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
 {
-   writer_.write();
    for (unsigned int i = 0; i < nrOfTimeSteps; ++i)
    {
       determineNextDT();
@@ -102,15 +100,15 @@ Boundary* FluidSimulator::boundaryCondition( DIRECTION direction, const FileRead
          velocity = "boundary_velocity_N";
          break;
       case SOUTH:
-         condition = "boundary_condition_N";
+         condition = "boundary_condition_S";
          velocity = "boundary_velocity_S";
          break;
       case WEST:
-         condition = "boundary_condition_N";
+         condition = "boundary_condition_W";
          velocity = "boundary_velocity_W";
          break;
       case EAST:
-         condition = "boundary_condition_N";
+         condition = "boundary_condition_E";
          velocity = "boundary_velocity_E";
          break;
       default:
