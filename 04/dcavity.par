@@ -15,7 +15,7 @@ boundary_velocity_N 1.0          # constant velocity u_bar of the lid
 GX    0.0                        # Body forces (e.g. gravity)
 GY    0.0                        #
 
-Re    1000.0                       # Reynolds number
+Re    10.0                       # Reynolds number
    
 U_INIT    0.0                    # initial value for velocity in x-direction
 V_INIT    0.0                    # initial value for velocity in y-direction

@@ -100,11 +100,12 @@ bool SORSolver::solve( StaggeredGrid & grid )
          {
             return true;
          }
+         std::cout << r<< std::endl;
       }
    }
 
    //No more omp here
-   WARN("Did not stop on eps_, residial = ");
+   WARN("Did not stop on eps_");
 #ifndef NDEBUG
       std::ofstream myfile;
       myfile.open("text.txt", std::ios::out);
