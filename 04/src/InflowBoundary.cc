@@ -60,6 +60,7 @@ void InflowBoundary::updateBoundaries(Array & u, Array & v)
       case WEST:
          for (size_t j = 1; j <= jmax_; ++j)
          {
+            u(0,j) = velocity_;
             v(0,j) = -v(1,j);
          }
          break;

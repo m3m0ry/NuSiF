@@ -120,13 +120,13 @@ void FileReader::printParameters() const
 {
    std::cout << "INT Parameters:" << std::endl;
    for (auto it=intParameters.begin(); it!=intParameters.end(); ++it)
-      std::cout << it->first << " => " << it->second << '\n';
+      std::cout << '\t' << it->first << " => " << it->second << '\n';
    std::cout << "Real Parameters:" << std::endl;
    for (auto it=RealParameters.begin(); it!=RealParameters.end(); ++it)
-      std::cout << it->first << " => " << it->second << '\n';
+      std::cout << '\t' << it->first << " => " << it->second << '\n';
    std::cout << "STRING Parameters:" << std::endl;
    for (auto it=stringParameters.begin(); it!=stringParameters.end(); ++it)
-      std::cout << it->first << " => " << it->second << '\n';
+      std::cout << '\t' << it->first << " => " << it->second << '\n';
 }
 
 

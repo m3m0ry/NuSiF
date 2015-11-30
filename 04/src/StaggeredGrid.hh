@@ -155,8 +155,8 @@ protected:
 
    Real dx_;   //< distance between two grid points in x direction
    Real dy_;   //< distance between two grid points in y direction
-   size_t xSize_;
-   size_t ySize_;
+   size_t xSize_; //< aka imax
+   size_t ySize_; //< aka jmax
 };
 
 

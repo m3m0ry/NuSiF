@@ -113,13 +113,13 @@ inline Real& Array::operator ()(size_t i, size_t j, size_t k)
 
 inline const Real & Array::operator () ( size_t i ) const
 {
-    ASSERT_MSG(i < xSize_, "Access value too large");
+   ASSERT_MSG(i < xSize_, "Access value too large");
    return array_[i];
 }
 
 inline const Real & Array::operator () ( size_t i ,size_t j ) const
 {
-    ASSERT_MSG(i < xSize_ && j < ySize_, "Access value too large");
+   ASSERT_MSG(i < xSize_ && j < ySize_, "Access value too large");
    return array_[i + j * xSize_];
 }
 

@@ -56,6 +56,7 @@ void FluidSimulator::simulate( Real duration )
    // Init values (i do it in the constructor)
    Real t = 0.0;
    
+   writer_.write();
    for(unsigned int i = 0; t<=duration; ++i)
    {
       determineNextDT();
@@ -74,6 +75,7 @@ void FluidSimulator::simulate( Real duration )
 
 void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
 {
+   writer_.write();
    for (unsigned int i = 0; i < nrOfTimeSteps; ++i)
    {
       determineNextDT();
@@ -134,8 +136,10 @@ Boundary* FluidSimulator::boundaryCondition( DIRECTION direction, const FileRead
          boundary = new OutflowBoundary(direction, imax_, jmax_, vel);
          break;
       case SLIP:
-         boundary = 0;
-         ABORT("Slip not yet implemented");
+         if( direction == (NORTH | SOUTH) )
+            boundary = new FreeSlipBoundary(direction, imax_, jmax_, vel, grid_.dx() );
+         else
+            boundary = new FreeSlipBoundary(direction, imax_, jmax_, vel, grid_.dy() );
          break;
       case PERIODIC:
          boundary = 0;

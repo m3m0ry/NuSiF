@@ -22,7 +22,7 @@ class EnumParser
 public:
     EnumParser(){};
 
-    T Parse(const std::string &value)
+    T Parse(const std::string &value) const
     { 
       //std::map<std::string, T>::const_iterator iValue = enumMap.find(value);
       typename std::map <std::string, T>::const_iterator iValue = enumMap.find(value);
@@ -35,37 +35,6 @@ private:
 };
 
 template <>
-inline EnumParser<BCTYPE>::EnumParser()
-{
-   enumMap["noslip"] = NOSLIP;
-   enumMap["slip"] = SLIP;
-   enumMap["inflow"] = INFLOW;
-   enumMap["outflow"] = OUTFLOW;
-   enumMap["periodic"] = PERIODIC;
-}
+EnumParser<BCTYPE>::EnumParser();
 
-static EnumParser<BCTYPE> bcParser;
-
-//template <>
-//class EnumParser<BCTYPE>{
-//public:
-//    EnumParser()
-//    {
-//      enumMap["noslip"] = NOSLIP;
-//      enumMap["slip"] = SLIP;
-//      enumMap["inflow"] = INFLOW;
-//      enumMap["outflow"] = OUTFLOW;
-//      enumMap["periodic"] = PERIODIC;
-//    };
-//
-//    BCTYPE Parse(const std::string &value)
-//    { 
-//      //std::map<std::string, T>::const_iterator iValue = enumMap.find(value);
-//      auto iValue = enumMap.find(value);
-//
-//      CHECK_MSG(iValue != enumMap.end(), "Wrong string to parse!");
-//      return iValue->second;
-//   }
-//private:
-//   std::map <std::string, BCTYPE> enumMap;
-//};
+extern const EnumParser<BCTYPE> bcParser;

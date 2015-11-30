@@ -101,21 +101,10 @@ bool SORSolver::solve( StaggeredGrid & grid )
             return true;
          }
       }
-#ifndef NDEBUG
-      if( nIter % 1000 == 0)
-      {
-         std::ofstream myfile;
-         myfile.open("text.txt", std::ios::out);
-         myfile << p;
-         myfile << std::endl;
-         myfile.close();
-         DEBUG_PROGRESS("SOR-Progress", nIter, itermax_);
-      }
-#endif //NDEBUG
    }
 
    //No more omp here
-   WARN("Did not stop on eps_");
+   WARN("Did not stop on eps_, residial = ");
 #ifndef NDEBUG
       std::ofstream myfile;
       myfile.open("text.txt", std::ios::out);
