@@ -23,3 +23,5 @@ tags
 *.out
 *.synctex.gz
 *.pdf
+.ycm_extra_conf.pyc
+*.vtk
