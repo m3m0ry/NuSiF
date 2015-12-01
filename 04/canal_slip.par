@@ -6,7 +6,7 @@
 # Problem specific Data:
 # ---------------------
 
-name		canal                     # specifier of problem
+name		canal_slip                # specifier of problem
 
 # per default all boundaries are NOSLIP if not otherwise stated
 
@@ -14,8 +14,10 @@ name		canal                     # specifier of problem
 boundary_condition_W   inflow      # inflow condition at west boundary
 boundary_velocity_W    1.0         # inflow velocity on the west boundary
 boundary_condition_E   outflow     # outflow condition at east boundary
+boundary_condition_N    slip
+boundary_condition_S    slip
 
-
+ 
 GX            0.0                  # Body forces (e.g. gravity)
 GY            0.0                  #
 

@@ -100,7 +100,6 @@ bool SORSolver::solve( StaggeredGrid & grid )
          {
             return true;
          }
-         std::cout << r<< std::endl;
       }
    }
 
