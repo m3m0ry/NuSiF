@@ -26,7 +26,7 @@ class FluidSimulator
       FluidSimulator( const FileReader & conf );
       // d'tor
       ~FluidSimulator();
-      //TODO rule of 3
+      //TODO fluidsimulator.hh rule of 3
 
       // Simulates a given time-length
       void simulate( Real duration );

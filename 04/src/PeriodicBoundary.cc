@@ -3,7 +3,7 @@ PeriodicBoundary::PeriodicBoundary(DIRECTION direction, size_t imax, size_t jmax
 {
    
 }
-//TODO evrything
+//TODO periodicboundary.cc evrything
 
 void PeriodicBoundary::setVelocityValues(Array & u, Array & v)
 {

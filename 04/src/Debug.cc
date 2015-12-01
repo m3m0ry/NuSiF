@@ -69,7 +69,7 @@ namespace internal
          std::cerr << message;
 
       std::cerr << "\t[" << GREEN;
-      //TODO -1
+      //TODO debug.cc -1
       for(unsigned int i = 0; i < (parts *20) / whole; ++i){
          std::cerr << "=";
       }
