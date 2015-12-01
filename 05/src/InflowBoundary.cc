@@ -5,7 +5,7 @@ InflowBoundary::InflowBoundary(DIRECTION direction, size_t imax, size_t jmax, Re
    
 }
 
-void InflowBoundary::setVelocityValues(Array & u, Array & v)
+void InflowBoundary::setVelocityValues(Array<Real> & u, Array<Real> & v)
 {
    switch(direction_){
       case NORTH:
@@ -42,7 +42,7 @@ void InflowBoundary::setVelocityValues(Array & u, Array & v)
    }
 }
 
-void InflowBoundary::updateBoundaries(Array & u, Array & v) 
+void InflowBoundary::updateBoundaries(Array<Real> & u, Array<Real> & v) 
 {
    switch(direction_){
       case NORTH:

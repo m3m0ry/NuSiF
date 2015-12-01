@@ -5,7 +5,7 @@ PeriodicBoundary::PeriodicBoundary(DIRECTION direction, size_t imax, size_t jmax
 }
 //TODO periodicboundary.cc evrything
 
-void PeriodicBoundary::setVelocityValues(Array & u, Array & v)
+void PeriodicBoundary::setVelocityValues(Array<Real> & u, Array<Real> & v)
 {
    switch(direction_){
       case NORTH:
@@ -43,7 +43,7 @@ void PeriodicBoundary::setVelocityValues(Array & u, Array & v)
 }
 
 
-void PeriodicBoundary::updateBoundaries(Array & u, Array & v) 
+void PeriodicBoundary::updateBoundaries(Array<Real> & u, Array<Real> & v) 
 {
    switch(direction_){
       case NORTH:

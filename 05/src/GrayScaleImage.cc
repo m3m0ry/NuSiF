@@ -37,13 +37,13 @@ void GrayScaleImage::save( const std::string & pngFilename )
 }
 
 
-real GrayScaleImage::operator() ( int x, int y ) const
+Real GrayScaleImage::operator() ( int x, int y ) const
 {
-   static const real maxVal = real( std::numeric_limits<unsigned char>::max() );
+   static const Real maxVal = Real( std::numeric_limits<unsigned char>::max() );
 
    const int yFlip = size_[1] - y - 1;
 
-   return real ( getElement(x, yFlip) ) / maxVal;
+   return Real ( getElement(x, yFlip) ) / maxVal;
 }
 
 
@@ -60,18 +60,18 @@ GrayScaleImage GrayScaleImage::getResizedImage( int newWidth, int newHeight ) co
 
    resizedImage.image_.resize( newWidth * newHeight );
 
-   real scaleX = real( size_[0] ) / real( newWidth );
-   real scaleY = real( size_[1] ) / real( newHeight);
+   Real scaleX = Real( size_[0] ) / Real( newWidth );
+   Real scaleY = Real( size_[1] ) / Real( newHeight);
 
    for( int y = 0; y <  newHeight; ++y )
       for( int x = 0; x <  newWidth; ++x )
       {
-         real oldX = x * scaleX;
-         real oldY = y * scaleY;
+         Real oldX = x * scaleX;
+         Real oldY = y * scaleY;
          int oldXi = static_cast<int>( oldX );
          int oldYi = static_cast<int>( oldY );
-         real xDiff = oldX - oldXi;
-         real yDiff = oldY - oldYi;
+         Real xDiff = oldX - oldXi;
+         Real yDiff = oldY - oldYi;
 
          // bilinear interpolation
 

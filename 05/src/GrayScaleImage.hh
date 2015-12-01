@@ -32,7 +32,7 @@ public:
 
    /// Returns a value between 0 and 1
    /// 0 means black - 1 means white
-   real operator() ( int x, int y ) const;
+   Real operator() ( int x, int y ) const;
 
    /// Returns the gray value of the specified pixel (between 0 and 255)
    unsigned char & getElement ( int x, int y );

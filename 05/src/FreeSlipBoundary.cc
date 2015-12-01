@@ -5,7 +5,7 @@ FreeSlipBoundary::FreeSlipBoundary(DIRECTION direction, size_t imax, size_t jmax
    
 }
 
-void FreeSlipBoundary::setVelocityValues(Array & u, Array & v)
+void FreeSlipBoundary::setVelocityValues(Array<Real> & u, Array<Real> & v)
 {
    switch(direction_){
       case NORTH:
@@ -42,7 +42,7 @@ void FreeSlipBoundary::setVelocityValues(Array & u, Array & v)
    }
 }
 
-void FreeSlipBoundary::updateBoundaries(Array & u, Array & v) 
+void FreeSlipBoundary::updateBoundaries(Array<Real> & u, Array<Real> & v) 
 {
    switch(direction_){
       case NORTH:

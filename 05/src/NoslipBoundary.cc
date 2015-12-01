@@ -4,7 +4,7 @@ NoslipBoundary::NoslipBoundary(DIRECTION direction, size_t imax, size_t jmax, Re
    
 }
 
-void NoslipBoundary::setVelocityValues(Array & u, Array & v)
+void NoslipBoundary::setVelocityValues(Array<Real> & u, Array<Real> & v)
 {
    switch(direction_){
       case NORTH:
@@ -42,7 +42,7 @@ void NoslipBoundary::setVelocityValues(Array & u, Array & v)
 }
 
 
-void NoslipBoundary::updateBoundaries(Array & u, Array & v) 
+void NoslipBoundary::updateBoundaries(Array<Real> & u, Array<Real> & v) 
 {
    switch(direction_){
       case NORTH:

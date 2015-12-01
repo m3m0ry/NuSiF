@@ -16,6 +16,7 @@
 *    - all elements should be stored in a contiguous chunk of memory ( no vector<vector> ! )
 */
 //*********************************************************************************************
+template<typename T>
 class Array
 {
 public:
@@ -34,19 +35,15 @@ public:
    // Destructor
    ~Array();
 
-   //Array operator- (const Array& s);
-   //Array operator- (const int value);
-
    // Access Operators for 1D, 2D and 3D
-   inline Real & operator () ( size_t );
-   inline Real & operator () ( size_t ,size_t );
-   inline Real & operator () ( size_t, size_t, size_t );
+   inline T & operator () ( size_t );
+   inline T & operator () ( size_t ,size_t );
+   inline T & operator () ( size_t, size_t, size_t );
 
    // for const Arrays the following access operators are required
-    inline const Real & operator () ( size_t) const;
-    inline const Real & operator () ( size_t, size_t) const;
-    inline const Real & operator () ( size_t, size_t, size_t ) const;
-
+   inline const T & operator () ( size_t) const;
+   inline const T & operator () ( size_t, size_t) const;
+   inline const T & operator () ( size_t, size_t, size_t ) const;
 
    //Operators
    // Copy assign operator
@@ -55,10 +52,10 @@ public:
    Array& operator= (Array&&);
    Array& operator+= (const Array&);
    Array operator+ (const Array&) const;
-   Array operator+ (const Real) const;
+   Array operator+ (const T) const;
 
    // initialize the whole array with a constant value
-   void fill( Real value );
+   void fill( T value );
 
 
    // return total size of the array
@@ -77,11 +74,12 @@ private:
    size_t xSize_;
    size_t ySize_;
    size_t zSize_;
-   Real * array_;
+   T * array_;
    char dimension_;
 };
 
-std::ostream& operator<< (std::ostream&, const Array&);
+template<typename T>
+std::ostream& operator<< (std::ostream&, const Array<T>&);
 
 //=======================================
 //
@@ -91,41 +89,53 @@ std::ostream& operator<< (std::ostream&, const Array&);
 
 
 // Operator() 1D
-inline Real& Array::operator ()(size_t i)
+template<typename T>
+inline T& Array<T>::operator ()(size_t i)
 {
    ASSERT_MSG(i < xSize_, "Access value too large");
    return array_[i];
 }
 
 // Operator() 2D
-inline Real& Array::operator ()(size_t i,size_t j)
+template<typename T>
+inline T& Array<T>::operator ()(size_t i,size_t j)
 {
    ASSERT_MSG(i < xSize_ && j < ySize_, "Access value too large");
    return array_[i + j*xSize_];
 }
 
 // Operator() 3D
-inline Real& Array::operator ()(size_t i, size_t j, size_t k)
+template<typename T>
+inline T& Array<T>::operator ()(size_t i, size_t j, size_t k)
 {
    ASSERT_MSG(i < xSize_ && j < ySize_ && k < zSize_, "Access value too large");
    return array_[i + j * xSize_ + k * xSize_ * ySize_];
 }
 
-inline const Real & Array::operator () ( size_t i ) const
+// Operator() 1D const
+template<typename T>
+inline const T & Array<T>::operator () ( size_t i ) const
 {
    ASSERT_MSG(i < xSize_, "Access value too large");
    return array_[i];
 }
 
-inline const Real & Array::operator () ( size_t i ,size_t j ) const
+// Operator() 2D const
+template<typename T>
+inline const T & Array<T>::operator () ( size_t i ,size_t j ) const
 {
    ASSERT_MSG(i < xSize_ && j < ySize_, "Access value too large");
    return array_[i + j * xSize_];
 }
 
-inline const Real & Array::operator () ( size_t i, size_t j, size_t k ) const
+// Operator() 3D const
+template<typename T>
+inline const T & Array<T>::operator () ( size_t i, size_t j, size_t k ) const
 {
     ASSERT_MSG(i < xSize_ && j < ySize_ && k < zSize_, "Access value too large");
    return array_[i + j * xSize_ + k * xSize_ * ySize_];
 }
 
+// Templates which are supported
+template class Array<Real>;
+template class Array<bool>;

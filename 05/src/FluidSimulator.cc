@@ -175,8 +175,8 @@ void FluidSimulator::determineNextDT()
 {
    const Real & dx = grid_.dx();
    const Real & dy = grid_.dy();
-   const Array & u = grid_.u();
-   const Array & v = grid_.v();
+   const Array<Real> & u = grid_.u();
+   const Array<Real> & v = grid_.v();
 
    if( tau_ <= 0.0 )
       return;
@@ -222,10 +222,10 @@ void FluidSimulator::determineNextDT()
 
 void FluidSimulator::updateVelocities()
 {
-   Array & u = grid_.u();
-   Array & v = grid_.v();
-   Array & F = grid_.f();
-   Array & G = grid_.g();
+   Array<Real> & u = grid_.u();
+   Array<Real> & v = grid_.v();
+   Array<Real> & F = grid_.f();
+   Array<Real> & G = grid_.g();
 
    for(size_t j = 1; j <= jmax_; ++j)
    {
@@ -247,9 +247,9 @@ void FluidSimulator::updateVelocities()
 void FluidSimulator::composeRHS()
 {
 
-   Array & rhs = grid_.rhs();
-   Array & F = grid_.f();
-   Array & G = grid_.g();
+   Array<Real> & rhs = grid_.rhs();
+   Array<Real> & F = grid_.f();
+   Array<Real> & G = grid_.g();
    const Real dx_in = 1.0/grid_.dx();
    const Real dy_in = 1.0/grid_.dy();
    const Real dt_in = 1.0/dt_;
@@ -266,10 +266,10 @@ void FluidSimulator::composeRHS()
 
 void FluidSimulator::computeFG()
 {
-   Array & F = grid_.f();
-   Array & G = grid_.g();
-   Array & u = grid_.u();
-   Array & v = grid_.v();
+   Array<Real> & F = grid_.f();
+   Array<Real> & G = grid_.g();
+   Array<Real> & u = grid_.u();
+   Array<Real> & v = grid_.v();
    Real re_in = 1.0 / re_;
 
    for(size_t j = 1; j <= jmax_; ++j)

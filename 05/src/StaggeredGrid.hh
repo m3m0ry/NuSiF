@@ -40,20 +40,23 @@ public:
 
    void normalizePressure();
 
-   // Getters / Setters for member variables
-   Array & p()    { return p_;    }
-   Array & rhs()  { return rhs_;  }
-   Array & u()    { return u_;    }
-   Array & v()    { return v_;    }
-   Array & f()    { return f_;    }
-   Array & g()    { return g_;    }
 
-   const Array & p()   const { return p_;   }
-   const Array & rhs() const { return rhs_; }
-   const Array & u()   const { return u_;   }
-   const Array & v()   const { return v_;   }
-   const Array & f()   const { return f_;   }
-   const Array & g()   const { return g_;   }
+   // Getters / Setters for member variables
+   Array<Real> & p()    { return p_;    }
+   Array<Real> & rhs()  { return rhs_;  }
+   Array<Real> & u()    { return u_;    }
+   Array<Real> & v()    { return v_;    }
+   Array<Real> & f()    { return f_;    }
+   Array<Real> & g()    { return g_;    }
+   Array<bool> & isFluids()  { return isFluids_;  }
+
+   const Array<Real> & p()   const { return p_;   }
+   const Array<Real> & rhs() const { return rhs_; }
+   const Array<Real> & u()   const { return u_;   }
+   const Array<Real> & v()   const { return v_;   }
+   const Array<Real> & f()   const { return f_;   }
+   const Array<Real> & g()   const { return g_;   }
+   const Array<bool> & isFluids()  const { return isFluids_;  }
 
    Real & dx()    { return dx_; }
    const Real & dx() const { return dx_; }
@@ -63,6 +66,34 @@ public:
    size_t xSize() const    { return xSize_; }
    size_t ySize() const    { return ySize_; }
 
+   inline Real u(size_t i, size_t j, DIRECTION dir)
+   {
+      //TODO
+      return u_(i,j);
+   }
+
+   inline Real v(size_t i, size_t j, DIRECTION dir)
+   {
+      //TODO
+      return v_(i,j);
+   }
+
+   inline Real p(size_t i, size_t j, DIRECTION dir)
+   {
+      //TODO
+      return p_(i,j);
+   }
+
+   inline bool isFluid(size_t i, size_t j, DIRECTION dir)
+   {
+      //TODO
+      return isFluids_(i,j);
+   }
+
+   inline size_t getNumFluid()
+   {
+      return nFluid_;
+   }
 
    inline Real dpdx(size_t i, size_t j) const
    {
@@ -146,17 +177,19 @@ public:
    }
 
 protected:
-   Array p_;   //< pressure field
-   Array rhs_; //< right hand side of the pressure equation
-   Array u_;   //< horizontal velocity field
-   Array v_;   //< vertical velocity field
-   Array f_;   //< horizontal intermediate result
-   Array g_;   //< vertical intermediate result
+   Array<Real> p_;   //< pressure field
+   Array<Real> rhs_; //< right hand side of the pressure equation
+   Array<Real> u_;   //< horizontal velocity field
+   Array<Real> v_;   //< vertical velocity field
+   Array<Real> f_;   //< horizontal intermediate result
+   Array<Real> g_;   //< vertical intermediate result
+   Array<bool> isFluids_; //< is cell fluid
 
    Real dx_;   //< distance between two grid points in x direction
    Real dy_;   //< distance between two grid points in y direction
    size_t xSize_; //< aka imax
    size_t ySize_; //< aka jmax
+   size_t nFluid_; //< number of fluid cells
 };
 
 

@@ -25,8 +25,8 @@ SORSolver::SORSolver ( const FileReader & configuration )
 // Solve the pressure equation on the staggered grid
 bool SORSolver::solve( StaggeredGrid & grid )
 {
-   Array & p = grid.p();
-   Array & rhs = grid.rhs();
+   Array<Real> & p = grid.p();
+   Array<Real> & rhs = grid.rhs();
    size_t imax = p.getSize(0) -2;
    size_t jmax = p.getSize(1) -2;
    Real dx = grid.dx();

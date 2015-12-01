@@ -4,7 +4,7 @@ OutflowBoundary::OutflowBoundary(DIRECTION direction, size_t imax, size_t jmax, 
    CHECK_MSG( velocity_ == 0.0, "Outflow cannot have a set velocity");
 }
 
-void OutflowBoundary::setVelocityValues(Array & u, Array & v)
+void OutflowBoundary::setVelocityValues(Array<Real> & u, Array<Real> & v)
 {
    switch(direction_){
       case NORTH:
@@ -42,7 +42,7 @@ void OutflowBoundary::setVelocityValues(Array & u, Array & v)
 }
 
 
-void OutflowBoundary::updateBoundaries(Array & u, Array & v) 
+void OutflowBoundary::updateBoundaries(Array<Real> & u, Array<Real> & v) 
 {
    switch(direction_){
       case NORTH:

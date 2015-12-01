@@ -7,7 +7,8 @@
 //==================
 
 // Default
-Array::Array( )
+template<typename T>
+Array<T>::Array( )
 {
    array_ = 0;
    size_ = 0;
@@ -18,10 +19,11 @@ Array::Array( )
 }
 
 // 1D
-Array::Array( size_t xSize )
+template<typename T>
+Array<T>::Array( size_t xSize )
 {
    ASSERT_MSG(xSize > 0, "Array size too small");
-   array_ = new Real[xSize];
+   array_ = new T[xSize];
    size_ = xSize;
    xSize_ = xSize;
    ySize_ = 1;
@@ -30,10 +32,11 @@ Array::Array( size_t xSize )
 }
 
 // 2D
-Array::Array( size_t xSize, size_t ySize )
+template<typename T>
+Array<T>::Array( size_t xSize, size_t ySize )
 {
    ASSERT_MSG(xSize > 0 && ySize > 0, "Array size too small");
-   array_ = new Real[xSize * ySize];
+   array_ = new T[xSize * ySize];
    size_ = xSize*ySize;
    xSize_ = xSize;
    ySize_ = ySize;
@@ -42,10 +45,11 @@ Array::Array( size_t xSize, size_t ySize )
 }
 
 // 3D
-Array::Array( size_t xSize, size_t ySize, size_t zSize )
+template<typename T>
+Array<T>::Array( size_t xSize, size_t ySize, size_t zSize )
 {
    ASSERT_MSG(xSize > 0 && ySize > 0 && zSize > 0, "Array size too small");
-   array_ = new Real[xSize * ySize * zSize];
+   array_ = new T[xSize * ySize * zSize];
    size_ = xSize*ySize*zSize;
    xSize_ = xSize;
    ySize_ = ySize;
@@ -54,14 +58,16 @@ Array::Array( size_t xSize, size_t ySize, size_t zSize )
 }
 
 // Copy constructor
-Array::Array(const Array & other) : size_(other.size_), xSize_(other.xSize_), ySize_(other.ySize_),
-                              zSize_(other.zSize_), array_(new Real[xSize_ * ySize_ * zSize_])
+template<typename T>
+Array<T>::Array(const Array & other) : size_(other.size_), xSize_(other.xSize_), ySize_(other.ySize_),
+                              zSize_(other.zSize_), array_(new T[xSize_ * ySize_ * zSize_])
 {
-   memcpy(array_, other.array_, xSize_ * ySize_ *zSize_ * sizeof(Real)); 
+   memcpy(array_, other.array_, xSize_ * ySize_ *zSize_ * sizeof(T)); 
 }
 
 // Move constructor
-Array::Array(Array && other)
+template<typename T>
+Array<T>::Array(Array && other)
 {
    std::cerr << "did move c'tor" << std::endl;
    size_ = std::move(other.size_);
@@ -73,7 +79,8 @@ Array::Array(Array && other)
 }
 
 //Destructor
-Array::~Array(){
+template<typename T>
+Array<T>::~Array(){
    delete[] array_;
 }
 
@@ -84,20 +91,23 @@ Array::~Array(){
 //===========================
 
 //Initialize the whole array with a constant value
-void Array::fill( Real value )
+template<typename T>
+void Array<T>::fill( T value )
 {
    std::fill(array_, array_ + size_, value);
 }
 
 
 // Print the whole array (for debugging purposes)
-void Array::print() const
+template<typename T>
+void Array<T>::print() const
 {
    std::cout << *this;
 }
 
 // Get size depending on dimension
-size_t Array::getSize( char dimension ) const
+template<typename T>
+size_t Array<T>::getSize( char dimension ) const
 {
    ASSERT_MSG(dimension < 3, "Dimension toolarge");
    if(0 == dimension)
@@ -110,7 +120,8 @@ size_t Array::getSize( char dimension ) const
 }
 
 //return total size of the array
-size_t Array::getSize() const
+template<typename T>
+size_t Array<T>::getSize() const
 {
    return size_;
 }
@@ -122,7 +133,8 @@ size_t Array::getSize() const
 //=================
 
 // Stream out
-std::ostream& operator<<(std::ostream& stream, const Array &a)
+template<typename T>
+std::ostream& operator<<(std::ostream& stream, const Array<T> &a)
 {
    // For 2D Arrays the positive x-coordinate goes to the right
    //                   positive y-coordinate goes upwards
@@ -143,7 +155,8 @@ std::ostream& operator<<(std::ostream& stream, const Array &a)
 }
 
 // Copy assign operator
-Array& Array::operator= (const Array& other)
+template<typename T>
+Array<T>& Array<T>::operator= (const Array& other)
 {
    if( this == &other )
       return *this;
@@ -158,7 +171,8 @@ Array& Array::operator= (const Array& other)
 }
 
 // Move assign operator
-Array& Array::operator=(Array && other)
+template<typename T>
+Array<T>& Array<T>::operator=(Array && other)
 {
    size_ = std::move(other.size_);
    xSize_ = std::move(other.xSize_);
@@ -170,7 +184,8 @@ Array& Array::operator=(Array && other)
    return *this;
 }
 
-Array Array::operator+ (const Array& other) const
+template<typename T>
+Array<T> Array<T>::operator+ (const Array& other) const
 {
    ASSERT_MSG(xSize_ == other.xSize_ && ySize_ == other.ySize_ && zSize_ == other.zSize_,
          "Matrix size not equal");
@@ -186,7 +201,8 @@ Array Array::operator+ (const Array& other) const
    return result;
 }
 
-Array& Array::operator+= (const Array& other)
+template<typename T>
+Array<T>& Array<T>::operator+= (const Array& other)
 {
    ASSERT_MSG(xSize_ == other.xSize_ && ySize_ == other.ySize_ && zSize_ == other.zSize_,
          "Matrix size not equal");
@@ -201,7 +217,8 @@ Array& Array::operator+= (const Array& other)
    return *this;
 }
 
-Array Array::operator+ (const Real value) const
+template<typename T>
+Array<T> Array<T>::operator+ (const T value) const
 {
    Array result( xSize_, ySize_, zSize_ );
    for(size_t k = 0; k < zSize_; ++k)
