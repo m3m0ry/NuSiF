@@ -40,6 +40,10 @@ public:
 
    void normalizePressure();
 
+   void createRectangle(size_t x1, size_t y1, size_t x2, size_t y2);
+
+   void createCircle(size_t x, size_t y, size_t r);
+
 
    // Getters / Setters for member variables
    Array<Real> & p()    { return p_;    }
@@ -68,26 +72,82 @@ public:
 
    inline Real u(size_t i, size_t j, DIRECTION dir)
    {
-      //TODO
-      return u_(i,j);
+      switch(dir){
+         case NORTH:
+            if(isFluid(i,j) && isFluid(i+1,j))
+               return u_(i,j);
+            else if(isSolid(i,j) && isSolid(i+1,j))
+               return -u_(i,j-1);
+            break;
+         case SOUTH:
+            if(isFluid(i,j) && isFluid(i+1,j))
+               return u_(i,j);
+            else if(isSolid(i,j) && isSolid(i+1,j))
+               return -u_(i,j+1);
+            break;
+         case EAST:
+         case WEST:
+            if(isFluid(i,j) && isFluid(i+1,j))
+               return u_(i,j);
+            break;
+         default:
+            ABORT("No direction given");
+      }
+
+      // else
+      return 0;
    }
 
    inline Real v(size_t i, size_t j, DIRECTION dir)
    {
-      //TODO
-      return v_(i,j);
+      switch(dir){
+         case NORTH:
+         case SOUTH:
+            if(isFluid(i,j) && isFluid(i,j+1))
+               return v_(i,j);
+         case EAST:
+            if(isFluid(i,j) && isFluid(i,j+1))
+               return v_(i,j);
+            else if(isSolid(i,j) && isSolid(i,j+1))
+               return -v_(i-1,j);
+         case WEST:
+            if(isFluid(i,j) && isFluid(i,j+1))
+               return v_(i,j);
+            else if(isSolid(i,j) && isSolid(i,j+1))
+               return -v_(i+1,j);
+         default:
+            ABORT("No direction given");
+      }
+      // else
+      return 0;
    }
 
    inline Real p(size_t i, size_t j, DIRECTION dir)
    {
-      //TODO
-      return p_(i,j);
+      if(isFluid(i,j))
+         return p_(i,j);
+      switch(dir){
+         case NORTH:
+            return p_(i,j-1);
+         case SOUTH:
+            return p_(i,j+1);
+         case EAST:
+            return p_(i-1,j);
+         case WEST:
+            return p_(i+1,j);
+         default:
+            ABORT("No direction given");
+      }
    }
 
-   inline bool isFluid(size_t i, size_t j, DIRECTION dir)
+   inline bool isFluid(size_t i, size_t j)
    {
-      //TODO
       return isFluids_(i,j);
+   }
+
+   inline bool isSolid(size_t i, size_t j)
+   {
+      return not isFluids_(i,j);
    }
 
    inline size_t getNumFluid()
