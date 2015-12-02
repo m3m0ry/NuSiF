@@ -1030,8 +1030,154 @@ As solver for \ref{fig:disc-stokes} we cannot use iterative solvers such as Gaus
 
 	\item GMRES ( see assignment) or MINRES (two Krylow space methods for non-SPD matrices)
 	
-	\item %TODO next week
+	\item Schur-complement
+\begin{figure}[H]
+	\centering
+	\[ \left[ \begin{matrix}
+	-\Delta_h & 0 & \Delta_{h,x} \\
+	0 & -\Delta_h & \Delta_{h,y} \\
+	\Delta_{h,x}^T & \Delta_{h,y}^T & S\\
+	\end{matrix} \right] 
+	\left[
+	\begin{matrix}
+	u \\
+	v \\
+	p\\
+	\end{matrix} \right] = \left[ \begin{matrix}
+	f_x \\ f_y \\ -\nabla_x^T \Delta_n^-1 f_x - \nabla_y^T \Delta_u^-1 f_y \\
+	\end{matrix} \right] \]
+	\renewcommand{\thefigure}{S17}
+	\caption{Schur-complement}
+	\label{fig:disc-freesplipb}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\[ (\nabla_x^T \nabla_y^T \left[ \begin{matrix}
+	-\Delta_h^-1 & 0 \\
+	0 & -\Delta_h^-1\\
+	\end{matrix} \right] 
+	\left[
+	\begin{matrix}
+	\nabla_x \\
+	\nabla_y \\
+	\end{matrix} \right]\]
+	\renewcommand{\thefigure}{S18}
+	\caption{Schur-complement}
+	\label{fig:disc-freesplipb}
+\end{figure}
+
+Unfortunatly $\Delta_h^{-1}$ dense, therefore also $S$ will be dense. So it cannot be computed exactly for large problems. S is positive definite and well conditioned. (condition \# inboundary), so that 
+\[ Sp = rhs \]
+can e.g. be solved by a CG (conugate gradient) method.
+
+The CG method requireds only that $S$ can be applied to a vector and thus
+\begin{figure}[H]
+	\centering
+	\[ p = SP \] %p hat dach
+	\renewcommand{\thefigure}{S20}
+	\caption{Schur-complement}
+	\label{fig:disc-freesplipb}
+\end{figure}
+
+can be computed approximatly
+\begin{enumerate}
+	\item form $\left[ \begin{matrix}
+	u_h\\
+	v_h
+	\end{matrix} \right] = \left[ \begin{matrix}
+	v_x\\
+	v_y
+	\end{matrix}\right] p$ %TODO u_h v_h ~ drauf S21
+	\item solve $\Delta_h u_h = w_h$ and $\delta_h v_h = v_h$ %TODO S22 erste x_h haben ~~ zeite nur noch ~
+	\item form $p = \nabla_x^T u_h + \nabla_y^T v_h$ %TODO s23, p hat dach, u_h ~~
 \end{enumerate}
+Inner CG (or SOR) to solve (S22) (or mutligrid)\\ %TODO ref
+Outer CG to solve (S19) %TODO ref
+	
+	\item Use an uniexact Uzawa method. In the $(h+1)$st iteration solve
+	
+	\begin{figure}[H]
+	\centering
+	\[ \left[ \begin{matrix}
+	A & 0 & 0\\
+	0 & A & 0\\
+	\nabla_x^T & \nabla_x^T & S\\
+\end{matrix}\right] \left[ \begin{matrix}
+u_h^{k+1} - u_h^k\\
+v_h^{k+1} - v_h^k\\
+p_h^{k+1} - p_h^k\\
+\end{matrix} \right] = \left[ \begin{matrix}
+f_x\\
+f_y\\
+0
+\end{matrix} \right] - A \left[ \begin{matrix}
+u_h^k\\
+v_k^h\\
+p_k^h\\
+\end{matrix} \right]	 \] %TODO A and S has hat , last A hast - on top
+	\renewcommand{\thefigure}{S24}
+	\caption{Uzawa method}
+	\label{fig:disc-freesplipb}
+\end{figure}
+where $A$ is an easily invertible approximation to $\Delta h$\\
+and $S$ is an easily invertible approximation to S %A and first S hast hat
+
+\item Develop a genuine multigrid method for (S14) %TODO ref
+	
+\end{enumerate}
+
+
+\section{Visualization}
+
+\subsection{Standard Techniques}
+
+\subsubsection{Real valued functions}
+$f:\Omega \rightarrow \Omega$ (pressure, absolute val. of velocity)
+\begin{enumerate}
+	\item graph fo function $G_f =  \left\lbrace (x,y,z) \in \Omega \times  \mathds{R}; z = f(x,y)\right\rbrace \subset \mathds{R}^3$
+	"surface plots"
+	\item level sets (contour plot)
+	$N_f(c) = \left\lbrace (x,y) \in \Omega | f(x,y) = c \right\rbrace \subset \mathds{R}^2$
+\begin{figure}[H]
+	\centering
+	\[ \varphi c: \begin{cases}
+	[a,b] \rightarrow N_F(c)\\
+	s \rightarrow \begin{pmatrix} x_c(s)\\ y_c(s)\end{pmatrix}\end{cases}\]
+	\renewcommand{\thefigure}{4.1}
+	\caption{Kaczmarc method}
+	\label{fig:disc-freesplipb}
+\end{figure}
+It holds
+$f(\varphi_c(s)) = f(x_c(s), y_c(s)) = c$ for all $s \in [a,b]$
+what to do in $\Omega \subset \mathds{R}^3$ (is, ants, projects
+	\item Grayscal and color coding
+\end{enumerate}
+
+\subsubsection{Vector valued functions}
+$f:\Omega \rightarrow \mathds{R}^2$\\
+$(x,y) \rightarrow f(x,y) = \begin{pmatrix}
+f_1(x,y)\\
+f_2(x,y)\\
+\end{pmatrix}$ (velocity field)
+
+Using glyphs to represent $\begin{pmatrix}
+f_1\\
+f_2\\
+\end{pmatrix}$ at a set of points in $\Omega$. Typical: arrows
+
+\noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
+
+
+Online versus offline visualization
+(interactive) (batch)
+
+\subsection{Paricle tracing, streamlines}
+\begin{itemize}
+	\item Pathlines trajectory of one particle in time
+	\item Streamlines inject particles at fixed location in short time intervals display particles that belong to the same injection type
+\end{itemize}
+
 
 
 \end{document}
