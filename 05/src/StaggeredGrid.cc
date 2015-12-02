@@ -78,3 +78,13 @@ void StaggeredGrid::normalizePressure()
    }
 
 }
+
+void StaggeredGrid::createRectangle(size_t x1, size_t y1, size_t x2, size_t y2)
+{
+
+}
+
+void StaggeredGrid::createCircle(size_t x, size_t y, size_t r)
+{
+
+}
