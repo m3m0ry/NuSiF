@@ -81,10 +81,25 @@ void StaggeredGrid::normalizePressure()
 
 void StaggeredGrid::createRectangle(size_t x1, size_t y1, size_t x2, size_t y2)
 {
-
+   for(size_t j = y1;  j<= y2; ++j)
+   {
+      for(size_t i = x1; i <= x2; ++i)
+      {
+         setCellToObstacle(i,j);
+      }
+   }
 }
 
 void StaggeredGrid::createCircle(size_t x, size_t y, size_t r)
 {
-
+   for(size_t j = y-r; j<= y+r; ++j)
+   {
+      for(size_t i = x-r; i <= x+r; ++i)
+      {
+         Real dx = x-i;
+         Real dy = y-j;
+         if((dx*dx + dy*dy) <= (r*r))
+            setCellToObstacle(i,j);
+      }
+   }
 }

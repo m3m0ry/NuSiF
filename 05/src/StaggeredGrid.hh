@@ -44,7 +44,6 @@ public:
 
    void createCircle(size_t x, size_t y, size_t r);
 
-
    // Getters / Setters for member variables
    Array<Real> & p()    { return p_;    }
    Array<Real> & rhs()  { return rhs_;  }
@@ -69,6 +68,11 @@ public:
 
    size_t xSize() const    { return xSize_; }
    size_t ySize() const    { return ySize_; }
+   
+   inline void setCellToObstacle(size_t x, size_t y)
+   {
+      isFluids_(x,y) = false;
+   }
 
    inline Real u(size_t i, size_t j, DIRECTION dir)
    {
