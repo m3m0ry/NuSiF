@@ -29,6 +29,12 @@ int main( int argc, char** argv )
 
 
    auto sim = FluidSimulator( filereader );
+   auto grid = sim.grid();
+   //Real x1 = filereader.getRealParameter("RectangleX1") / grid.dx();
+   //Real y1 = filereader.getRealParameter("RectangleY1") / grid.dy();
+   //Real x2 = filereader.getRealParameter("RectangleX2") / grid.dx();
+   //Real y2 = filereader.getRealParameter("RectangleY2") / grid.dy();
+   //grid.createRectangle(x1, y1, x2, y2);
    if(filereader.isRealParameter("time"))
       sim.simulate(filereader.getRealParameter("time"));
    else

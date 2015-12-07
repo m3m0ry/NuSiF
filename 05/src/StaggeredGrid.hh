@@ -74,7 +74,7 @@ public:
       isFluids_(x,y) = false;
    }
 
-   inline Real u(size_t i, size_t j, DIRECTION dir)
+   inline Real u(size_t i, size_t j, DIRECTION dir) const
    {
       switch(dir){
          case NORTH:
@@ -102,23 +102,26 @@ public:
       return 0;
    }
 
-   inline Real v(size_t i, size_t j, DIRECTION dir)
+   inline Real v(size_t i, size_t j, DIRECTION dir) const
    {
       switch(dir){
          case NORTH:
          case SOUTH:
             if(isFluid(i,j) && isFluid(i,j+1))
                return v_(i,j);
+            break;
          case EAST:
             if(isFluid(i,j) && isFluid(i,j+1))
                return v_(i,j);
             else if(isSolid(i,j) && isSolid(i,j+1))
                return -v_(i-1,j);
+            break;
          case WEST:
             if(isFluid(i,j) && isFluid(i,j+1))
                return v_(i,j);
             else if(isSolid(i,j) && isSolid(i,j+1))
                return -v_(i+1,j);
+            break;
          default:
             ABORT("No direction given");
       }
@@ -126,7 +129,7 @@ public:
       return 0;
    }
 
-   inline Real p(size_t i, size_t j, DIRECTION dir)
+   inline Real p(size_t i, size_t j, DIRECTION dir) const
    {
       if(isFluid(i,j))
          return p_(i,j);
@@ -144,12 +147,12 @@ public:
       }
    }
 
-   inline bool isFluid(size_t i, size_t j)
+   inline bool isFluid(size_t i, size_t j) const
    {
       return isFluids_(i,j);
    }
 
-   inline bool isSolid(size_t i, size_t j)
+   inline bool isSolid(size_t i, size_t j) const
    {
       return not isFluids_(i,j);
    }
@@ -161,81 +164,81 @@ public:
 
    inline Real dpdx(size_t i, size_t j) const
    {
-      return (p_(i+1,j) - p_(i,j)) / dx_;
+      return (p(i+1,j, EAST) - p_(i,j)) / dx_;
    }
 
    inline Real dpdy(size_t i, size_t j) const
    {
-      return (p_(i,j+1) - p_(i,j)) / dy_;
+      return (p(i,j+1, NORTH) - p_(i,j)) / dy_;
    }
 
    inline Real d2udx2(size_t i, size_t j) const
    {
-      return ( u_(i+1,j) - 2.0*u_(i,j) + u_(i-1,j) ) / (dx_*dx_);
+      return ( u(i+1,j, EAST) - 2.0*u_(i,j) + u(i-1,j, WEST) ) / (dx_*dx_);
 
    }
 
    inline Real d2udy2(size_t i, size_t j) const
    {
-      return ( u_(i,j+1) - 2.0*u_(i,j) + u_(i,j-1) ) / (dy_*dy_);
+      return ( u(i,j+1, NORTH) - 2.0*u_(i,j) + u(i,j-1, SOUTH) ) / (dy_*dy_);
 
    }
 
    inline Real du2dx(size_t i, size_t j, Real gamma) const
    {
-      Real tmp0 = ( (u_(i,j) + u_(i+1,j) ) *0.5);
-      Real tmp1 = ( (u_(i-1,j) + u_(i,j) ) *0.5);
+      Real tmp0 = ( (u_(i,j) + u(i+1,j, EAST) ) *0.5);
+      Real tmp1 = ( (u(i-1,j, WEST) + u_(i,j) ) *0.5);
       Real tmp2 = (1.0/dx_) * ( tmp0*tmp0 - tmp1*tmp1 );
       
-      Real tmp3 = (fabs( u_(i,j) + u_(i+1,j) ) *0.5) * (( u_(i,j) - u_(i+1,j) ) *0.5);
-      Real tmp4 = (fabs( u_(i-1,j) + u_(i,j) ) *0.5) * (( u_(i-1,j) - u_(i,j) ) *0.5);
+      Real tmp3 = (fabs( u_(i,j) + u(i+1,j, EAST) ) *0.5) * (( u_(i,j) - u(i+1,j, EAST) ) *0.5);
+      Real tmp4 = (fabs( u(i-1,j, WEST) + u_(i,j) ) *0.5) * (( u(i-1,j, WEST) - u_(i,j) ) *0.5);
       Real tmp5 = ( gamma / dx_ ) * ( tmp3 - tmp4 );
       return tmp2 + tmp5;
    }
 
    inline Real duvdy(size_t i, size_t j, Real gamma) const
    {
-      Real tmp0 = (( v_(i,j) + v_(i+1,j) ) *0.5) * (( u_(i,j) + u_(i,j+1) ) *0.5);
-      Real tmp1 = (( v_(i,j-1) + v_(i+1,j-1) ) *0.5) * (( u_(i,j-1) + u_(i,j) ) *0.5);
+      Real tmp0 = (( v_(i,j) + v(i+1,j, EAST) ) *0.5) * (( u_(i,j) + u(i,j+1, NORTH) ) *0.5);
+      Real tmp1 = (( v(i,j-1, SOUTH) + v(i+1,j-1, SOUTH) ) *0.5) * (( u(i,j-1, SOUTH) + u_(i,j) ) *0.5);
       Real tmp2 = (1.0/dy_) * ( tmp0 - tmp1 );
 
-      Real tmp3 = (fabs( v_(i,j) + v_(i+1, j) )*0.5) * ( ( u_(i,j)  - u_(i,j+1)) *0.5);
-      Real tmp4 = (fabs( v_(i,j-1) + v_(i+1, j-1) )*0.5) * ( ( u_(i,j-1)- u_(i,j) ) *0.5);
+      Real tmp3 = (fabs( v_(i,j) + v(i+1, j, EAST) )*0.5) * ( ( u_(i,j)  - u(i,j+1, NORTH)) *0.5);
+      Real tmp4 = (fabs( v(i,j-1, SOUTH) + v(i+1, j-1, SOUTH) )*0.5) * ( ( u(i,j-1, SOUTH)- u_(i,j) ) *0.5);
       Real tmp5 = ( gamma / dy_ ) * (tmp3 - tmp4);
       return tmp2 + tmp5;
    }
 
    inline Real d2vdx2( size_t i, size_t j) const
    {
-      return ( v_(i+1,j) - 2.0*v_(i,j) + v_(i-1,j) ) / (dx_*dx_);
+      return ( v(i+1,j, EAST) - 2.0*v_(i,j) + v(i-1,j, WEST) ) / (dx_*dx_);
    }
 
    inline Real d2vdy2( size_t i, size_t j) const
    {
-      return ( v_(i,j+1) - 2.0*v_(i,j) + v_(i,j-1) ) / (dy_*dy_);
+      return ( v(i,j+1, NORTH) - 2.0*v_(i,j) + v(i,j-1, SOUTH) ) / (dy_*dy_);
 
    }
 
    inline Real duvdx( size_t i, size_t j, Real gamma) const
    {
-      Real tmp0 = (( u_(i,j) + u_(i,j+1) ) *0.5) * (( v_(i,j) + v_(i+1,j) ) *0.5);
-      Real tmp1 = (( u_(i-1,j) + u_(i-1, j+1) ) *0.5) * (( v_(i-1, j) + v_(i,j) ) *0.5);
+      Real tmp0 = (( u_(i,j) + u(i,j+1, NORTH) ) *0.5) * (( v_(i,j) + v(i+1,j, EAST) ) *0.5);
+      Real tmp1 = (( u(i-1,j, WEST) + u_(i-1, j+1, WEST) ) *0.5) * (( v(i-1, j, WEST) + v_(i,j) ) *0.5);
       Real tmp2 = (1.0 /(dx_)) * ( tmp0 - tmp1 );
 
-      Real tmp3 = (fabs( u_(i,j) + u_(i,j+1) ) *0.5) * (( v_(i,j) -v_(i+1,j) ) *0.5);
-      Real tmp4 = (fabs( u_(i-1,j) + u_(i-1,j+1) ) *0.5) * ( (v_(i-1,j) - v_(i,j)) *0.5);
+      Real tmp3 = (fabs( u_(i,j) + u(i,j+1, NORTH) ) *0.5) * (( v_(i,j) -v(i+1,j, EAST) ) *0.5);
+      Real tmp4 = (fabs( u(i-1,j, WEST) + u_(i-1,j+1, WEST) ) *0.5) * ( (v(i-1,j, WEST) - v_(i,j)) *0.5);
       Real tmp5 = ( gamma / dx_) * ( tmp3 - tmp4 );
       return tmp2 + tmp5;
    }
 
    inline Real dv2dy( size_t i, size_t j, Real gamma) const
    {
-      Real tmp0 = (( v_(i,j) + v_(i,j+1) ) *0.5);
-      Real tmp1 = (( v_(i,j-1) + v_(i,j) ) *0.5);
+      Real tmp0 = (( v_(i,j) + v(i,j+1, NORTH) ) *0.5);
+      Real tmp1 = (( v(i,j-1, SOUTH) + v_(i,j) ) *0.5);
       Real tmp2 = (1.0/ dy_) * ( tmp0*tmp0 - tmp1*tmp1 );
 
-      Real tmp3 = (fabs(v_(i,j) + v_(i,j+1) ) *0.5) * ((v_(i,j) - v_(i,j+1) ) *0.5);
-      Real tmp4 = (fabs(v_(i,j-1) + v_(i,j)) *0.5) * (( v_(i,j-1) - v_(i,j)) *0.5);
+      Real tmp3 = (fabs(v_(i,j) + v(i,j+1, NORTH) ) *0.5) * ((v_(i,j) - v(i,j+1, NORTH) ) *0.5);
+      Real tmp4 = (fabs(v(i,j-1, SOUTH) + v_(i,j)) *0.5) * (( v(i,j-1, SOUTH) - v_(i,j)) *0.5);
       Real tmp5 = (gamma / dy_) * ( tmp3 - tmp4);
       return tmp2 + tmp5;
    }

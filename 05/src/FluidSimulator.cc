@@ -288,6 +288,8 @@ void FluidSimulator::computeFG()
    {
       for(size_t i = 1; i <= imax_-1; ++i)
       {
+         if(grid_.isSolid(i,j) || grid_.isSolid(i+1,j))
+            continue;
          F(i,j) = u(i,j) + dt_* ( re_in * ( grid_.d2udx2(i,j) + grid_.d2udy2(i,j)) - grid_.du2dx(i,j,gamma_) - grid_.duvdy(i,j, gamma_) + gx_);
       }
    }
@@ -295,6 +297,8 @@ void FluidSimulator::computeFG()
    {
       for(size_t i = 1; i <= imax_; ++i)
       {
+         if(grid_.isSolid(i,j) || grid_.isSolid(i,j+1))
+            continue;
          G(i,j) = v(i,j) + dt_* ( re_in * ( grid_.d2vdx2(i,j) + grid_.d2vdy2(i,j)) - grid_.duvdx(i,j, gamma_) - grid_.dv2dy(i,j, gamma_) + gy_);
       }
    }

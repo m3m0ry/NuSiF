@@ -33,6 +33,7 @@ StaggeredGrid::StaggeredGrid( const FileReader & configuration )
    v_ = Array<Real>(xSize_ + 2, ySize_ + 1);
    f_ = Array<Real>(xSize_ + 1, ySize_ + 2);
    g_ = Array<Real>(xSize_ + 2, ySize_ + 1);
+   isFluids_ = Array<bool>(xSize_ + 2, ySize_ +2);
 
    dx_ = configuration.getRealParameter("xlength")/(Real) xSize_;
    dy_ = configuration.getRealParameter("ylength")/(Real) ySize_;
