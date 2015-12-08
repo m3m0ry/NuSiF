@@ -56,8 +56,8 @@ bool SORSolver::solve( StaggeredGrid & grid )
                continue;
             Real tmp1 = (1.0 - omg_)*p(i,j);
             Real tmp2 = omg_ / (2*dx2 + 2*dy2);
-            Real tmp3 = (p(i+1,j, EAST) + p(i-1,j, WEST))*dx2;
-            Real tmp4 = (p(i,j+1, NORTH) + p(i,j-1, SOUTH))*dy2;
+            Real tmp3 = (grid.p(i+1,j, EAST) + grid.p(i-1,j, WEST))*dx2;
+            Real tmp4 = (grid.p(i,j+1, NORTH) + grid.p(i,j-1, SOUTH))*dy2;
             Real tmp5 = (tmp3 + tmp4) - rhs(i,j);
             Real tmp6 = tmp2 * tmp5;
             p(i,j) = tmp1 + tmp6;
@@ -90,8 +90,8 @@ bool SORSolver::solve( StaggeredGrid & grid )
                if(grid.isSolid(i,j))
                   continue;
                Real rTmp1 = (2.0 * (dx*dx + dy*dy) ) * dx2dy2 * p(i,j);
-               Real rTmp2 = (p(i+1,j, EAST) + p(i-1,j, WEST))*dx2;
-               Real rTmp3 = (p(i,j+1, NORTH) + p(i,j-1, SOUTH))*dy2;
+               Real rTmp2 = (grid.p(i+1,j, EAST) + grid.p(i-1,j, WEST))*dx2;
+               Real rTmp3 = (grid.p(i,j+1, NORTH) + grid.p(i,j-1, SOUTH))*dy2;
                Real rTmp4 = rTmp1 + rhs(i,j) - (rTmp2 + rTmp3);
                r += rTmp4 * rTmp4;
             }

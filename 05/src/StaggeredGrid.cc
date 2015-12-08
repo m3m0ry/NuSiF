@@ -15,6 +15,8 @@ StaggeredGrid::StaggeredGrid( size_t xSize, size_t ySize, Real dx, Real dy ) : d
    v_ = Array<Real>(xSize_ + 2, ySize_ + 1);
    f_ = Array<Real>(xSize_ + 1, ySize_ + 2);
    g_ = Array<Real>(xSize_ + 2, ySize_ + 1);
+   isFluids_ = Array<bool>(xSize_ + 2, ySize_ +2);
+   nFluid_ = isFluids_.getSize();
 }
 
 //Constructor from configuration
@@ -34,6 +36,8 @@ StaggeredGrid::StaggeredGrid( const FileReader & configuration )
    f_ = Array<Real>(xSize_ + 1, ySize_ + 2);
    g_ = Array<Real>(xSize_ + 2, ySize_ + 1);
    isFluids_ = Array<bool>(xSize_ + 2, ySize_ +2);
+   isFluids_.fill(true);
+   nFluid_  = isFluids_.getSize();
 
    dx_ = configuration.getRealParameter("xlength")/(Real) xSize_;
    dy_ = configuration.getRealParameter("ylength")/(Real) ySize_;
@@ -77,11 +81,12 @@ void StaggeredGrid::normalizePressure()
          p_(i,j) = p_(i,j) - norm;
       }
    }
-
 }
 
 void StaggeredGrid::createRectangle(size_t x1, size_t y1, size_t x2, size_t y2)
 {
+   std::cout << "x1 = " << x1 << " y1 = " << y1 << std::endl;
+   std::cout << "x2 = " << x2 << " y2 = " << y2 << std::endl;
    for(size_t j = y1;  j<= y2; ++j)
    {
       for(size_t i = x1; i <= x2; ++i)
@@ -100,7 +105,9 @@ void StaggeredGrid::createCircle(size_t x, size_t y, size_t r)
          Real dx = x-i;
          Real dy = y-j;
          if((dx*dx + dy*dy) <= (r*r))
+         {
             setCellToObstacle(i,j);
+         }
       }
    }
 }

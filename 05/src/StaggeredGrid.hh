@@ -71,7 +71,16 @@ public:
    
    inline void setCellToObstacle(size_t x, size_t y)
    {
+      if(isFluids_(x,y))
+         nFluid_--;
       isFluids_(x,y) = false;
+   }
+
+   inline void setCellToFluid(size_t x, size_t y)
+   {
+      if(!isFluids_(x,y))
+         nFluid_++;
+      isFluids_(x,y) = true;
    }
 
    inline Real u(size_t i, size_t j, DIRECTION dir) const
@@ -145,6 +154,8 @@ public:
          default:
             ABORT("No direction given");
       }
+      ABORT("Should not be here!");
+      return 0.0;
    }
 
    inline bool isFluid(size_t i, size_t j) const
