@@ -85,8 +85,6 @@ void StaggeredGrid::normalizePressure()
 
 void StaggeredGrid::createRectangle(size_t x1, size_t y1, size_t x2, size_t y2)
 {
-   std::cout << "x1 = " << x1 << " y1 = " << y1 << std::endl;
-   std::cout << "x2 = " << x2 << " y2 = " << y2 << std::endl;
    for(size_t j = y1;  j<= y2; ++j)
    {
       for(size_t i = x1; i <= x2; ++i)

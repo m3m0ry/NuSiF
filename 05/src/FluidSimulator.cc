@@ -231,6 +231,8 @@ void FluidSimulator::updateVelocities()
    {
       for(size_t i = 1; i <= imax_-1; ++i)
       {
+         if(grid_.isSolid(i,j))
+            continue;
          u(i,j) = F(i,j) - dt_ * grid_.dpdx(i,j);
       }
    }
@@ -239,6 +241,8 @@ void FluidSimulator::updateVelocities()
    {
       for(size_t i = 1; i <= imax_; ++i)
       {
+         if(grid_.isSolid(i,j))
+            continue;
          v(i,j) = G(i,j) - dt_ * grid_.dpdy(i,j);
       }
    }
