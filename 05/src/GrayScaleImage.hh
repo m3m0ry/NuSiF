@@ -20,6 +20,7 @@ class GrayScaleImage
 public:
    /// Loads a grayscale png image from the specified file
    GrayScaleImage( const std::string & pngFilename );
+   GrayScaleImage( size_t witdh, size_t height);
 
    void save( const std::string & pngFilename );
 

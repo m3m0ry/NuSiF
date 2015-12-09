@@ -26,6 +26,13 @@ GrayScaleImage::GrayScaleImage( const std::string & pngFilename )
    CHECK_MSG( error == 0 , "Error while loading PNG file: " << lodepng_error_text(error) );
 }
 
+
+GrayScaleImage::GrayScaleImage( size_t width, size_t height ): image_(width*height)
+{
+   size_[0] = width;
+   size_[1] = height;
+}
+
 void GrayScaleImage::save( const std::string & pngFilename )
 {
    unsigned int error = lodepng::encode( pngFilename, image_,

@@ -1,6 +1,6 @@
-#=====================================================================================================================
+#===========================================================
 #             		 Backward Facing Step
-#=====================================================================================================================
+#===========================================================
 
 
 # Problem specific Data:
@@ -30,6 +30,8 @@ ylength                2.0		   # domain size in y-direction
 imax                   100		   # number of interior cells in x-direction //Orginal:100
 jmax                   20		   # number of interior cells in y-direction //Orginal:25
 
+Solidpgn               output.png
+
 RectangleX1				  0.0       # x-coordinate of bottom-left point of the rectangle
 RectangleY1            0.0       # y-coordinate of bottom-left point of the rectangle
 RectangleX2            7.5       # x-coordinate of top-right point of the rectangle
@@ -57,4 +59,4 @@ normalizationfrequency 100       # every n'th time step in the fluid solver the 
 # -----------------------
 outputinterval 5                 # every n'th time step the visualization should be printed to a file
 
-#======================================================================================================================
+#===========================================================
