@@ -37,11 +37,14 @@ int main( int argc, char** argv )
    if(filereader.isStringParameter("Solidpgn")){
       std::ifstream png(filereader.getStringParameter("Solidpgn"));
       if(!png){
-         Real x1 = filereader.getRealParameter("RectangleX1") / grid.dx();
-         Real y1 = filereader.getRealParameter("RectangleY1") / grid.dy();
-         Real x2 = filereader.getRealParameter("RectangleX2") / grid.dx();
-         Real y2 = filereader.getRealParameter("RectangleY2") / grid.dy();
-         grid.createRectangle(x1, y1, x2, y2);
+         if(filereader.isIntParameter("Rectangle"))
+         {
+            Real x1 = filereader.getRealParameter("RectangleX1") / grid.dx();
+            Real y1 = filereader.getRealParameter("RectangleY1") / grid.dy();
+            Real x2 = filereader.getRealParameter("RectangleX2") / grid.dx();
+            Real y2 = filereader.getRealParameter("RectangleY2") / grid.dy();
+            grid.createRectangle(x1, y1, x2, y2);
+         }
       }
       else{
          GrayScaleImage gr = GrayScaleImage(filereader.getStringParameter("Solidpgn"));
