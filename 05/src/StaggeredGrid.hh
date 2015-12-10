@@ -233,11 +233,11 @@ public:
    inline Real duvdx( size_t i, size_t j, Real gamma) const
    {
       Real tmp0 = (( u_(i,j) + u(i,j+1, NORTH) ) *0.5) * (( v_(i,j) + v(i+1,j, EAST) ) *0.5);
-      Real tmp1 = (( u(i-1,j, WEST) + u_(i-1, j+1, WEST) ) *0.5) * (( v(i-1, j, WEST) + v_(i,j) ) *0.5);
+      Real tmp1 = (( u(i-1,j, WEST) + u(i-1, j+1, WEST) ) *0.5) * (( v(i-1, j, WEST) + v_(i,j) ) *0.5);
       Real tmp2 = (1.0 /(dx_)) * ( tmp0 - tmp1 );
 
       Real tmp3 = (fabs( u_(i,j) + u(i,j+1, NORTH) ) *0.5) * (( v_(i,j) -v(i+1,j, EAST) ) *0.5);
-      Real tmp4 = (fabs( u(i-1,j, WEST) + u_(i-1,j+1, WEST) ) *0.5) * ( (v(i-1,j, WEST) - v_(i,j)) *0.5);
+      Real tmp4 = (fabs( u(i-1,j, WEST) + u(i-1,j+1, WEST) ) *0.5) * ( (v(i-1,j, WEST) - v_(i,j)) *0.5);
       Real tmp5 = ( gamma / dx_) * ( tmp3 - tmp4 );
       return tmp2 + tmp5;
    }

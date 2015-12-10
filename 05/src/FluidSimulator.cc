@@ -39,8 +39,6 @@ FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(
    south_->setVelocityValues(grid_.u(), grid_.v());
    west_->setVelocityValues(grid_.u(), grid_.v());
    east_->setVelocityValues(grid_.u(), grid_.v());
-
-
 }
 
 FluidSimulator::~FluidSimulator()
