@@ -33,7 +33,6 @@ int main( int argc, char** argv )
 
    auto sim = FluidSimulator( filereader );
    StaggeredGrid & grid = sim.grid();
-   Array<bool> & fluid = grid.isFluids();
    if(filereader.isStringParameter("Solidpgn")){
       std::ifstream png(filereader.getStringParameter("Solidpgn"));
       if(!png){
@@ -43,14 +42,14 @@ int main( int argc, char** argv )
             Real y1 = filereader.getRealParameter("RectangleY1") / grid.dy();
             Real x2 = filereader.getRealParameter("RectangleX2") / grid.dx();
             Real y2 = filereader.getRealParameter("RectangleY2") / grid.dy();
-            grid.createRectangle(x1, y1, x2, y2);
+            grid.createRectangle((size_t)x1, (size_t)y1, (size_t)x2, (size_t)y2);
          }
       }
       else{
          GrayScaleImage gr = GrayScaleImage(filereader.getStringParameter("Solidpgn"));
-         for(int j = 0; j < gr.height(); ++j)
+         for(size_t j = 0; j < (size_t)gr.height(); ++j)
          {
-            for(int i = 0; i < gr.width(); ++i)
+            for(size_t i = 0; i < (size_t)gr.width(); ++i)
             {
                if(gr(i,j) <= 0.5)
                   grid.setCellToObstacle(i,j);
@@ -60,9 +59,9 @@ int main( int argc, char** argv )
    }
    int imax = filereader.getIntParameter("imax");
    int jmax = filereader.getIntParameter("jmax");
-   GrayScaleImage gr = GrayScaleImage(imax, jmax);
-   for(int j = 0; j < jmax; ++j){
-      for(int i = 0; i < imax; ++i){
+   GrayScaleImage gr = GrayScaleImage((size_t)imax, (size_t)jmax);
+   for(size_t j = 0; j < (size_t)jmax; ++j){
+      for(size_t i = 0; i < (size_t)imax; ++i){
          unsigned char & element = gr.getElement(i,jmax -1 -j);
          if(grid.isFluid(i,j)){
             element = 255;
@@ -75,10 +74,12 @@ int main( int argc, char** argv )
    gr.save("output.png");
 
 
-   if(filereader.isRealParameter("time"))
+   if(filereader.isRealParameter("time")){
       sim.simulate(filereader.getRealParameter("time"));
-   else
-      sim.simulateTimeStepCount(filereader.getIntParameter("timesteps"));
+   }
+   else{
+      sim.simulateTimeStepCount((unsigned int)filereader.getIntParameter("timesteps"));
+   }
 
 
    return 0;

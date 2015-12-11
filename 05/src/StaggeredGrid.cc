@@ -73,7 +73,7 @@ void StaggeredGrid::normalizePressure()
          norm += p_(i,j);
       }
    }
-   norm = norm / (p_.getSize(0) * p_.getSize(1));
+   norm = norm / (Real)(p_.getSize(0) * p_.getSize(1));
    for(size_t j = 0; j < p_.getSize(1); ++j)
    {
       for(size_t i = 0; i < p_.getSize(0); ++i)
@@ -100,8 +100,8 @@ void StaggeredGrid::createCircle(size_t x, size_t y, size_t r)
    {
       for(size_t i = x-r; i <= x+r; ++i)
       {
-         Real dx = x-i;
-         Real dy = y-j;
+         size_t dx = x-i;
+         size_t dy = y-j;
          if((dx*dx + dy*dy) <= (r*r))
          {
             setCellToObstacle(i,j);

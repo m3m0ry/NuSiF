@@ -34,10 +34,15 @@ public:
    bool solve( StaggeredGrid & grid );
 
 private:
+   void sor(StaggeredGrid & grid);
+   void sorParallel(StaggeredGrid & grid);
+   void sorRedBlack(StaggeredGrid & grid);
+   void updateBoundaries(StaggeredGrid & grid);
+   Real computeResiduum(StaggeredGrid & grid);
+
    unsigned int itermax_;
    Real eps_; // Epsilon
-   Real omg_; // 
-   
+   Real omg_; // Omega
    unsigned int epsFrequency_;
 };
 
