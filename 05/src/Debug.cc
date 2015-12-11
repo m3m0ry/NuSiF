@@ -40,6 +40,16 @@ namespace internal
             std::abort();
       }
 
+   // Abort function
+   void abortFct(const std::string & message, const char * const filename, int line )
+   {
+      std::cerr << RED << "Abort!" << DEFAULTCOLOR << "\n\tFile:       "
+               << filename << ":" << line << "\n";
+               if ( message.size() > 0 )
+      std::cerr << "\tMessage: \n\t" << message << std::endl;
+      std::abort();
+   }
+
    //Assert function -> Debug only
    void assertFct( bool b, const char * const expression, const std::string & message,
                       const char * const filename, int line )
@@ -69,7 +79,7 @@ namespace internal
          std::cerr << message;
 
       std::cerr << "\t[" << GREEN;
-      //TODO debug.cc -1
+      //TODO debug.cc -1??
       for(unsigned int i = 0; i < (parts *20) / whole; ++i){
          std::cerr << "=";
       }

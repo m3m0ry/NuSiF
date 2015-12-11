@@ -28,7 +28,7 @@
 #define ABORT(MSG) \
    { std::stringstream ss; \
      ss << MSG; \
-     internal::checkFct ( false, "", ss.str(), __FILE__, __LINE__ );\
+     internal::abortFct ( ss.str(), __FILE__, __LINE__ );\
    }
 
 #define PROGRESS(MSG, X, MAX) \
@@ -83,6 +83,8 @@ namespace internal
                    const char * const filename, int line );
    void assertFct( bool b, const char * const expression, const std::string & message,
                    const char * const filename, int line );
+
+   void abortFct(const std::string & message, const char * const filename, int line );
 
    void warnFct( const std::string & message,
                  const char * const filename, int line );
