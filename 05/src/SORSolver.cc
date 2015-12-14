@@ -30,6 +30,7 @@ void SORSolver::sor(StaggeredGrid & grid)
    Real dy = grid.dy();
    Real dx2 = 1.0 / (dx*dx);
    Real dy2 = 1.0 / (dy*dy);
+   Real dx2dy2Invert = 1.0 / (2*dx2 + 2*dy2);
 
    //SOR iteration
    for(size_t j = 1; j <= jmax; ++j)
@@ -39,7 +40,7 @@ void SORSolver::sor(StaggeredGrid & grid)
          if(grid.isSolid(i,j))
             continue;
          Real tmp1 = (1.0 - omg_)*p(i,j);
-         Real tmp2 = omg_ / (2*dx2 + 2*dy2);
+         Real tmp2 = omg_ * dx2dy2Invert;
          Real tmp3 = (grid.p(i+1,j, EAST) + grid.p(i-1,j, WEST))*dx2;
          Real tmp4 = (grid.p(i,j+1, NORTH) + grid.p(i,j-1, SOUTH))*dy2;
          Real tmp5 = (tmp3 + tmp4) - rhs(i,j);
@@ -124,9 +125,11 @@ Real SORSolver::computeResiduum(StaggeredGrid & grid)
    size_t jmax = p.getSize(1) -2;
    Real dx = grid.dx();
    Real dy = grid.dy();
-   Real dx2 = 1.0 / (dx*dx);
-   Real dy2 = 1.0 / (dy*dy);
-   Real dx2dy2 = 1.0 / (dx*dx*dy*dy);
+   Real dx2 = dx * dx;
+   Real dy2 = dy * dy;
+   Real dx2Invert = 1.0 / (dx*dx);
+   Real dy2Invert = 1.0 / (dy*dy);
+   Real dx2dy2Invert = 1.0 / (dx*dx*dy*dy);
 
    // Compute residuum
    Real r = 0.0;
@@ -137,9 +140,9 @@ Real SORSolver::computeResiduum(StaggeredGrid & grid)
       {
          if(grid.isSolid(i,j))
             continue;
-         Real rTmp1 = (2.0 * (dx*dx + dy*dy) ) * dx2dy2 * p(i,j);
-         Real rTmp2 = (grid.p(i+1,j, EAST) + grid.p(i-1,j, WEST))*dx2;
-         Real rTmp3 = (grid.p(i,j+1, NORTH) + grid.p(i,j-1, SOUTH))*dy2;
+         Real rTmp1 = (2.0 * (dx2 + dy2) ) * dx2dy2Invert * p(i,j);
+         Real rTmp2 = (grid.p(i+1,j, EAST) + grid.p(i-1,j, WEST))*dx2Invert;
+         Real rTmp3 = (grid.p(i,j+1, NORTH) + grid.p(i,j-1, SOUTH))*dy2Invert;
          Real rTmp4 = rTmp1 + rhs(i,j) - (rTmp2 + rTmp3);
          r += rTmp4 * rTmp4;
       }
@@ -154,6 +157,7 @@ Real SORSolver::computeResiduum(StaggeredGrid & grid)
 // Solve the pressure equation on the staggered grid
 bool SORSolver::solve( StaggeredGrid & grid )
 {
+   Real residuum = 0.0;
    // Copy paste boundaries
    updateBoundaries(grid);
    for(unsigned int nIter = 0; nIter < itermax_; ++nIter)
@@ -168,17 +172,16 @@ bool SORSolver::solve( StaggeredGrid & grid )
       if(nIter % epsFrequency_ == 0)
       {
          // Calculate r
-         Real r = computeResiduum(grid);
+         residuum = computeResiduum(grid);
 
-         if( r < eps_)
+         if( residuum < eps_)
          {
-         std::cout << "residuum: " << r << std::endl;
             return true;
          }
-         std::cout << "residuum: " << r << std::endl;
       }
    }
    // Itermax reached
+   std::cerr << "Residuum: " << residuum << std::endl;
    WARN("Did not stop on eps_");
    return false;
 }

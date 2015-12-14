@@ -82,7 +82,7 @@ void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
       composeRHS();
       solvePoisson();
       updateVelocities();
-      if(i % outputInterval_ == 0)
+      if(i % normFreqency_ == 0)
          normalizePressure();
       if(i % outputInterval_ == 0)
          writer_.write();
@@ -178,7 +178,7 @@ void FluidSimulator::determineNextDT()
 
    if( tau_ <= 0.0 )
    {
-      ABORT("Tau is below 0.0");
+      WARN("Tau is below 0.0");
       return;
    }
    Real umax = u(0,0);
@@ -203,7 +203,8 @@ void FluidSimulator::determineNextDT()
       }
    }
 
-   Real min1 = (re_ / 2) * (1/ ( 1 / (dx*dx) + 1/(dy*dy)));
+   //Find min
+   Real min1 = (re_ / 2) * (1/ ( 1 / (dx*dx) + 1/(dy*dy) ) );
    Real min2 = dx / umax;
    Real min3 = dy / vmax;
 
@@ -213,13 +214,8 @@ void FluidSimulator::determineNextDT()
    if(min > min3)
       min = min3;
 
-
-   std::cout << "werid: " << min1 << std::endl;
-   std::cout << "umax: " <<  min2 << std::endl;
-   std::cout << "vmax: " <<  min3 << std::endl;
-   std::cout << "min: " <<  min << std::endl;
+   // Compute finald dt
    dt_ = tau_ * min;
-   std::cout << dt_ << std::endl;
 }
 
 void FluidSimulator::updateVelocities()
@@ -233,7 +229,6 @@ void FluidSimulator::updateVelocities()
    {
       for(size_t i = 1; i <= imax_-1; ++i)
       {
-         //TODO check if is solid i + 1
          if(grid_.isSolid(i,j) || grid_.isSolid(i+1,j))
             continue;
          u(i,j) = F(i,j) - dt_ * grid_.dpdx(i,j);
@@ -279,7 +274,7 @@ void FluidSimulator::computeFG()
    Array<Real> & G = grid_.g();
    Array<Real> & u = grid_.u();
    Array<Real> & v = grid_.v();
-   Real re_in = 1.0 / re_;
+   Real reInvert = 1.0 / re_;
 
    for(size_t j = 1; j <= jmax_; ++j)
    {
@@ -302,7 +297,7 @@ void FluidSimulator::computeFG()
             F(i,j) = u(i,j);
             continue;
          }
-         F(i,j) = u(i,j) + dt_* ( re_in * ( grid_.d2udx2(i,j) + grid_.d2udy2(i,j)) - grid_.du2dx(i,j,gamma_) - grid_.duvdy(i,j, gamma_) + gx_);
+         F(i,j) = u(i,j) + dt_* ( reInvert * ( grid_.d2udx2(i,j) + grid_.d2udy2(i,j)) - grid_.du2dx(i,j,gamma_) - grid_.duvdy(i,j, gamma_) + gx_);
       }
    }
    for(size_t j = 1; j <= jmax_-1; ++j)
@@ -314,7 +309,7 @@ void FluidSimulator::computeFG()
             F(i,j) = u(i,j);
             continue;
          }
-         G(i,j) = v(i,j) + dt_* ( re_in * ( grid_.d2vdx2(i,j) + grid_.d2vdy2(i,j)) - grid_.duvdx(i,j, gamma_) - grid_.dv2dy(i,j, gamma_) + gy_);
+         G(i,j) = v(i,j) + dt_* ( reInvert * ( grid_.d2vdx2(i,j) + grid_.d2vdy2(i,j)) - grid_.duvdx(i,j, gamma_) - grid_.dv2dy(i,j, gamma_) + gy_);
       }
    }
 }

@@ -75,7 +75,7 @@ void StaggeredGrid::normalizePressure()
          norm += p_(i,j);
       }
    }
-   norm = norm / (Real)getNumFluid();
+   norm /= (Real)getNumFluid();
    for(size_t j = 0; j < p_.getSize(1); ++j)
    {
       for(size_t i = 0; i < p_.getSize(0); ++i)

@@ -5,6 +5,7 @@ FreeSlipBoundary::FreeSlipBoundary(DIRECTION direction, size_t imax, size_t jmax
    
 }
 
+//TODO freeslipboundary delta not using!!!
 void FreeSlipBoundary::setVelocityValues(Array<Real> & u, Array<Real> & v)
 {
    switch(direction_){

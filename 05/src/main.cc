@@ -80,6 +80,7 @@ int main( int argc, char** argv )
    else{
       sim.simulateTimeStepCount((unsigned int)filereader.getIntParameter("timesteps"));
    }
+   grid.p().print();
 
 
    return 0;
