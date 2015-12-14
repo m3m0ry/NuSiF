@@ -15,7 +15,7 @@ boundary_condition_E   outflow   # outflow condition at east boundary
 GX                     0.0			# Body forces (e.g. gravity)
 GY                     0.0			#
 
-Re                     100.0		# Reynolds number
+Re                     250.0		# Reynolds number
 
 U_INIT                 0.0		   # initial value for velocity in x-direction
 V_INIT                 0.0		   # initial value for velocity in y-direction
@@ -49,7 +49,7 @@ safetyfactor           0.5       # factor "tau" for timestep size control (<=0 m
 # Pressure Iteration Data:
 # -----------------------
 
-itermax                4000		   # maximal number of pressure iteration in one time step
+itermax                400		   # maximal number of pressure iteration in one time step
 eps                    0.0001		# stopping tolerance for pressure iteration
 omg                    1.85		# relaxation parameter for SOR iteration
 gamma                  0.9		   # upwind differencing factor gamma

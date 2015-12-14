@@ -70,17 +70,25 @@ void StaggeredGrid::normalizePressure()
    {
       for(size_t i = 0; i < p_.getSize(0); ++i)
       {
+         if(isSolid(i,j))
+            continue;
          norm += p_(i,j);
       }
    }
-   norm = norm / (Real)(p_.getSize(0) * p_.getSize(1));
+   norm = norm / (Real)getNumFluid();
    for(size_t j = 0; j < p_.getSize(1); ++j)
    {
       for(size_t i = 0; i < p_.getSize(0); ++i)
       {
+         if(isSolid(i,j))
+         {
+            p_(i,j) = 0;
+            continue;
+         }
          p_(i,j) = p_(i,j) - norm;
       }
    }
+   std::cout << "Norm: " << norm << std::endl;
 }
 
 void StaggeredGrid::createRectangle(size_t x1, size_t y1, size_t x2, size_t y2)
