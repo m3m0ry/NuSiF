@@ -28,6 +28,8 @@ FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(
    grid_.u().fill(conf.getRealParameter("U_INIT"));
    grid_.v().fill(conf.getRealParameter("V_INIT"));
    grid_.p().fill(conf.getRealParameter("P_INIT"));
+   grid_.f().fill(0.0);
+   grid_.g().fill(0.0);
 
    //Set boundaries
    north_ = boundaryCondition(NORTH, conf);
@@ -177,8 +179,11 @@ void FluidSimulator::determineNextDT()
    const Array<Real> & v = grid_.v();
 
    if( tau_ <= 0.0 )
+   {
+      WARN("Tau is below 0.0");
       return;
-   Real umax = 0.0;
+   }
+   Real umax = u(0,0);
    for(size_t j = 0; j <= jmax_+1; ++j)
    {
       for(size_t i = 0; i <= imax_; ++i)
@@ -189,7 +194,7 @@ void FluidSimulator::determineNextDT()
       }
    }
 
-   Real vmax = 0.0;
+   Real vmax = v(0,0);
    for(size_t j = 0; j <= jmax_; ++j)
    {
       for(size_t i = 0; i <= imax_+1; ++i)
@@ -200,21 +205,18 @@ void FluidSimulator::determineNextDT()
       }
    }
 
-   Real min1 = (re_ / 2) / ( 1 / (dx*dx) + 1/(dy*dy));
+   //Find min
+   Real min1 = (re_ / 2) * (1/ ( 1 / (dx*dx) + 1/(dy*dy) ) );
    Real min2 = dx / umax;
    Real min3 = dy / vmax;
-   Real min = 0.0;
-   if(min1 < min2)
-      if(min1 < min3)
-         min = min1;
-      else
-         min = min3;
-   else
-      if(min2 < min3)
-         min = min2;
-      else
-         min = min3;
 
+   Real min = min1;
+   if(min > min2)
+      min = min2;
+   if(min > min3)
+      min = min3;
+
+   // Compute finald dt
    dt_ = tau_ * min;
 }
 
@@ -229,7 +231,7 @@ void FluidSimulator::updateVelocities()
    {
       for(size_t i = 1; i <= imax_-1; ++i)
       {
-         if(grid_.isSolid(i,j))
+         if(grid_.isSolid(i,j) || grid_.isSolid(i+1,j))
             continue;
          u(i,j) = F(i,j) - dt_ * grid_.dpdx(i,j);
       }
@@ -239,7 +241,7 @@ void FluidSimulator::updateVelocities()
    {
       for(size_t i = 1; i <= imax_; ++i)
       {
-         if(grid_.isSolid(i,j))
+         if(grid_.isSolid(i,j) || grid_.isSolid(i,j+1))
             continue;
          v(i,j) = G(i,j) - dt_ * grid_.dpdy(i,j);
       }
@@ -261,6 +263,9 @@ void FluidSimulator::composeRHS()
    {
       for(size_t i = 1; i <= imax_; ++i)
       {
+         if(grid_.isSolid(i,j))
+            continue;
+         //TODO direction??
          rhs(i,j) = dt_in * ( ( F(i,j) - F(i-1,j) )*dx_in + ( G(i,j) - G(i,j-1) )*dy_in);
       }
    }
@@ -272,7 +277,7 @@ void FluidSimulator::computeFG()
    Array<Real> & G = grid_.g();
    Array<Real> & u = grid_.u();
    Array<Real> & v = grid_.v();
-   Real re_in = 1.0 / re_;
+   Real reInvert = 1.0 / re_;
 
    for(size_t j = 1; j <= jmax_; ++j)
    {
@@ -291,8 +296,11 @@ void FluidSimulator::computeFG()
       for(size_t i = 1; i <= imax_-1; ++i)
       {
          if(grid_.isSolid(i,j) || grid_.isSolid(i+1,j))
+         {
+            F(i,j) = u(i,j);
             continue;
-         F(i,j) = u(i,j) + dt_* ( re_in * ( grid_.d2udx2(i,j) + grid_.d2udy2(i,j)) - grid_.du2dx(i,j,gamma_) - grid_.duvdy(i,j, gamma_) + gx_);
+         }
+         F(i,j) = u(i,j) + dt_* ( reInvert * ( grid_.d2udx2(i,j) + grid_.d2udy2(i,j)) - grid_.du2dx(i,j,gamma_) - grid_.duvdy(i,j, gamma_) + gx_);
       }
    }
    for(size_t j = 1; j <= jmax_-1; ++j)
@@ -300,8 +308,11 @@ void FluidSimulator::computeFG()
       for(size_t i = 1; i <= imax_; ++i)
       {
          if(grid_.isSolid(i,j) || grid_.isSolid(i,j+1))
+         {
+            F(i,j) = u(i,j);
             continue;
-         G(i,j) = v(i,j) + dt_* ( re_in * ( grid_.d2vdx2(i,j) + grid_.d2vdy2(i,j)) - grid_.duvdx(i,j, gamma_) - grid_.dv2dy(i,j, gamma_) + gy_);
+         }
+         G(i,j) = v(i,j) + dt_* ( reInvert * ( grid_.d2vdx2(i,j) + grid_.d2vdy2(i,j)) - grid_.duvdx(i,j, gamma_) - grid_.dv2dy(i,j, gamma_) + gy_);
       }
    }
 }

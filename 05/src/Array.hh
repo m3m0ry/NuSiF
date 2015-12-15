@@ -135,7 +135,3 @@ inline const T & Array<T>::operator () ( size_t i, size_t j, size_t k ) const
     ASSERT_MSG(i < xSize_ && j < ySize_ && k < zSize_, "Access value too large");
    return array_[i + j * xSize_ + k * xSize_ * ySize_];
 }
-
-// Templates which are supported
-template class Array<Real>;
-template class Array<bool>;
