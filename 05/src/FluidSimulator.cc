@@ -28,6 +28,8 @@ FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(
    grid_.u().fill(conf.getRealParameter("U_INIT"));
    grid_.v().fill(conf.getRealParameter("V_INIT"));
    grid_.p().fill(conf.getRealParameter("P_INIT"));
+   grid_.f().fill(0.0);
+   grid_.g().fill(0.0);
 
    //Set boundaries
    north_ = boundaryCondition(NORTH, conf);
@@ -79,9 +81,12 @@ void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
       determineNextDT();
       refreshBoundaries();
       computeFG();
+      grid_.f().print();
+      grid_.g().print();
       composeRHS();
+      grid_.rhs().print();
+      return;
       solvePoisson();
-      updateVelocities();
       if(i % normFreqency_ == 0)
          normalizePressure();
       if(i % outputInterval_ == 0)
@@ -263,6 +268,7 @@ void FluidSimulator::composeRHS()
       {
          if(grid_.isSolid(i,j))
             continue;
+         //TODO direction??
          rhs(i,j) = dt_in * ( ( F(i,j) - F(i-1,j) )*dx_in + ( G(i,j) - G(i,j-1) )*dy_in);
       }
    }

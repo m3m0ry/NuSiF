@@ -231,3 +231,7 @@ Array<T> Array<T>::operator+ (const T value) const
    }
    return result;
 }
+
+// Templates which are supported
+template class Array<Real>;
+template class Array<bool>;

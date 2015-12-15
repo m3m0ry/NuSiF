@@ -80,6 +80,7 @@ int main( int argc, char** argv )
    else{
       sim.simulateTimeStepCount((unsigned int)filereader.getIntParameter("timesteps"));
    }
+   std::cout << "Pressure:" << std::endl;
    grid.p().print();
 
 
