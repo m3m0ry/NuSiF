@@ -81,11 +81,7 @@ void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
       determineNextDT();
       refreshBoundaries();
       computeFG();
-      grid_.f().print();
-      grid_.g().print();
       composeRHS();
-      grid_.rhs().print();
-      return;
       solvePoisson();
       if(i % normFreqency_ == 0)
          normalizePressure();
