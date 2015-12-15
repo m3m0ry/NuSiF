@@ -163,8 +163,7 @@ bool SORSolver::solve( StaggeredGrid & grid )
    for(unsigned int nIter = 0; nIter < itermax_; ++nIter)
    {
       // Solve pressure
-      //sorRedBlack(grid);
-      sor(grid);
+      sorRedBlack(grid);
 
       // Copy paste boundaries
       updateBoundaries(grid);

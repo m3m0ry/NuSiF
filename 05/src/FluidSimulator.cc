@@ -83,6 +83,7 @@ void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
       computeFG();
       composeRHS();
       solvePoisson();
+      updateVelocities();
       if(i % normFreqency_ == 0)
          normalizePressure();
       if(i % outputInterval_ == 0)
