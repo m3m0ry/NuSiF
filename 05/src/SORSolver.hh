@@ -44,6 +44,7 @@ private:
    Real eps_; // Epsilon
    Real omg_; // Omega
    unsigned int epsFrequency_;
+   unsigned int normFreqency_;
 };
 
 

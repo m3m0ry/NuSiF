@@ -84,7 +84,6 @@ class FluidSimulator
 		size_t imax_;
 		size_t jmax_;
 
-      unsigned int normFreqency_;
 
       VTKWriter writer_;
       unsigned int outputInterval_;

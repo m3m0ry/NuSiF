@@ -18,6 +18,9 @@ SORSolver::SORSolver ( const FileReader & configuration )
    test = configuration.getIntParameter("checkfrequency");
    CHECK_MSG(test >= 0, "Checkfrequency is less then 0");
    epsFrequency_ = (unsigned int) test;
+   CHECK_MSG(test >= 0, "Normalization frequency is lesser then 0");
+   normFreqency_ = (unsigned) test;
+   test = configuration.getIntParameter("outputinterval");
 }
 
 void SORSolver::sor(StaggeredGrid & grid)
@@ -167,6 +170,9 @@ bool SORSolver::solve( StaggeredGrid & grid )
 
       // Copy paste boundaries
       updateBoundaries(grid);
+
+      if(nIter % normFreqency_ == 0)
+         grid.normalizePressure();
 
       if(nIter % epsFrequency_ == 0)
       {

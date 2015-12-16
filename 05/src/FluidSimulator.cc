@@ -18,9 +18,6 @@ FluidSimulator::FluidSimulator( const FileReader & conf ) : grid_(StaggeredGrid(
    jmax_ = (size_t) test;
    tau_ = conf.getRealParameter("safetyfactor");
    test = conf.getIntParameter("normalizationfrequency");
-   CHECK_MSG(test >= 0, "Normalization frequency is lesser then 0");
-   normFreqency_ = (unsigned) test;
-   test = conf.getIntParameter("outputinterval");
    CHECK_MSG(test >= 0, "Ouput interval is lesser then 0");
    outputInterval_ = (unsigned) test;
 
@@ -65,8 +62,6 @@ void FluidSimulator::simulate( Real duration )
       composeRHS();
       solvePoisson();
       updateVelocities();
-      if(i % normFreqency_ == 0)
-         normalizePressure();
       if(i % outputInterval_ == 0)
          writer_.write();
       t += dt_;
@@ -84,8 +79,6 @@ void FluidSimulator::simulateTimeStepCount( unsigned int nrOfTimeSteps )
       composeRHS();
       solvePoisson();
       updateVelocities();
-      if(i % normFreqency_ == 0)
-         normalizePressure();
       if(i % outputInterval_ == 0)
          writer_.write();
    }

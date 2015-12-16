@@ -87,8 +87,12 @@ void StaggeredGrid::normalizePressure()
          }
          p_(i,j) = p_(i,j) - norm;
       }
+      //TODO pressure on edges???
+      p_(0,0) = 0.0;
+      p_(0,p_.getSize(1)-1) = 0.0;
+      p_(p_.getSize(0)-1,0) = 0.0;
+      p_(p_.getSize(0)-1,p_.getSize(1)-1) = 0.0;
    }
-   std::cout << "Norm: " << norm << std::endl;
 }
 
 void StaggeredGrid::createRectangle(size_t x1, size_t y1, size_t x2, size_t y2)
