@@ -9,7 +9,7 @@ Q         ?= @
 
 #DO NOT EDIT BELOW
 include $(MAKE_DIR)/include_$(TAG).mk
-INCLUDES  += -I./src/includes
+INCLUDES  += -I./include
 
 VPATH     = $(SRC_DIR)
 ASM       = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.s,$(wildcard $(SRC_DIR)/*.c))
