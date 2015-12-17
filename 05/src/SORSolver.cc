@@ -18,9 +18,6 @@ SORSolver::SORSolver ( const FileReader & configuration )
    test = configuration.getIntParameter("checkfrequency");
    CHECK_MSG(test >= 0, "Checkfrequency is less then 0");
    epsFrequency_ = (unsigned int) test;
-   CHECK_MSG(test >= 0, "Normalization frequency is lesser then 0");
-   normFreqency_ = (unsigned) test;
-   test = configuration.getIntParameter("outputinterval");
 }
 
 void SORSolver::sor(StaggeredGrid & grid)
@@ -136,7 +133,7 @@ Real SORSolver::computeResiduum(StaggeredGrid & grid)
 
    // Compute residuum
    Real r = 0.0;
-   #pragma omp parallel for reduction(+:r)
+   //#pragma omp parallel for reduction(+:r)
    for(size_t j = 1; j <= jmax; ++j)
    {
       for(size_t i = 1; i <= imax; ++i)
@@ -147,6 +144,8 @@ Real SORSolver::computeResiduum(StaggeredGrid & grid)
          Real rTmp2 = (grid.p(i+1,j, EAST) + grid.p(i-1,j, WEST))*dx2Invert;
          Real rTmp3 = (grid.p(i,j+1, NORTH) + grid.p(i,j-1, SOUTH))*dy2Invert;
          Real rTmp4 = rTmp1 + rhs(i,j) - (rTmp2 + rTmp3);
+         //Real rTmp4 = rhs(i,j) - ( ( (grid.p(i+1,j,EAST) - 2.0 * p(i,j) + grid.p(i-1,j,WEST))/(dx*dx)) +
+         //      ( (grid.p(i,j+1,NORTH) - 2.0 * p(i,j) + grid.p(i,j-1,SOUTH))/(dy*dy)));
          r += rTmp4 * rTmp4;
       }
    }
@@ -170,9 +169,6 @@ bool SORSolver::solve( StaggeredGrid & grid )
 
       // Copy paste boundaries
       updateBoundaries(grid);
-
-      if(nIter % normFreqency_ == 0)
-         grid.normalizePressure();
 
       if(nIter % epsFrequency_ == 0)
       {

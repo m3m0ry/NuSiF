@@ -15,9 +15,10 @@ const char * RealTypeToString<double>::str = "double";
 
 
 
-VTKWriter::VTKWriter(  const StaggeredGrid & grid, const std::string & basename, bool writePressure, bool writeVelocity )
+VTKWriter::VTKWriter(  const StaggeredGrid & grid, const std::string & basename, bool writePressure, bool writeVelocity, bool writeFluid )
       : grid_(grid), baseName_( basename ),
-        writeVelocity_(writeVelocity), writePressure_(writePressure), counter_ (0 )
+        writeVelocity_(writeVelocity), writePressure_(writePressure), counter_ (0 ),
+        writeFluid_(writeFluid)
 {
    ASSERT_MSG( writePressure_ || writeVelocity_ , "VTK Writer has to write at least velocity or pressure" );
 
@@ -67,6 +68,17 @@ void VTKWriter::write()
       for ( size_t j = 0; j < grid_.ySize (); ++j )
          for ( size_t i = 0; i < grid_.xSize (); ++i )
             fileStream << grid_.p()( i+1, j+1 ) << "\n";
+   }
+
+
+   if ( writeFluid_ )
+   {
+      fileStream << "SCALARS fluid " << RealTypeToString<Real>::str << " 1\n";
+      fileStream << "LOOKUP_TABLE default\n";
+
+      for ( size_t j = 0; j < grid_.ySize (); ++j )
+         for ( size_t i = 0; i < grid_.xSize (); ++i )
+            fileStream << grid_.isFluids()( i+1, j+1 ) << "\n";
    }
 
    ++counter_;

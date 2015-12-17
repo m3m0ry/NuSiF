@@ -87,6 +87,7 @@ class FluidSimulator
 
       VTKWriter writer_;
       unsigned int outputInterval_;
+      unsigned int normFreqency_;
 
 };
 

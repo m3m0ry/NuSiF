@@ -43,7 +43,7 @@ file(GLOB SRC_FILES "src/*.cc")
 # Set include folder for headers
 include_directories(include)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wno-format")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wno-format -g")
 #set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wall -pedantic -Wextra -Wno-format")
 
 #---------
@@ -55,7 +55,7 @@ add_executable(${PROJECT_NAME} ${SRC_FILES})
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 # Compile flags
-target_compile_options(${PROJECT_NAME} PUBLIC "-O3")
+target_compile_options(${PROJECT_NAME} PUBLIC "-O0")
 
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)

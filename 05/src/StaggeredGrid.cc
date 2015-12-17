@@ -82,16 +82,10 @@ void StaggeredGrid::normalizePressure()
       {
          if(isSolid(i,j))
          {
-            p_(i,j) = 0;
             continue;
          }
          p_(i,j) = p_(i,j) - norm;
       }
-      //TODO pressure on edges???
-      p_(0,0) = 0.0;
-      p_(0,p_.getSize(1)-1) = 0.0;
-      p_(p_.getSize(0)-1,0) = 0.0;
-      p_(p_.getSize(0)-1,p_.getSize(1)-1) = 0.0;
    }
 }
 

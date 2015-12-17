@@ -42,7 +42,7 @@ int main( int argc, char** argv )
             Real y1 = filereader.getRealParameter("RectangleY1") / grid.dy();
             Real x2 = filereader.getRealParameter("RectangleX2") / grid.dx();
             Real y2 = filereader.getRealParameter("RectangleY2") / grid.dy();
-            grid.createRectangle((size_t)x1, (size_t)y1, (size_t)x2, (size_t)y2);
+            grid.createRectangle((size_t)x1, (size_t)y1, (size_t)x2, (size_t)y2-1);
          }
       }
       else{
@@ -59,6 +59,7 @@ int main( int argc, char** argv )
    }
    int imax = filereader.getIntParameter("imax");
    int jmax = filereader.getIntParameter("jmax");
+   Array<Real> & u = grid.u();
    GrayScaleImage gr = GrayScaleImage((size_t)imax, (size_t)jmax);
    for(size_t j = 0; j < (size_t)jmax; ++j){
       for(size_t i = 0; i < (size_t)imax; ++i){
@@ -69,9 +70,12 @@ int main( int argc, char** argv )
          else{
             element = 0;
          }
+         if(j < 8)
+            u(i,j) = 0.0;
       }
    }
    gr.save("output.png");
+
 
 
    if(filereader.isRealParameter("time")){

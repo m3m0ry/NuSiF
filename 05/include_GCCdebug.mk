@@ -8,7 +8,7 @@ ANSI_CFLAGS += -std=c++0x
 ANSI_CFLAGS += -pedantic
 ANSI_CFLAGS += -Wextra
 
-CFLAGS   = -O3 -Wno-format  -Wall $(ANSI_CFLAGS)
+CFLAGS   = -Wno-format  -Wall $(ANSI_CFLAGS)
 CXXFLAGS = $(CFLAGS)
 FCFLAGS  = 
 CPPFLAGS = -std=c++0x
