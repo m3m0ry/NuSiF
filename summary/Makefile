@@ -77,7 +77,7 @@ onlysources.tex	?= summary.tex
 #onlysources.eps	?=
 #
 # If you list files here, they will be treated as _include_ files
-includes.tex		?= introduction.tex
+includes.tex		?= introduction.tex mathematicalDescription.tex
 #includes.lhs		?=
 #includes.tex.sh	?=
 #includes.tex.pl	?=
@@ -94,7 +94,7 @@ includes.tex		?= introduction.tex
 #
 # If you list files or wildcards here, they will *not* be cleaned - default is
 # to allow everything to be cleaned.
-neverclean		?= *.pdf
+#neverclean		?= *.pdf
 #
 # A space-separated list of extra files to clean - you can specify this in the
 # .ini files. Make sure you escape them properly, if that's needed!

@@ -1,0 +1,197 @@
+\section*{NuSiF on Stokes equation}
+Two simplifications:
+\begin{enumerate}
+	\item Stationary solution $\frac{\delta u}{\delta t} = 0$
+	\item Neglect inertial terms, i.e. $Re = 0$
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\[ Re( \frac{\delta u}{\delta t} + u \cdot \nabla u) + \nabla p - \nabla u = 0 \Rightarrow \nabla p - \nabla u = f\]
+	\[ \nabla u = 0 \]
+	\renewcommand{\thefigure}{S0}
+	\caption{Navier-Stokes equations}
+	\label{fig:stokes-ns}
+\end{figure}
+ In more general form:
+ \begin{figure}[H]
+	\centering
+	\[ - div T(\vec{u},p) = \vec{f} \text{ in } \Omega \]
+	\[ div \vec{u} = 0 \]
+	\renewcommand{\thefigure}{S1}
+	\caption{Momentum equation mass conservation}
+	\label{fig:stokes-mass}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\[ T(\vec{u},p) = 2 \vec{v} D(\vec{u}) - pI \]
+	\renewcommand{\thefigure}{S2}
+	\caption{Cauchy stress tensor}
+	\label{fig:cauchy}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\[ D(\vec{u}) = \frac{1}{2} (\vec{v}\vec{u}+ (\vec{v}\vec{u})^T) \]
+	\renewcommand{\thefigure}{S3}
+	\caption{Symmetric velocity gradient}
+	\label{fig:symm-vel-grad}
+\end{figure}
+
+Typical application
+
+$\vec{f} = $ boundary forces, e.g. as determined by a temperature field
+
+$v = v(temp, p, \dots) $ nonlinear viscosity
+
+$\Rightarrow$ slow geophysical flows, i.e. glaciers, Earthmantle convention
+
+$\Rightarrow$ microfluidics
+
+When $v = \text{const}$, the system simplifies to:
+
+\begin{figure}[H]
+	\centering
+	\[ -v \Delta \vec{u} +  \nabla p = \vec{f}\]
+	\[ div \vec{u} = 0\]  %TODO both in \Omega
+	\renewcommand{\thefigure}{S4}
+	\caption{Simplified system}
+	\label{fig:disc-freesplipb}
+\end{figure}
+
+In $\mathds{R}^2$, typical solutions can be constructed using the stream function (see NuSiF book, Chapter 4) %TODO ref
+\begin{figure}[H]
+	\centering
+	\[ \frac{\delta \psi}{\delta x} = -v; \frac{\delta }{\delta y} = u \]
+	\renewcommand{\thefigure}{S5}
+	\caption{}
+	\label{fig:disc-freesplipb}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\[ \psi \text{ scalar, since } \frac{\delta ^2 \psi}{\delta x \delta y} = \frac{\delta^2 \psi}{\delta y \delta x}\]
+	\renewcommand{\thefigure}{S6}
+	\caption{}
+	\label{fig:disc-freesplipb}
+\end{figure}
+it follows that automatically $\frac{\delta u}{\delta x} + \frac{\delta v}{\delta y} = 0$
+
+Example: $\Omega = (0, \pi)^2$
+\begin{figure}[H]
+	\centering
+	\[ \phi = \sin(x) \cdot \sin(y) \]
+	\[ - \frac{\delta \phi}{\delta x} = v = -\cos(x)\sin(y)\]
+	\[ \frac{\delta \phi}{\delta y} = u = \sin(x)\cos(y)\]
+	\renewcommand{\thefigure}{S7}
+	\caption{Example}
+	\label{fig:disc-freesplipb}
+\end{figure}
+%TODO picture SP1
+
+\begin{figure}[H]
+	\centering
+	\[ - \Delta u = 2\sin(x) \cos(y) = f_x \]
+	\[ - \Delta v = -2 \cos(x) \sin(y) = f_y \]
+	\renewcommand{\thefigure}{S8}
+	\caption{Checking for stokes equation}
+	\label{fig:disc-freesplipb}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\[ p = 0; \text{ then } - \Delta \vec{u} + \nabla p = f; \text{div } u = 0\]
+	\renewcommand{\thefigure}{S9}
+	\caption{}
+	\label{fig:disc-freesplipb}
+\end{figure}
+
+The same flow field would result if we set $f_x = 0$ and adjust $p$ just that
+\begin{figure}[H]
+	\centering
+	\[ \frac{\delta p}{\delta x} = 2 \sin(x) \cos(y) \Rightarrow p = -2 \cos(x)\cos(y) + \text{ const} \]%last eq in box
+	\[ \Rightarrow \frac{\delta p}{\delta y} = -2 \cos(x) \sin(y) \Rightarrow f_y = -4 \cos(x) \sin(y)\]%TODO  last eq in box
+	\renewcommand{\thefigure}{S10}
+	\caption{}
+	\label{fig:disc-freesplipb}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\[ \Rightarrow \frac{\delta p}{\delta y} = -2 \cos(x) \sin(y) \Rightarrow f_y = -4 \cos(x) \sin(y)\]%TODO  last eq in box
+	\renewcommand{\thefigure}{S11}
+	\caption{}
+	\label{fig:disc-freesplipb}
+\end{figure}
+
+Thus starting from S5 %TODO ref
+the $\square$es define a solution of the Stokes system, one can see that the analogous construction would work for:
+\begin{figure}[H]
+	\centering
+	\[ \phi_{k,l} = \sin(kx) \cdot \sin(ly)\]
+	\renewcommand{\thefigure}{S12}
+	\caption{}
+	\label{fig:disc-freesplipb}
+\end{figure}
+With appropriate factors depending on $k$ and $l$. We can expand solutions into
+\begin{figure}[H]
+	\centering
+	\[ \psi = \sum_k \sum_l \mu_{k,l} \psi_{k,l}(x,y)\]
+	\renewcommand{\thefigure}{S13}
+	\caption{}
+	\label{fig:disc-freesplipb}
+\end{figure}
+
+\subsection*{Discretization of the stoke system with a staggered grid (MAC = Marker-and-Cell)}
+To discretize:
+$- \Delta u$%} 5 point stencil -> \Delta_h
+$- \Delta v$%}
+and boundary conditions
+
+$\Delta p \text{ central differencis } \frac{\delta p}{\delta x}, \frac{\delta p}{\delta y} \rightarrow \Delta_h p$
+
+$\text{div }\vec{u} = u_{i+1,j} - u_{i,j} +v_{i,j+1} - v_{i,j} = 0 \rightarrow \Delta_h^T \vec{u} = 0$
+
+\begin{figure}[H]
+	\centering
+	\[ \left[ \begin{matrix}
+	-\Delta_h & 0 & \Delta_{h,x} \\
+	0 & -\Delta_h & \Delta_{h,y} \\
+	\Delta_{h,x}^T & \Delta_{h,y}^T 0\\
+	\end{matrix} \right] 
+	\left[
+	\begin{matrix}
+	u_h \\
+	v_h \\
+	p_h\\
+	\end{matrix} \right] = \left[ \begin{matrix}
+	f_x \\ f_y \\ 0 \\
+	\end{matrix} \right] \]%TODO first matrix is A_h
+	\renewcommand{\thefigure}{S14} %TODO note that b.cs must be incorporated appropriately
+	\caption{}
+	\label{fig:disc-stokes}
+\end{figure}
+\ref{fig:disc-stokes} is a symmetric, linear system with a saddle point structure. It has $O(i_{max}\cdot j_{max}\cdot 3)$ unknowns, but it has positive and negative eigenvalues $\rightarrow$ indefinite, corresponding to the solution in $p$ being determined only up to a constant.
+
+The same system could be obtained from a constrained optimalization problem
+\[ E(u_h, v_h) = \frac{1}{2}u_h^T(-\Delta_h)u_h + \frac{1}{2}v_h^T(-\Delta_h)v_h - f_x^T u_h - f_y^T v_h\Rightarrow \text{minimalization porblem}\]
+\[ \Delta_{h,x}^T \bigodot u_h + \Delta_{h,y} \bigodot v_h = 0\] (discrete divergencefeeness)%TODO fette punkte
+
+Introduce largrange multiplier $p$ and minimize
+\[ E(u_h,v_h) + p(\Delta_{h,x}^T u_h + \Delta_{h,y} v_h) = \text{ min} \]
+$\Rightarrow$ \ref{fig:disc-stokes}
+
+As solver for \ref{fig:disc-stokes} we cannot use iterative solvers such as Gauss-Seidel,SOR, Jacobi because they divide with the diagonal and there is a $0$ at some place. Conjugate gradients need positive definites. Direct methods are too expensive (except possibly FFT-based ones). Iterative methods that work are
+\begin{enumerate}
+	\item Row projection methods: Kaczmarz method, where $a_i$ is the transpose of the i-th row of $A_h$ \\
+	it has slow convergence %TODO refactor
+\begin{figure}[H]
+	\centering
+	\[ z_h^{k+1} = z_h^k + \frac{f_h - a_i z_h^k}{\left\lVert a_i \right\rVert^2}a_i \]
+	\renewcommand{\thefigure}{S16}
+	\caption{Kaczmarc method}
+	\label{fig:disc-freesplipb}
+\end{figure}
+
+
+	\item GMRES ( see assignment) or MINRES (two Krylow space methods for non-SPD matrices)
+	
+	\item %TODO next week
+\end{enumerate}

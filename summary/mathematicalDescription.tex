@@ -1,0 +1,141 @@
+\section{Mathematical description of flows}
+\begin{itemize}
+	\item laminar
+	\item viscious
+	\item incompressible
+\end{itemize}
+\subsection{Mathematical Model}
+\begin{itemize}
+	\item Spatial domain: $\Omega \subset  \mathds{R}^2$ or $\Omega \subset  \mathds{R}^3$
+	\item Time $t \in [0, t_{end}]$
+	\item Fluid is characteristic by:
+	\begin{itemize}
+		\item Velocity: $\vec{u} : \Omega \times [0, t_{end}] \rightarrow \mathds{R}^2$
+		\item Pressure: $p : \Omega \times [0, t_{end}] \rightarrow \mathds{R}$
+		\item Density: $ \varrho : \Omega \times [0, t_{end}] \rightarrow \mathds{R}$
+		\item[$\rightarrow$] Incompressible: $\varrho(\vec{x},t) = \varrho_\infty = \text{const}$
+	\end{itemize}
+\end{itemize}
+Governing equations, a system of partial differential equations (Navier-Stokes eq.) are (~\ref{fig:momentum} and ~\ref{fig:cont-eq}):
+
+\begin{figure}[H]
+	\centering
+	\[\frac{\delta \vec{u}}{\delta t} + ( \vec{u} \cdot \text{grad}) \vec{u} + \text{grad} p = \frac{1}{Re} \Delta \vec{u} + \vec{g}\]
+	\renewcommand{\thefigure}{2.1.a}
+    \caption{Momentum Equation}
+	\label{fig:momentum}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\[\text{div} \vec{u} = 0\]
+	\renewcommand{\thefigure}{2.1.b}
+    \caption{Continuity Equation}
+	\label{fig:cont-eq}
+\end{figure}
+
+\begin{itemize}
+	\item grad $p := (\frac{\delta p}{\delta x},\frac{\delta p}{\delta y})^T$
+	\item div $\vec{u} := \frac{\delta u}{\delta x} + \frac{\delta v}{\delta y}$
+	\item $\vec{u} \text{ grad} := \left( \begin{pmatrix}
+		u \\
+		v
+	\end{pmatrix}
+	\cdot \begin{pmatrix}
+		\frac{\delta}{\delta x} \\
+		\frac{\delta}{\delta y}
+	\end{pmatrix}\right)
+	= (u \cdot \frac{\delta}{\delta x} + v \frac{\delta}{\delta y})$
+	\item $(\vec{u} \text{ grad} ) \vec{u} = \left( u \cdot \frac{\delta}{\delta x} + v \frac{\delta}{\delta y}\begin{pmatrix}
+		u \\
+		v
+	\end{pmatrix}\right) = \begin{pmatrix}
+		u \frac{\delta u}{\delta x} & v \frac{\delta u}{\delta y}\\
+		u \frac{\delta v}{\delta x} & v \frac{\delta v}{\delta y}
+	\end{pmatrix}$
+	\item $Re \in \mathds{R} \Rightarrow$ Reynolds number
+	\item $\vec{g} \in \mathds{R} \Rightarrow$ Body forces (i.e. gravity)
+	\item $\vec{x} = \begin{pmatrix}
+	x\\
+	y
+	\end{pmatrix}; \vec{u} = \begin{pmatrix}
+	u\\
+	v
+	\end{pmatrix}; \vec{p} = \begin{pmatrix}
+	p_x \\
+	p_y
+	\end{pmatrix}$
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\[ \frac{\delta u}{\delta t} + \frac{\delta p}{\delta x} = \frac{1}{Re} \left( \frac{\delta^2 u}{\delta x^2} + \frac{\delta^2 u}{\delta y^2}\right) - \frac{\delta (u^2)}{\delta x} - \frac{\delta (uv)}{\delta y} + g_x\]
+    \renewcommand{\thefigure}{2.2a}
+	\caption{Momentum Equation u}
+	\label{fig:momentuma}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\[ \frac{\delta v}{\delta t} + \frac{\delta p}{\delta y} = \frac{1}{Re} \left( \frac{\delta^2 v}{\delta x^2} + \frac{\delta^2 v}{\delta y^2}\right) - \frac{\delta (uv)}{\delta x} - \frac{\delta (v^2)}{\delta y} + g_y\]
+    \renewcommand{\thefigure}{2.2b}
+	\caption{Momentum Equation v}
+	\label{fig:momentumb}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\[ \frac{\delta u}{\delta x} + \frac{\delta v}{\delta y}\]
+    \renewcommand{\thefigure}{2.2c}
+	\caption{Continuity Equation}
+	\label{fig:cont}
+\end{figure}
+
+
+At $t = 0$ initial conditions $u(t=0, x,y) = u_0(x,y)$ and $v(t=0,x,y) = v_0(x,y)$ \textbf{must} satisfy \ref{fig:cont}.
+
+
+For all times along the boundary of the domain $\Omega$ we have \textbf{boundary condition}: "initial-boundary value problem".
+
+To formulate the boundary condition, we introduce $\varphi_n$ velocity component nominal to the boundary and $\varphi_t$ velocity component tangential to the boundary. When the boundary is aligned with the coordinate direction: 
+
+
+$\left.\begin{matrix}
+\varphi_n = u\\
+\varphi_t = v
+\end{matrix} \right\rbrace$ vertical boundary $\left\lbrace \frac{\delta \varphi_n}{\delta n} = \frac{\delta u}{\delta x},\frac{\delta \varphi_t}{\delta n} = \frac{\delta v}{\delta x} \right\rbrace$
+
+$\left.\begin{matrix}
+\varphi_n = v\\
+\varphi_t = u
+\end{matrix} \right\rbrace$ vertical boundary $\left\lbrace \frac{\delta \varphi_n}{\delta n} = \frac{\delta v}{\delta y},\frac{\delta \varphi_t}{\delta n} = \frac{\delta u}{\delta y} \right\rbrace$
+
+
+The following types of boundary conditions occur:
+\begin{enumerate}
+	\item \textit{No-slip condition}: No fluid penetrates the boundary and the fluid is at rest there
+	\[ \varphi_n(x,y) = 0, \varphi_t(x,y)=0\]
+	\item \textit{Free-slip condition}: No fluid penetrates the boundary. There are no frictional losses at the boundary.
+	\[ \varphi_n (x,y)= 0, \frac{\delta \varphi_t(x,y)}{\delta n} = 0 \]
+	$\rightarrow$ useful along alined line of symmetry
+	\item \textit{Inflow condition}: Both velocity components are given
+	\[ \varphi_n(x,y) = \varphi_n^0, \varphi_t(x,y) = \varphi_t^0\]
+	\item \textit{Outflow condition}: Neither velocity component changes in the direction normal to the boundary
+	\[ \frac{\delta \varphi_n(x,y)}{\delta n} = 0, \frac{\delta \varphi_t(x,y)}{\delta n} = 0\]
+	\item \textit{Periodic boundary condition}: For problems which are periodic with a certain period of "a" in on of the coordinate directions (e.g. the flow over modulating surface), computation can be restricted to one period. Velocities and pressure must coincide at the endpoints at the interval. Periodicity in x-direction $\left.\begin{matrix}
+	x = 0\\
+	x=a
+	\end{matrix}\right\rbrace$ boundary
+	\[\varphi_n (0, y) = \varphi_n(a,y)\]
+	\[ \varphi_t(0,y) = \varphi_t(a,y)\]
+	\[ p (0, y) = p(a,y)\]
+	
+\end{enumerate}
+
+If the velocity components (rather then the derivatives) are given along the entire boundary, then
+\[ \int_\Gamma \begin{pmatrix}
+u
+v
+\end{pmatrix} \cdot \vec{n} ds = 0\]
+in the Navier-Stoke equation the pressure is only determined up to a constant.
+
+\subsection{Derivation fo NS equation} %TODO itemization?
+%TODO abschreiben
+
