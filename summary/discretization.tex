@@ -548,7 +548,49 @@ Where $F$ and $G$ are discretized at the right/upper edge of the cell, respectiv
 \end{figure}
 
 \subsubsection{Poisson equation for pressure}
-%TODO 
+Discrete form of ~\ref{fig:pressure-eq}
+\begin{figure}[H]
+	\centering
+   \[ \frac{p_{i+1,j}^{(n+1)} - 2p_{i,j}^{(n+1)} + p_{i-1,j}^{(n+1)}}{(\delta x)^2} + \frac{p_{i,j+1}^{(n+1)} - 2p_{i,j}^{(n+1)} + p_{i,j-1}^{(n+1)}}{(\delta x)^2} = \frac{1}{\delta t} \left( \frac{F_{i,j}^{(n)} - F_{i-1,j}^{(n)}}{\delta x} - \frac{G_{i,j}^{(n)} - G_{i,j-1}^{(n)}}{\delta y}\right) \]
+\[ for \begin{cases}i = 1,\dots,i_{max}\\ j = 1,\dots,j_{max} \end{cases} \]
+	\renewcommand{\thefigure}{3.38}
+	\caption{Discrete Pressure computation}
+	\label{fig:disc-p}
+\end{figure}
+
+For the lefthand side of ~\ref{fig:disc-p} we need 
+$\begin{Bmatrix}
+   p_{0.j}, p_{i_{max},j} &\text{for } j=1,\dots,j_{max} \\
+   p_{i.0}, p_{i,j_{max}}  & \text{for } i=1,\dots,i_{max}\\
+\end{Bmatrix}$
+as boundary values and to compute the righthand side
+$\begin{Bmatrix}
+   F_{0.j},F_{i_{max},j} & \text{for } j = 1,\dots,j_{max}\\
+   G_{i,0},G_{i,j_{max}} & \text{for } i = 1,\dots,i_{max}\\
+\end{Bmatrix}$
+whih are so far unspecified.\\
+
+We use the discrete form of the boundary condition:
+\begin{figure}[H]
+	\centering
+   \[ \frac{p_{i+1,j}^{(n+1)} - p_{i,j}^{(n+1)}}{\delta x} n_1 + \frac{p_{i,j+1}^{(n+1)} - p_{i,j}^{(n+1)}}{\delta x} n_2 = \frac{1}{\delta t} \left[ \left( u_{i,j}^{(n+1)} - F_{i,j}^{(n)} \right) n_1 + \left(v_{i,j}^{(n+1)} - G_{i,j}^{(n)}\right) n_2 \right] \]
+	\renewcommand{\thefigure}{3.39}
+	\caption{Discrete Boundary Condition}
+	\label{fig:disc-pboundary}
+\end{figure}
+
+\paragraph{Example} Left boundary: $\vec{n} = \begin{pmatrix} -1 \\ 0 \end{pmatrix}$, so we get $(i = 0)$
+   \[ \frac{p_{1,j}^{(n+1)} - p_{0,j}^{(n+1)}}{\delta x} (-1) = - \frac{1}{\delta t} \left( u_{0,j}^{(n+1)} -F_{0,j}^{(n)} \right) (-1) \]
+
+This can be inserted into the discrete pressure equation ~\ref{fig:disc-p} and we get for $i = 1$:
+\[ \frac{p_{2,j}^{(n+1)} - p_{1,j}^{(n+1)}}{(\delta x)^2} + \frac{p_{1,j+1}^{(n+1)} - 2 p_{1,j}^{(n+1)} + p_{i,j-1}^{(n+1)}}{(\delta y)^2} = \frac{1}{\delta t} \left[ \frac{F_{1,j}^{(n)} - u_{0,j}^{(n+1)}}{\delta x} + \frac{G_{1,j}^{(n)} - G_{1,j-1}^{(n)}}{\delta y}\right] \]
+
+$\Rightarrow$ This does no depend on $F_{0.j}$, hence we can choose an arbitrary value. Simplest choise: $F_{0,j}^{(n)} = u_{0.j}^{(n+1)} \Rightarrow p_{0,j}^{(n+1)} = p_{1,j}^{(n+1)}$. These are homogeneus Neumann boundary conditions indiscrete from.\\
+
+Other boundaries treated analogysly $\Rightarrow$
+%TODO
+
+
 
 \subsubsection{Stability Criterium}
 %TODO 
