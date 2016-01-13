@@ -4,6 +4,8 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}
+\usepackage{graphicx}
+
 
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
@@ -12,7 +14,7 @@
 
 \title{Numerical Simulation of Fluids - Assignment 06}
 
-\author{Jan H\"onig \\ \texttt{jan.hoenig@fau.de}}
+\author{Jan H\"onig}
 
 
 \date{\today}
@@ -57,6 +59,63 @@ Continuity equation:
 
 $ \frac{u_{i+1,j} - u_{i,j}}{\partial x} + \frac{v_{i,j+1} - v_{i,j}}{\partial y} = 0 $
 
+\section{Task 2 (Programming)}
+
+\subsection{a) (with b) and c))}
+
+Matrix is in file "matrix.txt"
+\subsection{e)}
+
+\includegraphics[width=\textwidth]{stokes.png}
+
+
+\section{Task 3 (Theory)}
+
+\[
+   \begin{pmatrix}
+      A & B \\
+      B^T & 0 \\
+   \end{pmatrix} \cdot \begin{pmatrix}
+      u\\
+      v\\
+   \end{pmatrix}  = \begin{pmatrix}
+      g\\
+      0\\
+   \end{pmatrix}
+   \]
+\[
+   \begin{pmatrix}
+      I & 0\\
+      B^T A^{-1} & I \\
+   \end{pmatrix}
+   \begin{pmatrix}
+      A & B \\
+      B^T & 0 \\
+   \end{pmatrix} \cdot \begin{pmatrix}
+      u\\
+      v\\
+   \end{pmatrix}  = 
+   \begin{pmatrix}
+      I & 0\\
+      B^T A^{-1} & I \\
+   \end{pmatrix}
+   \begin{pmatrix}
+      g\\
+      0\\
+   \end{pmatrix}
+   \]
+\[
+   \begin{pmatrix}
+      A & B \\
+      0 & B^TA{-1}B \\
+   \end{pmatrix} \cdot \begin{pmatrix}
+      u\\
+      v\\
+   \end{pmatrix}  = \begin{pmatrix}
+      g\\
+      B^TA^{-1}g\\
+   \end{pmatrix}
+   \]
 
 
 
