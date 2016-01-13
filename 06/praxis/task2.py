@@ -76,7 +76,7 @@ def constructM(imax, jmax):
             nhx[pos(i,j,imax+1),pos(i+1,j,imax+2)] = 1
 
     #print("nhx:")
-    print(nhx)
+    #print(nhx)
 
 
     nhy = np.zeros(((imax+2)*(jmax+1),(imax+2)*(jmax+2)))
@@ -182,7 +182,7 @@ def main(argv):
     #print(u)
     #print("---")
     #print("---")
-    print(v)
+    #print(v)
     #print("---")
     #print("---")
     #print(p)
