@@ -143,8 +143,8 @@ def VTKwrite(u,v,p,imax,jmax,fileName="output.vtk"):
     f.write("VECTORS velocity double\n" )
     for j in range(0,jmax):
         for i in range(0,imax):
-            uS = 0.5 * (u[i,j] + u[i+1,j])
-            vS = 0.5 * (v[i,j] + v[i,j+1])
+            uS = 0.5 * (u[i,j+1] + u[i+1,j+1])
+            vS = 0.5 * (v[i+1,j] + v[i+1,j+1])
             f.write(str.format("{0:.3f}",uS) + " " + str.format("{0:.3f}",vS) + " 0\n")
     f.write("\n")
 
@@ -182,7 +182,7 @@ def main(argv):
     #print(u)
     #print("---")
     #print("---")
-    #print(v)
+    print(v)
     #print("---")
     #print("---")
     #print(p)
