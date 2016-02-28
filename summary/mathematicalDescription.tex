@@ -44,25 +44,26 @@ Governing equations, a system of partial differential equations (Navier-Stokes e
 		\frac{\delta}{\delta x} \\
 		\frac{\delta}{\delta y}
 	\end{pmatrix}\right)
-	= (u \cdot \frac{\delta}{\delta x} + v \frac{\delta}{\delta y})$
-	\item $(\vec{u} \text{ grad} ) \vec{u} = \left( u \cdot \frac{\delta}{\delta x} + v \frac{\delta}{\delta y}\begin{pmatrix}
+	= (u \frac{\delta}{\delta x} + v \frac{\delta}{\delta y})$
+\item $(\vec{u} \text{ grad} ) \vec{u} = \left( u \frac{\delta}{\delta x} + v \frac{\delta}{\delta y}\right)
+   \begin{pmatrix}
 		u \\
 		v
-	\end{pmatrix}\right) = \begin{pmatrix}
+	\end{pmatrix} = \begin{pmatrix}
 		u \frac{\delta u}{\delta x} & v \frac{\delta u}{\delta y}\\
 		u \frac{\delta v}{\delta x} & v \frac{\delta v}{\delta y}
 	\end{pmatrix}$
 	\item $Re \in \mathds{R} \Rightarrow$ Reynolds number
 	\item $\vec{g} \in \mathds{R} \Rightarrow$ Body forces (i.e. gravity)
-	\item $\vec{x} = \begin{pmatrix}
+	\item From now on in 2D: $\vec{x} = \begin{pmatrix}
 	x\\
 	y
 	\end{pmatrix}; \vec{u} = \begin{pmatrix}
 	u\\
 	v
-	\end{pmatrix}; \vec{p} = \begin{pmatrix}
-	p_x \\
-	p_y
+	\end{pmatrix}; \vec{g} = \begin{pmatrix}
+	g_x \\
+	g_y
 	\end{pmatrix}$
 \end{itemize}
 
@@ -94,18 +95,20 @@ At $t = 0$ initial conditions $u(t=0, x,y) = u_0(x,y)$ and $v(t=0,x,y) = v_0(x,y
 
 For all times along the boundary of the domain $\Omega$ we have \textbf{boundary condition}: "initial-boundary value problem".
 
-To formulate the boundary condition, we introduce $\varphi_n$ velocity component nominal to the boundary and $\varphi_t$ velocity component tangential to the boundary. When the boundary is aligned with the coordinate direction: 
+To formulate the boundary condition, we introduce $\varphi_n$ velocity component normal to the boundary and $\varphi_t$ velocity component tangential to the boundary. When the boundary is aligned with the coordinate direction: 
 
 
-$\left.\begin{matrix}
+\begin{itemize}
+\item $\left.\begin{matrix}
 \varphi_n = u\\
 \varphi_t = v
 \end{matrix} \right\rbrace$ vertical boundary $\left\lbrace \frac{\delta \varphi_n}{\delta n} = \frac{\delta u}{\delta x},\frac{\delta \varphi_t}{\delta n} = \frac{\delta v}{\delta x} \right\rbrace$
 
-$\left.\begin{matrix}
+\item $\left.\begin{matrix}
 \varphi_n = v\\
 \varphi_t = u
-\end{matrix} \right\rbrace$ vertical boundary $\left\lbrace \frac{\delta \varphi_n}{\delta n} = \frac{\delta v}{\delta y},\frac{\delta \varphi_t}{\delta n} = \frac{\delta u}{\delta y} \right\rbrace$
+\end{matrix} \right\rbrace$ horizontal boundary $\left\lbrace \frac{\delta \varphi_n}{\delta n} = \frac{\delta v}{\delta y},\frac{\delta \varphi_t}{\delta n} = \frac{\delta u}{\delta y} \right\rbrace$
+\end{itemize}
 
 
 The following types of boundary conditions occur:
@@ -134,8 +137,9 @@ If the velocity components (rather then the derivatives) are given along the ent
 u
 v
 \end{pmatrix} \cdot \vec{n} ds = 0\]
-in the Navier-Stoke equation the pressure is only determined up to a constant.
 
-\subsection{Derivation fo NS equation} %TODO itemization?
-%TODO abschreiben
+In the Navier-Stoke equation the pressure is only determined up to a constant.
+
+\subsection{Derivation fo NS equation} 
+TODO write down
 

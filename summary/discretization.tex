@@ -79,14 +79,14 @@ We can replace the derivatives with the appropriate difference quotients from ab
 
 In matrix-vector-notation this can be written as $Au = f$, where 
 
-%TODO matrix, vector, func, representation (3.8)
+TODO matrix, vector, func, representation (3.8)
 \[
 A = ()  u = ()   f = ()
 \]
 
-Take a very simple example case. Assume $k >> 1$ (is large), $f(x) = 0$, $\delta x = 1$, $u(0) = e^{-3k} \approx 0$, $u(3) = 0$.
+Take a very simple example case. Assume $k >> 1$ (is large), $f(x) = 0$, $\delta x = 1$, $u(0) = e^{-3k} \approx 0$, $u(3) = 1$.
 
-True solution: $u(x) = e^{k(x-3)} \qquad u_0 = e^{-3k} \approx 0 \qquad u_3 = 1$
+Analytical solution: $u(x) = e^{k(x-3)} \qquad u_0 = e^{-3k} \approx 0 \qquad u_3 = 1$
 \[\left.\begin{matrix}
 	-u_0 + 2u_1 -u_2  + k(u_2 -u_0) =0\\
 	-u_1 + 2u_2 - u_3 + k(u_3-u_1) = 0
@@ -94,7 +94,7 @@ True solution: $u(x) = e^{k(x-3)} \qquad u_0 = e^{-3k} \approx 0 \qquad u_3 = 1$
 	u_2 = u_0\\
 	u_3 = u_1
 	\end{matrix} \]
-%TODO pictures
+TODO pictures
 
 With central differences, oscillations will start to occur when $\delta x > \frac{2}{\abs{k}}$ $\rightarrow$ unstable discretization.
 
@@ -112,7 +112,7 @@ For $k >> 1 \Rightarrow$ backward difference, $k << -1 \Rightarrow$ forward diff
 In general we can use ~\ref{fig:disc-upwind}. This is always stable, but only $O(\delta x)$ accurate. Possible compromise: the weight average between central and upwind discretization \ref{fig:weighted-average} with properly chosen parameter $\gamma = [0,1]$.
 \begin{figure}[H]
 	\centering
-	\[ \left[\frac{d u}{d x}\right]^{du}_i = \frac{ (1+\epsilon) (u_i - u_{i-1} + (1 - \epsilon) (u_{i+1} - u_i)}{ 2 \delta x} \text{ with } \epsilon = \text{sign}(k) \]
+   \[ \left[\frac{d u}{d x}\right]^{du}_i = \frac{ (1+\epsilon) (u_i - u_{i-1}) + (1 - \epsilon) (u_{i+1} - u_i)}{ 2 \delta x} \text{ with } \epsilon = \text{sign}(k) \]
 	\renewcommand{\thefigure}{3.9}
 	\caption{General "upwind" difference}
 	\label{fig:disc-upwind}
@@ -140,7 +140,7 @@ u_{i} & k_l < 0
 	\caption{Discretization with the donor-cell scheme}
 	\label{fig:dcs-method}
 \end{figure}
-%TODO line
+TODO line
 
 
 The formula~\ref{fig:dcs-method} can be rewritten in the form~\ref{fig:dcs-method-rewritten}. With this representation there is no need fore case distinctions. Thus the sign of k denotes the flow direction, these scheme always selects the value which lies in the upstream direction. An averaging of central and donor-cell differences, similar to ~\ref{fig:weighted-average} is another option.
@@ -167,7 +167,7 @@ $\rightarrow$ Grid with equal sized cells, with intersection points of the grid 
 	\label{fig:dcs-method}
 \end{figure}
 
-After discretizing Poisson's equation ~\ref{fig:pe-dirich} with Dirichlet boundary conditions, we obtain  a system of $(i_{max}-1)(j_{max})$ equations ~\ref{fig:sys-of-eq} where $u_{i,j}$ approximates $u(x_{i,j})$.
+After discretizing Poisson's equation ~\ref{fig:pe-dirich} with Dirichlet boundary conditions, we obtain  a system of $(i_{max}-1)(j_{max}-1)$ equations ~\ref{fig:sys-of-eq} where $u_{i,j}$ approximates $u(x_{i,j})$.
 \begin{figure}[H]
 	\centering
 	\[ \Delta u = f \text{ in } \Omega, \qquad u = g \text{ on } \delta\Omega\]
@@ -198,7 +198,7 @@ We will use a staggered grid, i.e. the unknowns are not located at the same grid
 	\item horizontal velocity $u$ in midpoints of vertical cell edges
 	\item vertical velocity $v$ in midpoints of horizontal cell edges
 \end{itemize}
-%TODO picture
+TODO picture
 
 
 Problems occur on the boundary: need to introduce a "boundary strip".
@@ -229,7 +229,8 @@ Spatial derivative of pressure: central difference with half the mesh width
 
 Difficulty: Discretization $\frac{\delta(u^2)}{\delta x}, \frac{\delta(uv)}{\delta y}, \frac{\delta(uv)}{\delta x}, \frac{\delta(v^2)}{\delta y}$
 
-%TODO picture
+TODO picture
+
 At the "x"-points we need approximations of $u \cdot v \rightarrow$ use averages!
 
 \begin{figure}[H]
@@ -331,7 +332,7 @@ v_{0,j}, v_{i_{max+1},j} \text{ for } j = 1, \dots, j_{max}
 \end{cases}$ 
 \end{tabular}
 
-%TODO picture
+TODO picture
 
 \begin{enumerate}
 	\item No-slip boundary condition: continuous velocities must vanish on the boundary ( or be the same velocity as the wall)
@@ -347,7 +348,7 @@ For values directly on the boundary, set
 
 \begin{figure}[H]
 	\centering
-	\[ v_r = \frac{v_u + v_i}{2} = 0 \Rightarrow v_a = -v_i\]
+	\[ v_r = \frac{v_a + v_i}{2} = 0 \Rightarrow v_a = -v_i\]
 	\renewcommand{\thefigure}{3.22}
 	\caption{Discretization of the No-slip condition}
 	\label{fig:disc-nosplipb}
@@ -372,10 +373,11 @@ This leads to: %TODO figure has no numer and should be in this line???
 	\[ u_{0,j} = 0, \qquad u_{i_{max},j} = 0, \qquad j = 1,\dots,j_{max} \]
 	\[ v_{i,0} = 0, \qquad v_{i,j_{max}} = 0, \qquad i = 1,\dots,i_{max} \]
 	\renewcommand{\thefigure}{3.24}
-	\caption{Discretization of the No-slip condition}
+	\caption{Discretization of the Free-slip condition}
 	\label{fig:disc-freesplipa}
 \end{figure}
-%TODO picture
+
+TODO picture
 
 Because the normal derivative $\delta v/ \delta x$ has to be $0 \Rightarrow v_a = v_i$ Further boundary conditions:
 \begin{figure}[H]
@@ -383,7 +385,7 @@ Because the normal derivative $\delta v/ \delta x$ has to be $0 \Rightarrow v_a 
 	\[ v_{0,j} = v_{1,j}, \qquad v_{i_{max},j} = v_{i_{max+1}, j}, \qquad j = 1,\dots,j_{max} \]
 	\[ u_{i,0} = u_{i,1}, \qquad u_{i,j_{max}} = u_{i,j_{max+1}}, \qquad i = 1,\dots,i_{max} \]
 	\renewcommand{\thefigure}{3.25}
-	\caption{Discretization of the No-slip condition}
+	\caption{Discretization of the Free-slip condition}
 	\label{fig:disc-freesplipb}
 \end{figure}
 	
@@ -436,24 +438,24 @@ $u,v,p$ only at times $n \delta t = t_{n}$
 \subsection{The Algorithm}
 
 \subsubsection{The time-stepping loop}
-$u,v,p$ at time $t_n$ given, goal compute $u,v,p$ at time $t_n$
+$u,v,p$ at time $t_n$ given, goal compute $u,v,p$ at time $t_{n+1}$
 
 \begin{figure}[H]
 	\centering
    \[u^{(n+1)} = u^{(n)} + \delta t \left[ \frac{1}{Re}\left(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2}\right) - \frac{\partial u^2}{\partial x} - \frac{\partial uv}{\partial y} + g_x - \frac{\partial p}{\partial x}\right]\]
 
    \[v^{(n+1)} = v^{(n)} + \delta t \left[ \frac{1}{Re}\left(\frac{\partial^2 v}{\partial x^2} + \frac{\partial^2 v}{\partial y^2}\right) - \frac{\partial v^2}{\partial y} - \frac{\partial uv}{\partial x} + g_y - \frac{\partial p}{\partial y}\right]\]
-	\renewcommand{\thefigure}{3.38} %TODO number???
+   \renewcommand{\thefigure}{3.38 TODO number???}
 	\caption{Time step computation}
 	\label{fig:time-step}
 \end{figure}
 
-%TODO all in [] exept pressure at t(n)
+TODO all in [] exept pressure at t(n)
 
 Introduce abbrevations:
 \begin{figure}[H]
 	\centering
-   \[F^{(n)} = u^{(n)} + \delta t \left[ \frac{1}{Re}\left(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2}\right) - \frac{\partial u^2}{\partial x} - \frac{\partial uv}{\partial y} + g_x - \frac{\partial p}{\partial x}\right]\]
+   \[F^{(n)} = u^{(n)} + \delta t \left[ \frac{1}{Re}\left(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2}\right) - \frac{\partial u^2}{\partial x} - \frac{\partial uv}{\partial y} + g_x\right]\]
 
    \[G^{(n)} = v^{(n)} + \delta t \left[ \frac{1}{Re}\left(\frac{\partial^2 v}{\partial x^2} + \frac{\partial^2 v}{\partial y^2}\right) - \frac{\partial v^2}{\partial y} - \frac{\partial uv}{\partial x} + g_y\right]\]
 	\renewcommand{\thefigure}{3.29}
@@ -463,8 +465,8 @@ Introduce abbrevations:
 
 \begin{figure}[H]
 	\centering
-   \[u^{(n+1)} = F^{(n)} - \frac{\partial p}{\partial x}\]
-   \[v^{(n+1)} = G^{(n)} - \frac{\partial p}{\partial y}\]
+   \[u^{(n+1)} = F^{(n)} - \partial t \frac{\partial p}{\partial x}\]
+   \[v^{(n+1)} = G^{(n)} - \partial t \frac{\partial p}{\partial y}\]
 	\renewcommand{\thefigure}{3.30, 3.31}
 	\caption{Computation with abbrevations}
 	\label{fig:comp-fg}
@@ -588,12 +590,12 @@ This can be inserted into the discrete pressure equation ~\ref{fig:disc-p} and w
 $\Rightarrow$ This does no depend on $F_{0.j}$, hence we can choose an arbitrary value. Simplest choise: $F_{0,j}^{(n)} = u_{0.j}^{(n+1)} \Rightarrow p_{0,j}^{(n+1)} = p_{1,j}^{(n+1)}$. These are homogeneus Neumann boundary conditions indiscrete from.\\
 
 Other boundaries treated analogysly $\Rightarrow$
-%TODO
+TODO
 
 
 
 \subsubsection{Stability Criterium}
-%TODO 
+TODO 
 
 
 
@@ -601,16 +603,16 @@ Other boundaries treated analogysly $\Rightarrow$
 
 
 
-%TODO on notes
+TODO on notes
 
 
 
-%TODO Should be 3.4 and 3.4.1
+TODO Should be 3.4 and 3.4.1
 \subsection{Treatment of general Domains}
 
 \subsubsection{Introduction of obstacle domains}
 \begin{itemize}
-	\item flow domain $\Omega$ embeded into rectangle $G$, smallest possible size, grid for $G$ as in Sect 3.1 %TODO reference on section
+	\item flow domain $\Omega$ embeded into rectangle $G$, smallest possible size, grid for $G$ as in Sect 3.1 TODO reference on section
 	\item cells of $G$ are divided into
 	\begin{itemize}
 		\item fluid cells (completly or mostly filled with fluid)
@@ -621,15 +623,15 @@ Other boundaries treated analogysly $\Rightarrow$
 	\item cells $(i,j), i \in \{0, i_{max+1}\}; j \in \{0,j_{max+1}\}$
 	(artificial boundary strip) are also treated as obstacle cells
 	\item obstacle cells which share an edge with at least one fluid cell are called boundary cells
-	\item Fluid cells that are adjacent to the obstacle cells: Compute F,G according to (3.36) (3.37)%TODO ref
+	\item Fluid cells that are adjacent to the obstacle cells: Compute F,G according to (3.36) (3.37)TODO ref
 	$\Rightarrow$ Need: 
 	\begin{itemize}
 		\item nomal velocity on the boundary edge
 		\item tangential velocity components on edges between boundary cells
 	\end{itemize}
-	\item[$\Rightarrow$] F,G values at boundary edges needed to compute pressure in fluid cells adjacent to boundary cells $\Rightarrow$ pressure equation modified according to (3.43) %TODO ref
+	\item[$\Rightarrow$] F,G values at boundary edges needed to compute pressure in fluid cells adjacent to boundary cells $\Rightarrow$ pressure equation modified according to (3.43) TODO ref
 	Alternative: set the pressure in the boundary cell equal to the value in neighborhing fluid cell
-	Later (for visualization) we also need velocity values for edges that hit the fluid cell - see picture %TODO picture
+	Later (for visualization) we also need velocity values for edges that hit the fluid cell - see picture TODO picture
 \end{itemize}
 
 In the program: Use a flag array int ** FLAG (better maybe char)\\
@@ -638,10 +640,10 @@ C\_B obstacle cells
 
 More info in each cell needed (one possible implementation - alternatives in excercises/assignemnts)
 
-B\_W, B\_S, B\_E, B\_N to denote which neighbor of a boundary cell is a fluid cell, also B\_SW, B\_NE possible. We assume here that boundary cells have one or at most two fluid neighbors. In case of two fluid neighbors: corner cell. Boundary cells with two opposite or 3 or 4 fluid neighbors are undinssible %TODO last word wtf?
+B\_W, B\_S, B\_E, B\_N to denote which neighbor of a boundary cell is a fluid cell, also B\_SW, B\_NE possible. We assume here that boundary cells have one or at most two fluid neighbors. In case of two fluid neighbors: corner cell. Boundary cells with two opposite or 3 or 4 fluid neighbors are undinssible TODO last word wtf?
 
 Example No-slip condition:
-%TODO picture
+TODO picture
 \begin{figure}[H]
 	\centering
 	\[ v_{i,j} = 0; \qquad G_{i,j} = v_{i,j} \]
@@ -651,7 +653,7 @@ Example No-slip condition:
 	\label{fig:disc-freesplipb}
 \end{figure}
 
-%TODO picture
+TODO picture
 \begin{figure}[H]
 	\centering
 	\[ u_{i,j} = 0; v_{i,j} = 0; \qquad u_{i-1,j} = - u_{i-1,j+1} \]
@@ -661,10 +663,10 @@ Example No-slip condition:
 	\label{fig:disc-freesplipb}
 \end{figure}
 
-In case the pressure is not modified in the boundary cells as in (3.43) %TODO ref
+In case the pressure is not modified in the boundary cells as in (3.43) TODO ref
 , then pressure in edge cells must be set equal to the pressure in neighboring fluid cells. For B\_N : $p_{i,j} = p_{i,j+1}$ for B\_W: $p_{i,j} = p_{i-1,j}$, etc. Pressure in corner cells B\_NE : $p_{i,j} = \frac{p_{i,j} + p_{i_1,j}}{2}$, ...
 
-Pressure equation (3.43) %TODO ref
+Pressure equation (3.43) TODO ref
 only solved in fluid cells, F,G-values are only updated between two fluid cells
 \begin{itemize}
 	\item fluid cells
