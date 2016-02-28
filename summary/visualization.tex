@@ -1,0 +1,75 @@
+\section{Visualization}
+
+\subsection{Something}
+\subsection{Something}
+
+\subsection{Stream Function and Velocity}
+
+\subsubsection{Definition \& Interpretation}
+
+Def.: Streamfunction $\psi(x,y)$ defined by
+\begin{figure}[H]
+	\centering
+   \[\frac{\partial \psi(x,y)}{\partial x} = -v ; \frac{\partial \psi(x,y)}{\partial y} = u \]
+    \renewcommand{\thefigure}{4.4}
+	\caption{Streamfunction}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+   \[ \zeta (x,y) = \frac{\partial u}{\partial y} - \frac{\partial v}{\partial x} \]
+    \renewcommand{\thefigure}{4.5}
+	\caption{Vortocity}
+\end{figure}
+
+Interpretation: TODO pictures
+
+For $\psi$ : $ \frac{\partial^2 \psi}{\partial x \partial y} \Leftrightarrow \frac{\partial^2 \psi}{\partial y \partial x}$, because of continuity equation the order of differentiation is interchangable: $\frac{\partial}{\partial x}u + \frac{\partial}{\partial y}v = 0 \Leftrightarrow \frac{\partial}{\partial x}\left(\frac{\partial \psi}{\partial y}\right) + \frac{\partial}{\partial y}\left(-\frac{\partial \psi}{\partial x}\right) = 0$
+
+\paragraph{Definition}
+A streamline is a curve, whose tangential is parallel to the velocity field $\begin{pmatrix}u\\v\\\end{pmatrix}$ in each point at fixed time $t$. Streamlines are the contour lines of streamfucntion $\psi$.
+
+   \begin{enumerate}[label=\roman*]
+\item Along countour line $\varphi_c(s) = \begin{pmatrix} x_c(s) \\ y_c(s) \\ \end{pmatrix}$ of $\psi$, the gradient is orthogonal to the tangential direction as follows
+\[ 0 = \frac{d \psi( \varphi_c(s))}{d s} = \frac{\partial \psi}{\partial x} \frac{d x_c(s)}{d s} + \frac{\partial \psi}{\partial y} \frac{d y_c(s)}{d s} = \left( \frac{\partial \psi}{\partial x} , \frac{\partial \psi}{\partial y}\right) \cdot \begin{pmatrix} \dot{x_c}(s) \\ \dot{y_c}(s) \\ \end{pmatrix} \]
+
+\item The gradient of $\psi(x,y)$ is orthogonal to the velocity field
+\[ (\text{grad} \psi) \cdot \begin{pmatrix} u \\ v \\ \end{pmatrix} = \left( \frac{\partial \psi}{\partial x} , \frac{\partial \psi}{\partial y}\right) \cdot \begin{pmatrix} u \\ v \\ \end{pmatrix} = \begin{pmatrix} -v \\ u \\ \end{pmatrix} \cdot \begin{pmatrix} u \\ v \\ \end{pmatrix} = 0 \]
+
+\item From i and ii we counclude that the tangential direction $\dot{\varphi_c}(s)$ and the velocity vectors are parallel along the level curves $\Rightarrow$ contour lines are streamlines
+\end{enumerate}
+ Mass flow rate $m^t$ is defined as mass passing threw a cruve $c$ connecting $a \& b$ on streamlines $\psi_a \& \psi_b$ per unit time.
+
+In general TODO picture \\
+
+\[ m = \int_\Omega \rho dxdy \]
+\[ m^t = \int_c^\Omega \rho \begin{pmatrix} u \\ v \\ \end{pmatrix} \cdot \vec{n} ds \]
+
+incompressible: $ \rho = \rho_0 = const$, normalizing $\rho = 1$
+
+\[ m^t = \int_c \rho_0 \begin{pmatrix}u \\v \\ \end{pmatrix} \cdot \vec{n} ds = \int_a^b \begin{pmatrix}u \\ v \\ \end{pmatrix} \begin{pmatrix}dy \\ -dx \\ \end{pmatrix} = \int_a^b udy - vdx = \int_a^b \frac{\partial \psi}{\partial y} dy + \frac{\partial \psi}{\partial x} dx = \int_a^b d \psi = \psi_b - \psi_a\]
+$\Rightarrow$ Mass flowing between two streamlines is always the same (incompressible!)
+
+\subsubsection{Implementation}
+Need to compute $\psi_{i,j}$ and $\zeta_{i,j}$ on grid. Easiest is upper right corners of each cell: 
+\[ \psi_{i,j} : i = 0,\dots, i_{max} ; j = 0, \dots, j_{max}\]
+\[ \zeta_{i,j} = i = 1,\dots,i_{max-1}; j = 1, \dots, j_{max-1}\]
+\[ \frac{\partial \psi}{\partial y} = u \text{ discretized: } \left[ \frac{\partial \psi}{\partial y} \right]_{i,j} = \frac{\psi_{i,j} - \psi_{i,j-1}}{\delta y}\]
+
+\[ \psi_{0,0} = 0 \]
+\[ \psi_{i,j} = \psi_{i,j-1} + u_{i,j} \delta y \begin{cases} i = 0, \dots, i_{max} \\ j = 1, \dots, j_{max} \end{cases} \]
+
+\[ \psi_{i,0} = \psi_{i-1,0} - v_{i,0} \delta x \quad i = 1,\dots,i_{max} \]
+
+If the grid is mass conserving, the ordering does not matter! Obstacle structure must be taken into account.
+
+\[ \zeta_{i,j} = \frac{u_{i,j+1} - u_{i,j}}{\delta y} - \frac{v_{i+1,j} - v_{i,j}}{\delta x} \]
+
+\subsubsection{Extensions}
+\paragraph{Chemical transport}: assume substance disolved in fluid
+\[ \vec{u}, C \text{ concentration:} \]
+\[ \frac{\partial C}{\partial t} + \vec{u} \cdot \text{ grad } C = \lambda \Delta C + Q(t,x,y,\vec{u},C) \]
+(Upper eq: convective transport = diffusive transport + decau (radioactive) reaction)
+
+\paragraph{Temperature, Energy}
+TODO
